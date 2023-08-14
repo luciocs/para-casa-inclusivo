@@ -1,6 +1,6 @@
 🇧🇷 🇧🇷 🇧🇷
 
-**Desejamos boas-vindas ao PARA CASA INCLUSIVO**
+# Desejamos boas-vindas ao PARA CASA INCLUSIVO
 
 *Versão: 0.1*
 *Autores: Nathalie Brasil e Lucio Santana*
@@ -64,7 +64,7 @@ Empodere a educação com adaptações personalizadas usando o PARA CASA INCLUSI
 
 🇺🇸 🇺🇸 🇺🇸
 
-**Welcome to PARA CASA INCLUSIVO**
+# Welcome to PARA CASA INCLUSIVO
 
 *Version: 0.1*
 *Authors: Nathalie Brasil and Lucio Santana*
