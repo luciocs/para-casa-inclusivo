@@ -27,7 +27,7 @@ Projetada para ajudar educadores e alunos a criar e adaptar tarefas de casa de a
 
 ## Primeiros Passos
 
-1. Copie o conteúdo do arquivo [para-casa-inclusivo.md] (https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md)
+1. Copie o conteúdo do arquivo [para-casa-inclusivo.md](https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md)
 2. Abra o ChatGPT (funciona bem na versão 3.5, mas tem melhores resultados com o GPT 4).
 3. Cole o conteúdo no Prompt e siga as instruções.
 
@@ -90,7 +90,7 @@ PARA CASA INCLUSIVO is a tool that leverages Artificial Intelligence and ChatGPT
 
 ## Getting Started
 
-1. Copy the content from the [para-casa-inclusivo.md] (https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md) file.
+1. Copy the content from the [para-casa-inclusivo.md](https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md) file.
 2. Open ChatGPT (works well with version 3.5, but achieves better results with GPT 4).
 3. Paste the content into the Prompt and follow the instructions.
 
