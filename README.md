@@ -52,7 +52,7 @@ Para feedback, perguntas ou suporte, [crie um issue](https://github.com/luciocs/
 
 ## Licença
 
-Este projeto está licenciado sob a [Licença MIT](link_para_o_seu_arquivo_de_licença).
+Este projeto está licenciado sob a [Licença MIT](https://github.com/luciocs/para-casa-inclusivo/blob/main/LICENSE).
 
 ---
 
@@ -115,7 +115,7 @@ For feedback, questions, or support, please [create an issue](https://github.com
 
 ## License
 
-This project is licensed under the [MIT License](link_to_your_license_file).
+This project is licensed under the [MIT License](https://github.com/luciocs/para-casa-inclusivo/blob/main/LICENSE).
 
 ---
 
