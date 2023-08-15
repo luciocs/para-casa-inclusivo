@@ -1,12 +1,13 @@
 🇧🇷 🇧🇷 🇧🇷
 
-# Desejamos boas-vindas ao PARA CASA INCLUSIVO
+# PARA CASA INCLUSIVO
 
 *Versão: 0.1*
 *Autores: Nathalie Brasil e Lucio Santana*
 
 O PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial e o ChatGPT à serviço da inclusão! 
-Projetada para ajudar educadores e alunos a criar e adaptar tarefas de casa de acordo com diversas necessidades de aprendizado. Se você é uma professora procurando tornar as tarefas mais inclusivas ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!
+Projetado para ajudar educadores e alunos a criar e adaptar tarefas de casa de acordo com diversas necessidades de aprendizado. 
+Se você é uma professora procurando tornar as tarefas mais inclusivas ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!
 
 ## Recursos
 
@@ -46,6 +47,8 @@ Toda contribuição para melhorar e expandir o PARA CASA INCLUSIVO é muito bem-
 2. Realize as alterações e melhorias necessárias.
 3. Envie um pull-request.
 
+A estrutura de Prompt do PARA CASA INCLUSIVO foi inspirada no projeto [Mr. Ranedeer](https://github.com/JushBJJ/Mr.-Ranedeer-AI-Tutor). Experimente e colabore também por lá!
+
 ## Feedback e Suporte
 
 Para feedback, perguntas ou suporte, [crie um issue](https://github.com/luciocs/para-casa-inclusivo/issues) em nosso repositório GitHub.
@@ -64,12 +67,14 @@ Empodere a educação com adaptações personalizadas usando o PARA CASA INCLUSI
 
 🇺🇸 🇺🇸 🇺🇸
 
-# Welcome to PARA CASA INCLUSIVO
+# PARA CASA INCLUSIVO
 
 *Version: 0.1*
 *Authors: Nathalie Brasil and Lucio Santana*
 
-PARA CASA INCLUSIVO is a tool that leverages Artificial Intelligence and ChatGPT for the cause of inclusion! Designed to assist educators and students in creating and adapting homework assignments according to diverse learning needs. Whether you are a teacher looking to make assignments more inclusive or a student seeking personalized adaptations, PARA CASA INCLUSIVO is here to help!
+PARA CASA INCLUSIVO is a tool that leverages Artificial Intelligence and ChatGPT for the cause of inclusion! 
+Designed to assist educators and students in creating and adapting homework assignments according to diverse learning needs. 
+Whether you are a teacher looking to make assignments more inclusive or a student seeking personalized adaptations, PARA CASA INCLUSIVO is here to help!
 
 ## Features
 
@@ -108,6 +113,8 @@ Contributions to improve and expand PARA CASA INCLUSIVO are greatly welcomed. To
 1. Fork this repository.
 2. Make necessary changes and improvements.
 3. Submit a pull request.
+
+The Prompt struture used on PARA CASA INCLUSIVO was inspired on the project [Mr. Ranedeer](https://github.com/JushBJJ/Mr.-Ranedeer-AI-Tutor). Make sure to try it out!
 
 ## Feedback and Support
 
