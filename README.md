@@ -3,10 +3,15 @@
 # PARA CASA INCLUSIVO
 
 *Versão: 0.1*
+
 *Autores: Nathalie Brasil e Lucio Santana*
 
-O PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial e o ChatGPT à serviço da inclusão! 
+
+
+PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial e o ChatGPT à serviço da inclusão! 
+
 Projetado para ajudar educadores e alunos a criar e adaptar tarefas de casa de acordo com diversas necessidades de aprendizado. 
+
 Se você é uma professora procurando tornar as tarefas mais inclusivas ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!
 
 ## Recursos
@@ -40,6 +45,8 @@ Se você é uma professora procurando tornar as tarefas mais inclusivas ou um al
 4. Receba tarefas adaptadas de acordo com suas preferências.
 
 *Para atividades maiores, insira primeiro o enunciado/texto e depois as perguntas para melhores resultados.
+
+IMPORTANTE: PARA CASA INCLUSIVO é um prompt customizado para ChatGPT. A qualidade das adaptações pode variar de acordo com as mudanças que a OpenAI realiza no modelo ao longo do tempo.
 
 ## Exemplos
 ![Captura de Tela 2023-08-15 às 14 54 13](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/4ce4eb10-7478-475d-899d-97ecc3c46e3f)
@@ -76,6 +83,9 @@ Para feedback, perguntas ou suporte, [crie um issue](https://github.com/luciocs/
 Este projeto está licenciado sob a [Licença MIT](https://github.com/luciocs/para-casa-inclusivo/blob/main/LICENSE).
 
 ---
+
+**"O mundo precisa de todo tipo de mentes."**
+*Temple Grandin*
 
 Empodere a educação com adaptações personalizadas usando o PARA CASA INCLUSIVO!
 
@@ -126,6 +136,8 @@ Whether you are a teacher looking to make assignments more inclusive or a studen
 
 *For larger activities, insert the statement/text first and then the questions for best results.
 
+IMPORTANT: PARA CASA INCLUSIVO is a custom prompt for ChatGPT. The quality of the adaptations can vary according to the changes OpenAI makes to the model over time.
+
 ## Contribution
 
 Contributions to improve and expand PARA CASA INCLUSIVO are greatly welcomed. To contribute:
@@ -145,5 +157,8 @@ For feedback, questions, or support, please [create an issue](https://github.com
 This project is licensed under the [MIT License](https://github.com/luciocs/para-casa-inclusivo/blob/main/LICENSE).
 
 ---
+
+**"The world needs all kinds of minds."**
+*Temple Grandin*
 
 Empower education with personalized adaptations using PARA CASA INCLUSIVO!
