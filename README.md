@@ -33,15 +33,15 @@ Se você é uma professora procurando tornar as tarefas mais inclusivas ou um al
 
 ## Primeiros Passos
 
-1. Acesse [este link](https://chat.openai.com/share/75156b85-6307-441a-a5af-ae312a6b3ee1).
-2. Clique em "Continue this conversation".
+1. Acesse [este link](https://chat.openai.com/share/e1ab3dac-6ed5-4ab3-9f75-19569ba228de).
+2. Clique em "Continue this conversation" (Melhores resultados com o GPT-4).
 3. Configure as preferências.
 4. Adapte e crie atividades escolares.
 
 OU
 
 1. Copie o conteúdo do arquivo [para-casa-inclusivo.md](https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md)
-2. Abra o ChatGPT (Melhores resultados com o GPT 4).
+2. Abra o ChatGPT (Melhores resultados com o GPT-4).
 3. Cole o conteúdo no Prompt e siga as instruções.
 
 ## Uso
@@ -130,15 +130,15 @@ Whether you are a teacher looking to make assignments more inclusive or a studen
 
 ## Getting Started
 
-1. Go to [this link](https://chat.openai.com/share/75156b85-6307-441a-a5af-ae312a6b3ee1).
-2. Click "Continue this conversation".
+1. Go to [this link](https://chat.openai.com/share/e1ab3dac-6ed5-4ab3-9f75-19569ba228de).
+2. Click "Continue this conversation" (Better results with GPT-4).
 3. Configure preferences.
 4. Adapt and create school activities.
 
 OR
 
 1. Copy the content from the [para-casa-inclusivo.md](https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md) file.
-2. Open ChatGPT (Better results with GPT 4).
+2. Open ChatGPT (Better results with GPT-4).
 3. Paste the content into the Prompt and follow the instructions.
 
 ## Usage
