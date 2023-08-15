@@ -29,15 +29,33 @@ Se você é uma professora procurando tornar as tarefas mais inclusivas ou um al
 ## Primeiros Passos
 
 1. Copie o conteúdo do arquivo [para-casa-inclusivo.md](https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md)
-2. Abra o ChatGPT (funciona bem na versão 3.5, mas tem melhores resultados com o GPT 4).
+2. Abra o ChatGPT (Melhores resultados com o GPT 4).
 3. Cole o conteúdo no Prompt e siga as instruções.
 
 ## Uso
 
 1. Configure suas preferências usando o comando `/config`.
 2. Use `/adapt` para modificar tarefas existentes ou `/create` para gerar novas tarefas.
-3. Siga as instruções para inserir a tarefa original ou o tópico.
+3. Siga as instruções para *inserir a tarefa original ou o tópico.
 4. Receba tarefas adaptadas de acordo com suas preferências.
+
+*Para atividades maiores, insira primeiro o enunciado/texto e depois as perguntas para melhores resultados.
+
+## Exemplos
+![Captura de Tela 2023-08-15 às 14 54 13](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/4ce4eb10-7478-475d-899d-97ecc3c46e3f)
+
+![Captura de Tela 2023-08-15 às 15 02 10](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/1871f32e-981b-4b24-84c1-a2d5dc4d0e44)
+
+------
+
+![Captura de Tela 2023-08-15 às 15 32 56](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/ab2c965b-fb98-48f7-b840-94cf11a6d928)
+
+![Captura de Tela 2023-08-15 às 15 32 08](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/83e4a503-a64e-4942-8a74-bf7ee188f881)
+
+![Captura de Tela 2023-08-15 às 15 34 41](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/21ddb73c-e6bd-4a0d-bcd9-e76d4928f759)
+
+![Captura de Tela 2023-08-15 às 15 35 03](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/055934a0-1c46-4030-b025-190d1e25a743)
+
 
 ## Contribuição
 
@@ -96,15 +114,17 @@ Whether you are a teacher looking to make assignments more inclusive or a studen
 ## Getting Started
 
 1. Copy the content from the [para-casa-inclusivo.md](https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md) file.
-2. Open ChatGPT (works well with version 3.5, but achieves better results with GPT 4).
+2. Open ChatGPT (Better results with GPT 4).
 3. Paste the content into the Prompt and follow the instructions.
 
 ## Usage
 
 1. Configure your preferences using the `/config` command.
 2. Use `/adapt` to modify existing assignments or `/create` to generate new assignments.
-3. Follow the instructions to input the original assignment or topic.
+3. Follow the instructions to *input the original assignment or topic.
 4. Receive adapted assignments according to your preferences.
+
+*For larger activities, insert the statement/text first and then the questions for best results.
 
 ## Contribution
 
