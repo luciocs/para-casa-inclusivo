@@ -33,7 +33,7 @@ Se você é uma professora procurando tornar as tarefas mais inclusivas, um tuto
 
 ## Primeiros Passos
 
-1. Acesse [este link](https://chat.openai.com/share/e1ab3dac-6ed5-4ab3-9f75-19569ba228de).
+1. Acesse [este link](https://chat.openai.com/share/876b4883-6242-4028-9a16-af62b5cc5701).
 2. Clique em "Continue this conversation" (exclusivo para GPT-4).
 3. Configure as preferências.
 4. Adapte e crie Atividades Escolares.
@@ -138,7 +138,7 @@ Whether you are a teacher looking to make assignments more inclusive or a studen
 
 ## Getting Started
 
-1. Go to [this link](https://chat.openai.com/share/e1ab3dac-6ed5-4ab3-9f75-19569ba228de).
+1. Go to [this link](https://chat.openai.com/share/876b4883-6242-4028-9a16-af62b5cc5701).
 2. Click "Continue this conversation" (Better results with GPT-4).
 3. Configure preferences.
 4. Adapt and create school activities.
