@@ -10,9 +10,9 @@
 
 PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial e o ChatGPT à serviço da inclusão! 
 
-Projetado para ajudar educadores e alunos a criar e adaptar tarefas de casa de acordo com diversas necessidades de aprendizado. 
+Projetado para ajudar educadores, tutores e alunos a criar e adaptar tarefas de casa de acordo com diversas necessidades de aprendizado. 
 
-Se você é uma professora procurando tornar as tarefas mais inclusivas ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!
+Se você é uma professora procurando tornar as tarefas mais inclusivas, um tutor de criança atípica ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!
 
 ## Recursos
 
@@ -25,8 +25,8 @@ Se você é uma professora procurando tornar as tarefas mais inclusivas ou um al
 
 ### Comandos
 - **/config**: Inicie o processo de configuração para definir preferências.
-- **/adapt**: Adapte tarefas existentes de acordo com as preferências especificadas.
-- **/create**: Gere novas tarefas sobre um determinado tópico com as adaptações aplicadas.
+- **/adapt**: Adapte Atividades Escolares existentes de acordo com as preferências especificadas.
+- **/create**: Gere novas Atividades Escolares sobre um determinado tópico com as adaptações aplicadas.
 - **/continue**: Retome a tarefa anterior.
 - **/self-eval**: Avalie a qualidade da última resposta.
 - **/language**: Altere o idioma da interação.
@@ -34,24 +34,32 @@ Se você é uma professora procurando tornar as tarefas mais inclusivas ou um al
 ## Primeiros Passos
 
 1. Acesse [este link](https://chat.openai.com/share/e1ab3dac-6ed5-4ab3-9f75-19569ba228de).
-2. Clique em "Continue this conversation" (Melhores resultados com o GPT-4).
+2. Clique em "Continue this conversation" (exclusivo para GPT-4).
 3. Configure as preferências.
-4. Adapte e crie atividades escolares.
+4. Adapte e crie Atividades Escolares.
 
 OU
 
 1. Copie o conteúdo do arquivo [para-casa-inclusivo.md](https://github.com/luciocs/para-casa-inclusivo/blob/main/para-casa-inclusivo.md)
-2. Abra o ChatGPT (Melhores resultados com o GPT-4).
+2. Abra o ChatGPT (exclusivo para GPT-4).
 3. Cole o conteúdo no Prompt e siga as instruções.
+
+### Versão simplificada para GPT-3.5
+Caso não tenha acesso ao GPT-4, você pode utilizar a versão simplificada e otimizada para o GPT-3.5
+1. Acesse [este link](https://chat.openai.com/share/2f3843ec-c880-4a54-959a-d4e1fc7c6a72).
+2. Clique em "Continue this conversation" (funcionar com GPT-3.5 e GPT-4).
+3. Siga as instruções e adapte Atividades Escolares.
+
+* IMPORTANTE: O [prompt da versão simplificada](https://github.com/luciocs/para-casa-inclusivo/blob/main/prompt-gpt35-ptbr.md) foi escrito em Portugês e não suporta alteração de idioma.
 
 ## Uso
 
 1. Configure suas preferências usando o comando `/config`.
-2. Use `/adapt` para modificar tarefas existentes ou `/create` para gerar novas tarefas.
-3. Siga as instruções para *inserir a tarefa original ou o tópico.
-4. Receba tarefas adaptadas de acordo com suas preferências.
+2. Use `/adapt` para modificar Atividades Escolares existentes ou `/create` para gerar novas Atividades Escolares.
+3. Siga as instruções para *inserir a Atividade Escolar original ou o tópico.
+4. Receba Atividades Escolares adaptadas de acordo com suas preferências.
 
-*Para atividades maiores, insira primeiro o enunciado/texto e depois as perguntas para melhores resultados.
+*Para atividades maiores, insira primeiro o texto inicial de apoio e depois o enunciado/opções para melhores resultados.
 
 IMPORTANTE: PARA CASA INCLUSIVO é um prompt customizado para ChatGPT. A qualidade das adaptações pode variar de acordo com as mudanças que a OpenAI realiza no modelo ao longo do tempo.
 
