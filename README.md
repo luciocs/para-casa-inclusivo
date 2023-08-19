@@ -47,7 +47,7 @@ OU
 ### Versão simplificada para GPT-3.5
 Caso não tenha acesso ao GPT-4, você pode utilizar a versão simplificada e otimizada para o GPT-3.5
 1. Acesse [este link](https://chat.openai.com/share/174c02bf-4f98-453c-a412-0c5d0492929a).
-2. Clique em "Continue this conversation" (funcionar com GPT-3.5 e GPT-4).
+2. Clique em "Continue this conversation" (funciona com GPT-3.5 e GPT-4).
 3. Siga as instruções e adapte Atividades Escolares.
 
 * IMPORTANTE: O [prompt da versão simplificada](https://github.com/luciocs/para-casa-inclusivo/blob/main/prompt-gpt35-ptbr.md) foi escrito em Portugês e não suporta alteração de idioma.
