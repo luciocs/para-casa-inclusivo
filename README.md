@@ -10,9 +10,9 @@
 
 PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial e o ChatGPT à serviço da inclusão! 
 
-Projetado para ajudar educadores, tutores e alunos a criar e adaptar tarefas de casa de acordo com diversas necessidades de aprendizado. 
+Projetado para ajudar educadores, mediadores escolares, familiares e alunos a criar e adaptar Atividades Escolares de acordo com diversas necessidades de aprendizado.
 
-Se você é uma professora procurando tornar as tarefas mais inclusivas, um tutor de criança atípica ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!
+Se você é uma professora procurando tornar as atividades mais inclusivas, um mediador ou familiar de criança atípica ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!
 
 ## Recursos
 
