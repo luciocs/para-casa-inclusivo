@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PARA CASA INCLUSIVO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://cdn.glitch.global/73e7c968-18cd-44ab-9bde-50ed36955258/Logo%20-%20Para%20Casa%20Inclusivo.png?v=1693099004477" alt="PARA CASA INCLUSIVO Logo" class="logo">
+            <h1>PARA CASA INCLUSIVO</h1>
+        </div>
+        <div class="description">
+            <p>PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial e o ChatGPT à serviço da inclusão!</p>
+            <p>Projetado para ajudar educadores, mediadores escolares, familiares e alunos a criar e adaptar Atividades Escolares de acordo com diversas necessidades de aprendizado.</p>
+            <p>Se você é uma professora procurando tornar as atividades mais inclusivas, um mediador ou familiar de criança atípica ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!</p>
+        </div>
+        <div class="instructions">
+            <p>Envie o PDF ou uma foto da Atividade Escolar e clique em Adaptar!</p>
+        </div>
+        <div id="status" class="status"></div>
+        <div class="chat-window">
+            <div class="output" id="result"></div>
+            <!-- Copy to Clipboard Button -->
+            <button id="copyButton" class="copy-button">Copiar para Área de Transferência</button>
+            <div class="input">
+                <form id="uploadForm">
+                    <input type="file" id="fileInput" name="file" class="file-input" accept=".jpg,.jpeg,.png,.pdf" required>
+                    <button type="submit" class="submit-button">Adaptar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
