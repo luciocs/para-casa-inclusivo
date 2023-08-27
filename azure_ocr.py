@@ -1,6 +1,7 @@
-import requests
 import os
 from dotenv import load_dotenv
+from azure.core.credentials import AzureKeyCredential
+from azure.ai.formrecognizer import DocumentAnalysisClient
 
 # Load environment variables from .env file
 load_dotenv()
@@ -9,34 +10,25 @@ load_dotenv()
 AZURE_OCR_ENDPOINT = "https://para-casa-inclusivo-ocr.cognitiveservices.azure.com/"
 AZURE_OCR_API_KEY = os.getenv("AZURE_OCR_API_KEY")  # You'll insert this later
 
-# Create headers for the API request
-headers = {
-    "Ocp-Apim-Subscription-Key": AZURE_OCR_API_KEY,
-    "Content-Type": "application/octet-stream"
-}
-
-# OCR API URL
-ocr_url = f"{AZURE_OCR_ENDPOINT}/vision/v3.1/read/analyze"
-
 def azure_ocr(image_data):
-    """Perform OCR using Azure OCR API."""
-    response = requests.post(ocr_url, headers=headers, data=image_data)
-    
-    if response.status_code != 202:
-        return {"error": "Failed to start OCR job"}
-    
-    # Retrieve the result
-    result_url = response.headers["Operation-Location"]
-    
-    for _ in range(10):
-        result_response = requests.get(result_url, headers={"Ocp-Apim-Subscription-Key": AZURE_OCR_API_KEY})
-        result_data = result_response.json()
-        
-        if result_data.get("status") == "succeeded":
-            # Extract text from the OCR result
-            text = ""
-            for line in result_data["analyzeResult"]["readResults"][0]["lines"]:
-                text += line["text"] + "\n"
-            return {"text": text.strip()}
-        
-    return {"error": "OCR timed out"}
+    """
+    Perform OCR on an image using Azure's Document Analysis Client.
+    """
+    # Initialize the Document Analysis client
+    document_analysis_client = DocumentAnalysisClient(endpoint=AZURE_OCR_ENDPOINT, credential=AzureKeyCredential(AZURE_OCR_API_KEY))
+
+    # Start the OCR process
+    try:
+        poller = document_analysis_client.begin_analyze_document(
+            "prebuilt-document", image_data)
+        result = poller.result()
+    except Exception as e:
+        return {"error": f"Failed to start OCR job: {str(e)}"}
+
+    # Extract text from the OCR result
+    extracted_text = []
+    for page in result.pages:
+        for line in page.lines:
+            extracted_text.append(line.content)
+
+    return " ".join(extracted_text)
