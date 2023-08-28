@@ -22,7 +22,7 @@ body {
     margin-bottom: 10px;
 }
 
-.description, .instructions {
+.description {
     margin: 20px 0;
     padding: 10px;
     text-align: center;
@@ -47,7 +47,7 @@ body {
     border-bottom: 1px solid #ccc;
 }
 
-.status {
+.status, .instructions {
     margin: 20px 0;
     padding: 10px;
     font-size: 16px;
@@ -60,11 +60,34 @@ body {
     padding: 20px;
 }
 
+.custom-file-upload label {
+    display: flex;
+    align-items: center;  
+    margin-right: 15px;  /* Adds right margin */
+    margin-bottom: 10px;  /* Adds bottom margin */  
+}
+
 .file-input {
-    padding: 10px;
-    margin-right: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    display: none;
+}
+
+button {
+    /* Your custom styles for the button */
+    margin-right: 10px;
+}
+
+/* Hide camera input by default */
+.camera-input {
+    display: none;
+}
+
+/* Show camera input on mobile devices */
+@media only screen and (max-width: 600px) {
+    .camera-input {
+        display: inline-block;
+        margin-right: 15px;  /* Adds right margin */
+        margin-bottom: 10px;  /* Adds bottom margin */
+    }
 }
 
 .submit-button {
@@ -87,8 +110,48 @@ body {
     border-radius: 4px;
     color: white;
     cursor: pointer;
+    margin-top: 5px;
+    margin-right: 15px;  /* Adds right margin */
+    margin-bottom: 10px;  /* Adds bottom margin */  
 }
 
 .copy-button:hover {
     background-color: #e1e1e1;
 }
+
+/* CSS for Responsive Design */
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    /* Additional responsive styles */
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-bottom: 10px;  /* Adds bottom margin */  
+}
+
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-top-color: #000;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

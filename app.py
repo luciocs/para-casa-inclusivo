@@ -18,7 +18,7 @@ def index():
             if ocr_result is None:
                 return jsonify({"error": "Failed to extract text from image"}), 400
 
-            print (ocr_result)
+            #print (ocr_result)
             # Call OpenAI GPT to process text
             gpt_result = adapt_text_for_inclusivity(ocr_result)
 
@@ -26,7 +26,7 @@ def index():
             if gpt_result is None:
                 return jsonify({"error": "Failed to generate text"}), 400
 
-            print(gpt_result)  
+            #print(gpt_result)  
             return jsonify({'adapted_text': gpt_result['text']})
               
     return render_template('index.html')
