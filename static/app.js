@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (data.error) {
                 resultDiv.innerHTML = '<p>Error: ' + data.error + '</p>';
+                document.getElementById("copyButton").style.display = "none";
             } else {
                 // Step 4: Showing Response
                 updateStatus('Preparando para te mostrar o resultado...');
@@ -109,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 let html = converter.makeHtml(data.adapted_text);              
               
                 resultDiv.innerHTML = '<p>Atividade Escolar Adaptada:</p>' + html;
-                
+                document.getElementById("copyButton").style.display = "inline-block"; // or "block"
+              
                 // Clear the status
                 updateStatus('');
             }
