@@ -10,11 +10,16 @@
 
 PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial e o ChatGPT à serviço da inclusão! 
 
-Projetado para ajudar educadores, mediadores escolares, familiares e alunos a criar e adaptar Atividades Escolares de acordo com diversas necessidades de aprendizado.
+Criado para ajudar educadores e equipes pedagógicas a adaptar Atividades Escolares de acordo com diversas necessidades de aprendizado.
 
-Se você é uma professora procurando tornar as atividades mais inclusivas, um mediador ou familiar de criança atípica ou um aluno em busca de adaptações personalizadas, o PARA CASA INCLUSIVO está aqui para ajudar!
+Se você é uma professora procurando tornar as atividades mais inclusivas, um mediador ou parte de uma equipe pedagógica trabalhando com uma criança atípica, o PARA CASA INCLUSIVO está aqui para ajudar!
 
-## Recursos
+## Versões Disponíveis
+- 📱 [**Fácil de Incluir:**](https://para-casa-inclusivo.azurewebsites.net/) Faça upload de uma imagem ou PDF, e nossa tecnologia adaptará o material educacional em tempo real utilizando visão computacional em conjunto com GPT-4.
+- 🤖 [**Versão Completa do ChatGPT para GPT-4:**](https://chat.openai.com/share/876b4883-6242-4028-9a16-af62b5cc5701) Utiliza a mais recente tecnologia GPT-4 para oferecer adaptações mais abrangentes e personalizadas. (necessário assinar o ChatGPT Plus)
+- 🤖 [**Versão Simplificada para GPT-3.5:**](https://chat.openai.com/share/174c02bf-4f98-453c-a412-0c5d0492929a) Oferece adaptações básicas usando GPT-3.5. (100% gratuito)
+
+## Recursos (versão completa)
 
 ### Personalização
 - **Série**: Especifique a série do aluno de 1 a 11.
@@ -51,6 +56,11 @@ Caso não tenha acesso ao GPT-4, você pode utilizar a versão simplificada e ot
 3. Siga as instruções e adapte Atividades Escolares.
 
 * IMPORTANTE: O [prompt da versão simplificada](https://github.com/luciocs/para-casa-inclusivo/blob/main/prompt-gpt35-ptbr.md) foi escrito em Portugês e não suporta alteração de idioma.
+
+### Fácil de Incluir
+1. Acesse o site da versão [Fácil de Incluir](https://para-casa-inclusivo.azurewebsites.net/).
+2. Faça upload de uma imagem ou PDF.
+
 
 ## Uso
 
