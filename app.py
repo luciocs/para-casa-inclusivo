@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from azure_ocr import azure_ocr
 from openai_gpt import adapt_text_for_inclusivity
 from openai_gpt import create_dalle_images
+from openai_gpt import generate_comic_book
 from azure_bing import search_images
 
 app = Flask(__name__)
@@ -69,6 +70,40 @@ def generate_images():
               image_urls.append(url)              
         
     return jsonify({"image_urls": image_urls})  
+
+@app.route('/generate_comic', methods=['POST'])
+def generate_comic():
+    # Get the adapted text from the request
+    adapted_text = request.json.get('adapted_text')
+    # Generate comic book narration and image descriptions
+    comic_output = generate_comic_book(adapted_text)
+    # Create the panels
+    panels = create_panels(comic_output)
+    return jsonify({'comic_panels': panels})    
+  
+def create_panels(comic_output):
+    panels_data = parse_narration_and_images(comic_output)
+    for panel in panels_data:
+        image_url = create_dalle_images(panel['image_description'] + " Faça isso em um estilo vector artwork.")
+        panel['image_url'] = image_url
+    return panels_data
+
+def parse_narration_and_images(comic_output):
+    panels = []
+    lines = comic_output.split('\n')
+    narration = None
+    image_description = None
+    for line in lines:
+        if "NARRAÇÃO:" in line:
+            narration = line.replace("NARRAÇÃO:", "").strip()
+        elif "DESCRIÇÃO DE IMAGEM:" in line:
+            image_description = line.replace("DESCRIÇÃO DE IMAGEM:", "").strip()
+            if narration and image_description:
+                panels.append({'narration': narration, 'image_description': image_description})
+                narration = None  # Reset narration for the next panel
+                image_description = None  # Reset image_description for the next panel
+    return panels
+  
   
 if __name__ == '__main__':
     app.run(debug=True)

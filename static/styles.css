@@ -153,7 +153,7 @@ button {
     background-color: #0056b3;
 }
 
-.copy-button, .image-button {
+.copy-button, .image-button, .comic-button, .print-button {
     padding: 8px;
     background-color: #87D0FA;
     border: none;
@@ -165,7 +165,7 @@ button {
     margin-bottom: 10px;  /* Adds bottom margin */  
 }
 
-.copy-button:hover, .image-button:hover {
+.copy-button:hover, .image-button:hover, .comic-button:hover, .print-button:hover {
     background-color: #38B6FF;
 }
 
@@ -261,4 +261,36 @@ button {
   font-size: 40px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.comic-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.comic-panel {
+  flex: 1;
+  margin: 10px;
+  width: calc(50% - 20px); /* Take into account the margins */
+  position: relative;
+}
+
+.narration-box {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px; /* Smaller font */
+  z-index: 1; /* To make sure it appears above the image */
+}
+
+.comic-image {
+  max-width: 100%;
+  border-radius: 5px;
 }
