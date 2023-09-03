@@ -1,3 +1,5 @@
+let imageKeywords = [];
+
 // Function to update the status on the page
 function updateStatus(message) {
   const statusDiv = document.getElementById('status');
@@ -33,6 +35,7 @@ async function copyToClipboard() {
 document.addEventListener('DOMContentLoaded', () => {
     const uploadForm = document.getElementById('uploadForm');
     const resultDiv = document.getElementById('result');
+    const imageDiv = document.getElementById('supportImages');  
     const copyButton = document.getElementById('copyButton');
     // Listen for changes to the file input
     const fileInput = document.getElementById('fileInput');
@@ -40,7 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listen for changes to the camera input
     const cameraInput = document.getElementById('cameraInput');
     const cameraLabel = document.getElementById('cameraLabel');
-
+    // Add event listener for the "Add Support Images" button
+    const searchImagesButton = document.getElementById('searchImagesButton');
+  
     // Attach the copy function to the copy button
     copyButton.addEventListener('click', copyToClipboard);  
       
@@ -85,8 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // Step 2: Running OCR
-            updateStatus('Recuperando o texto da Imagem/PDF com IA...');
+            // Step 2: Running OCR and GPT-4
+            updateStatus('Adaptando a atividade escolar com IA...');
             
             const response = await fetch('/', {
                 method: 'POST',
@@ -94,23 +99,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json();
-
-            // Step 3: Running GPT Prompt
-            updateStatus('Adaptando a atividade escolar com GPT-4...');
-            
+                      
             if (data.error) {
                 resultDiv.innerHTML = '<p>Error: ' + data.error + '</p>';
-                document.getElementById("copyButton").style.display = "none";
+                copyButton.style.display = "none";
             } else {
-                // Step 4: Showing Response
-                updateStatus('Preparando para te mostrar o resultado...');
+                const adaptedText = data.adapted_text;
+                // Store image_keywords in the variable
+                imageKeywords = data.image_keywords;
                 
                 // Convert Markdown to HTML using Showdown
                 let converter = new showdown.Converter();
                 let html = converter.makeHtml(data.adapted_text);              
               
                 resultDiv.innerHTML = '<p>Atividade Escolar Adaptada:</p>' + html;
-                document.getElementById("copyButton").style.display = "inline-block"; // or "block"
+                copyButton.style.display = 'inline-block'; // or "block"
+                searchImagesButton.style.display = 'inline-block';
               
                 // Clear the status
                 updateStatus('');
@@ -121,4 +125,45 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStatus('');
         }
     });
+  
+    // Event listener for Add Support Images button
+    searchImagesButton.addEventListener('click', async () => {
+        try {
+            // Step 3: Searchin for support images
+            updateStatus('Pesquisando imagens de apoio...');
+
+            const response = await fetch('/fetch_images', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({image_keywords: imageKeywords}),
+            });
+
+            const imageData = await response.json();
+
+            if (imageData.error) {
+                imageDiv.innerHTML = '<p>Error: ' + imageData.error + '</p>';
+            } else {
+                const imageUrls = imageData.image_urls;
+
+                // Display images
+                imageDiv.innerHTML = '<p>Imagens de Apoio:</p>';
+                imageUrls.forEach(url => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = 'Imagem de suporte';
+                    img.className = 'support-image';
+                    imageDiv.appendChild(img);
+                });
+                // Clear the status
+                updateStatus('');
+            };
+          
+        } catch (error) {
+            imageDiv.innerHTML = '<p>Error: ' + error + '</p>';
+            // Clear the status
+            updateStatus('');
+        }            
+    });     
 });

@@ -5,7 +5,6 @@
 
 # Install the Flask application and requeriments
 pip3 install Flask
-pip3 install python-dotenv
 pip3 install -r requirements.txt
 
 # Run the Flask application

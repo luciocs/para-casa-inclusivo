@@ -2,9 +2,8 @@
 
 # PARA CASA INCLUSIVO
 
-*Versão: 0.1*
+*Versão: 0.3*
 
-*Autores: Nathalie Brasil e Lucio Santana*
 
 
 
