@@ -26,7 +26,8 @@
             <h2>Adapte atividades escolares em segundos com Chatgpt</h2>
             <ul class="key-adaptations">
                 <li><span class="icon">&#128172;</span> Linguagem simples</li>
-                <li><span class="icon">&#128444;</span> Emojis ilustrativos</li>
+                <li><span class="icon">&#128515;</span> Emojis ilustrativos</li>
+                <li><span class="icon">&#128444;</span> Imagens de apoio</li>
                 <li><span class="icon">&#128288;</span> CAIXA ALTA</li>
                 <li><span class="icon">&#11088;</span> Destaques em <strong>negrito</strong></li>
                 <li><span class="icon">&#128221;</span> Redução sem perder contexto</li>
@@ -37,13 +38,16 @@
             <p>Envie o PDF ou uma foto da Atividade Escolar e clique em Adaptar!</p>
         </div>
         <div id="status" class="status"></div>
-        <div id="spinner" class="spinner" style="display:none;">
+        <div id="spinner" class="spinner" style="display:none">
             <div class="loader"></div>
         </div>      
         <div class="chat-window">
             <div class="output" id="result"></div>
             <!-- Copy to Clipboard Button -->
-            <button id="copyButton" class="copy-button" style="display:none;">Copiar Texto</button>
+            <button id="copyButton" class="copy-button" style="display:none">Copiar Texto</button>
+            <!-- This is the new button for searching for support images -->
+            <button id="searchImagesButton" class="image-button" style="display:none">Buscar Imagens de Apoio</button>          
+            <div id="supportImages" class="image-container"></div>
             <div class="input">
                 <form id="uploadForm">
                   <div class="custom-file-upload">
@@ -61,15 +65,13 @@
                           <span id="cameraLabel">Envie uma foto da atividade</span>
                       </label>
                   </div>
-
                   <button type="submit" class="submit-button">Adaptar</button>
                 </form>
             </div>
         </div>
         <div class="about-section">
             <h2 class="about-title">Sobre o PARA CASA INCLUSIVO</h2>
-            <p class="about-version"><strong>Versão:</strong> 0.1</p>
-            <p class="about-authors"><strong>Autores:</strong> Nathalie Brasil e Lucio Santana</p>
+            <p class="about-version"><strong>Versão:</strong> 0.3</p>
             <hr>
             <p class="about-description">
                 PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial e o ChatGPT à serviço da inclusão!

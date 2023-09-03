@@ -14,7 +14,7 @@ body {
 .header {
     text-align: center;
     padding: 20px;
-    background-color: #fff;
+    background-color: #ffffff;
     color: #007BFF;
     border-radius: 8px;
 }
@@ -63,18 +63,18 @@ body {
 .chat-window {
     border: 1px solid #e1e1e1;
     padding: 20px;
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.output {
+.output, .image-container {
     overflow-y: auto;  /* Allow vertical scrolling */
     overflow-x: hidden;  /* Hide horizontal scrolling */
     white-space: pre-wrap;  /* Wraps text and preserves new lines */
     word-wrap: break-word;  /* Break words to next line */
     padding: 20px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #cccccc;
 }
 
 .instructions {
@@ -131,7 +131,7 @@ button {
 .submit-button {
     padding: 12px 24px;
     background-color: #007BFF;
-    color: #FFF;
+    color: #FFFFFF;
     border: none;
     border-radius: 4px;
     color: white;
@@ -142,7 +142,7 @@ button {
     background-color: #0056b3;
 }
 
-.copy-button {
+.copy-button, .image-button {
     padding: 8px;
     background-color: #87D0FA;
     border: none;
@@ -154,7 +154,7 @@ button {
     margin-bottom: 10px;  /* Adds bottom margin */  
 }
 
-.copy-button:hover {
+.copy-button:hover, .image-button:hover {
     background-color: #38B6FF;
 }
 
@@ -206,7 +206,7 @@ button {
 }
 
 .about-section p, .about-section ul {
-  color: #333;
+  color: #333333;
   font-size: 1em;
 }
 
@@ -215,4 +215,7 @@ button {
   margin-left: 20px;
 }
 
-
+.support-image {
+    max-width: 200px;
+    margin: 10px;
+}
