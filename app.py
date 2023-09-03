@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from azure_ocr import azure_ocr
 from openai_gpt import adapt_text_for_inclusivity
+from openai_gpt import create_dalle_images
 from azure_bing import search_images
 
 app = Flask(__name__)
@@ -56,6 +57,18 @@ def fetch_images():
 
     #print(image_urls)  
     return jsonify({'image_urls': image_urls})  
+
+@app.route('/generate_images', methods=['POST'])
+def generate_images():
+    image_keywords = request.json.get('image_keywords', [])
+    #Generate images using Dall-E
+    image_urls = []
+    for keyword in image_keywords:
+          url = create_dalle_images(keyword)
+          if url:
+              image_urls.append(url)              
+        
+    return jsonify({"image_urls": image_urls})  
   
 if __name__ == '__main__':
     app.run(debug=True)

@@ -40,3 +40,18 @@ def adapt_text_for_inclusivity(extracted_text):
         return {"text": response["choices"][0]["message"]["content"]}
     except Exception as e:
         return {"error": str(e)}
+
+def create_dalle_images(prompt, n=1, size="512x512"):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    try:
+        response = openai.Image.create(
+            prompt=prompt,
+            n=n,
+            size=size
+        )
+        if response and response.get('data'):
+            return [img['url'] for img in response['data']]
+        else:
+            return {"error": "No images generated"}
+    except Exception as e:
+        return {"error": str(e)}
