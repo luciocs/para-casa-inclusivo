@@ -2,14 +2,14 @@ let imageKeywords = [];
 
 // Function to update the status on the page
 function updateStatus(message) {
-  const statusDiv = document.getElementById('status');
+  const statusText = document.getElementById('status-text');
   const spinner = document.getElementById('spinner');
   if (message) {
     spinner.style.display = 'block';
   } else {
     spinner.style.display = 'none';
   }
-  statusDiv.innerHTML = message;
+  statusText.innerHTML = message;
 }
 
 // Function to copy text and formatting to clipboard
@@ -45,7 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const cameraLabel = document.getElementById('cameraLabel');
     // Add event listener for the "Add Support Images" button
     const searchImagesButton = document.getElementById('searchImagesButton');
-  
+    // Get the modal
+    const modal = document.getElementById("imageModal");
+    // Get the image inside the modal
+    const modalImg = document.getElementById("modalImage");
+    // Get the <span> element that closes the modal
+    const span = document.getElementsByClassName("close")[0];  
+
     // Attach the copy function to the copy button
     copyButton.addEventListener('click', copyToClipboard);  
       
@@ -61,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fileName = cameraInput.files[0].name;
             cameraLabel.textContent = fileName;
         }
-    });  
+    });    
   
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -165,5 +171,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Clear the status
             updateStatus('');
         }            
-    });     
+    });
+  
+    // Add an event listener to each image in the 'imageDiv'
+    imageDiv.addEventListener("click", function(event) {
+      if (event.target.tagName === "IMG") {
+        modal.style.display = "block";
+        modalImg.src = event.target.src;
+      }
+    });  
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }  
+  
 });
