@@ -37,19 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultDiv = document.getElementById('result');
     const imageDiv = document.getElementById('supportImages');  
     const copyButton = document.getElementById('copyButton');
-    // Listen for changes to the file input
     const fileInput = document.getElementById('fileInput');
     const fileLabel = document.getElementById('fileLabel');
-    // Listen for changes to the camera input
     const cameraInput = document.getElementById('cameraInput');
     const cameraLabel = document.getElementById('cameraLabel');
-    // Add event listener for the "Add Support Images" button
     const searchImagesButton = document.getElementById('searchImagesButton');
-    // Get the modal
+    const generateImagesButton = document.getElementById('generateImagesButton');
     const modal = document.getElementById("imageModal");
-    // Get the image inside the modal
     const modalImg = document.getElementById("modalImage");
-    // Get the <span> element that closes the modal
     const span = document.getElementsByClassName("close")[0];  
 
     // Attach the copy function to the copy button
@@ -109,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.error) {
                 resultDiv.innerHTML = '<p>Error: ' + data.error + '</p>';
                 copyButton.style.display = "none";
+                searchImagesButton.style.display = "none";
+                generateImagesButton.style.display = "none";
             } else {
                 const adaptedText = data.adapted_text;
                 // Store image_keywords in the variable
@@ -119,8 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 let html = converter.makeHtml(data.adapted_text);              
               
                 resultDiv.innerHTML = '<p>Atividade Escolar Adaptada:</p>' + html;
-                copyButton.style.display = 'inline-block'; // or "block"
+                copyButton.style.display = 'inline-block';
                 searchImagesButton.style.display = 'inline-block';
+                generateImagesButton.style.display = 'inline-block';
               
                 // Clear the status
                 updateStatus('');
@@ -172,6 +170,47 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStatus('');
         }            
     });
+
+    // Event listener for Generate New Images button
+    generateImagesButton.addEventListener('click', async () => {
+        try {
+            // Step 3: Generating new support images using Dall-E
+            updateStatus('Criando imagens de apoio usando IA...');
+
+            const response = await fetch('/generate_images', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({image_keywords: imageKeywords}),
+            });
+
+            const imageData = await response.json();
+
+            if (imageData.error) {
+                imageDiv.innerHTML = '<p>Error: ' + imageData.error + '</p>';
+            } else {
+                const imageUrls = imageData.image_urls;
+
+                // Display images
+                imageDiv.innerHTML = '<p>Imagens de Apoio:</p>';
+                imageUrls.forEach(url => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = 'Imagem de suporte';
+                    img.className = 'support-image';
+                    imageDiv.appendChild(img);
+                });
+                // Clear the status
+                updateStatus('');
+            };
+
+        } catch (error) {
+            imageDiv.innerHTML = '<p>Error: ' + error + '</p>';
+            // Clear the status
+            updateStatus('');
+        }            
+    });  
   
     // Add an event listener to each image in the 'imageDiv'
     imageDiv.addEventListener("click", function(event) {
@@ -184,6 +223,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
       modal.style.display = "none";
-    }  
-  
+    }    
 });
