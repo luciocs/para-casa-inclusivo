@@ -18,23 +18,6 @@ Se você é uma professora procurando tornar as atividades mais inclusivas, um m
 - 🤖 [**Versão Completa do ChatGPT para GPT-4:**](https://chat.openai.com/share/876b4883-6242-4028-9a16-af62b5cc5701) Utiliza a mais recente tecnologia GPT-4 para oferecer adaptações mais abrangentes e personalizadas. (necessário assinar o ChatGPT Plus)
 - 🤖 [**Versão Simplificada para GPT-3.5:**](https://chat.openai.com/share/174c02bf-4f98-453c-a412-0c5d0492929a) Oferece adaptações básicas usando GPT-3.5. (100% gratuito)
 
-## Recursos (versão completa)
-
-### Personalização
-- **Série**: Especifique a série do aluno de 1 a 11.
-- **Dificuldades de Aprendizagem**: Adapte as tarefas para dificuldades de aprendizagem específicas, como dislexia, disgrafia e muito mais.
-- **Neurodiversidade**: Adapte as tarefas para alunos neurodiversos com TDAH, Autismo e outras condições.
-- **Adaptações**: Escolha entre uma variedade de adaptações, como usar Linguagem Simples, destacar informações importantes em negrito e muito mais.
-- **Emojis**: Adicione emojis envolventes às tarefas para uma experiência de aprendizado aprimorada.
-
-### Comandos
-- **/config**: Inicie o processo de configuração para definir preferências.
-- **/adapt**: Adapte Atividades Escolares existentes de acordo com as preferências especificadas.
-- **/create**: Gere novas Atividades Escolares sobre um determinado tópico com as adaptações aplicadas.
-- **/continue**: Retome a tarefa anterior.
-- **/self-eval**: Avalie a qualidade da última resposta.
-- **/language**: Altere o idioma da interação.
-
 ## Primeiros Passos
 
 1. Acesse [este link](https://chat.openai.com/share/876b4883-6242-4028-9a16-af62b5cc5701).
@@ -60,6 +43,39 @@ Caso não tenha acesso ao GPT-4, você pode utilizar a versão simplificada e ot
 1. Acesse o site da versão [Fácil de Incluir](https://para-casa-inclusivo.azurewebsites.net/).
 2. Faça upload de uma imagem ou PDF.
 
+## Exemplos
+
+**Versão Simplificada para GPT-3.5:**
+
+![PARA CASA INCLUSIVO - ChatGPT 35](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/cf7f7e19-1739-4fe1-9800-85b8d38441ce)
+
+------
+**Fácil de Incluir:**
+
+![PARA CASA INCLUSIVO - Example - Fácil](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/c77fc624-44c7-48a9-87c1-bd973f2e5405)
+
+![PARA CASA INCLUSIVO - Comic Book 2](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/07c4edc8-7616-4b01-8b74-3c86a2f33ed2) 
+
+![PARA CASA INCLUSIVO - Comic Book](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/f392af30-f109-4954-bcfb-35042330d4ae)
+
+------
+
+## Recursos (versão completa)
+
+### Personalização
+- **Série**: Especifique a série do aluno de 1 a 11.
+- **Dificuldades de Aprendizagem**: Adapte as tarefas para dificuldades de aprendizagem específicas, como dislexia, disgrafia e muito mais.
+- **Neurodiversidade**: Adapte as tarefas para alunos neurodiversos com TDAH, Autismo e outras condições.
+- **Adaptações**: Escolha entre uma variedade de adaptações, como usar Linguagem Simples, destacar informações importantes em negrito e muito mais.
+- **Emojis**: Adicione emojis envolventes às tarefas para uma experiência de aprendizado aprimorada.
+
+### Comandos
+- **/config**: Inicie o processo de configuração para definir preferências.
+- **/adapt**: Adapte Atividades Escolares existentes de acordo com as preferências especificadas.
+- **/create**: Gere novas Atividades Escolares sobre um determinado tópico com as adaptações aplicadas.
+- **/continue**: Retome a tarefa anterior.
+- **/self-eval**: Avalie a qualidade da última resposta.
+- **/language**: Altere o idioma da interação.
 
 ## Uso
 
@@ -71,22 +87,6 @@ Caso não tenha acesso ao GPT-4, você pode utilizar a versão simplificada e ot
 *Para atividades maiores, insira primeiro o texto inicial de apoio e depois o enunciado/opções para melhores resultados.
 
 IMPORTANTE: PARA CASA INCLUSIVO é um prompt customizado para ChatGPT. A qualidade das adaptações pode variar de acordo com as mudanças que a OpenAI realiza no modelo ao longo do tempo.
-
-## Exemplos
-![Captura de Tela 2023-08-15 às 14 54 13](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/4ce4eb10-7478-475d-899d-97ecc3c46e3f)
-
-![Captura de Tela 2023-08-15 às 15 02 10](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/1871f32e-981b-4b24-84c1-a2d5dc4d0e44)
-
-------
-
-![Captura de Tela 2023-08-15 às 15 32 56](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/ab2c965b-fb98-48f7-b840-94cf11a6d928)
-
-![Captura de Tela 2023-08-15 às 15 32 08](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/83e4a503-a64e-4942-8a74-bf7ee188f881)
-
-![Captura de Tela 2023-08-15 às 15 34 41](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/21ddb73c-e6bd-4a0d-bcd9-e76d4928f759)
-
-![Captura de Tela 2023-08-15 às 15 35 03](https://github.com/luciocs/para-casa-inclusivo/assets/10077205/055934a0-1c46-4030-b025-190d1e25a743)
-
 
 ## Contribuição
 
@@ -121,8 +121,8 @@ Empodere a educação com adaptações personalizadas usando o PARA CASA INCLUSI
 
 # PARA CASA INCLUSIVO
 
-*Version: 0.1*
-*Authors: Nathalie Brasil and Lucio Santana*
+*Version: 0.3*
+
 
 PARA CASA INCLUSIVO is a tool that leverages Artificial Intelligence and ChatGPT for the cause of inclusion! 
 Designed to assist educators and students in creating and adapting homework assignments according to diverse learning needs. 
