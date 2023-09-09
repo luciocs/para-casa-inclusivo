@@ -1,5 +1,6 @@
 let imageKeywords = [];
 let adaptedText = "";
+let carouselIndex = 0;
 
 // Function to update the status on the page
 function updateStatus(message) {
@@ -221,11 +222,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add an event listener to each image in the 'imageDiv'
     imageDiv.addEventListener("click", function(event) {
       if (event.target.tagName === "IMG") {
-        modal.style.display = "block";
+        modal.style.display = "flex";
         modalImg.src = event.target.src;
       }
     });  
   
+    // Add an event listener to each image in the 'examples'
+    document.getElementById('examples').addEventListener("click", function(event) {
+      if (event.target.tagName === "IMG") {
+        modal.style.display = "flex";
+        modalImg.src = event.target.src;
+      }
+    });  
+
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
       modal.style.display = "none";
@@ -334,5 +343,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Restore the original body
         document.body.innerHTML = originalBody;   
     });
+  
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      move(-2);  // Move two items back
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      move(2);  // Move two items forward
+    });
+
+    function move(step) {
+      const wrapper = document.querySelector('.carousel-wrapper');
+      carouselIndex += step;
+      carouselIndex = Math.max(0, Math.min(carouselIndex, wrapper.children.length - 2));  // Adjust here to stop at the correct item
+      const newOffset = -carouselIndex * 300;  // 300 is the width of each carousel item
+      wrapper.style.transform = `translateX(${newOffset}px)`;
+    }
   
 });
