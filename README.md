@@ -121,8 +121,8 @@ Empodere a educação com adaptações personalizadas usando o PARA CASA INCLUSI
 
 # PARA CASA INCLUSIVO
 
-*Version: 0.1*
-*Authors: Nathalie Brasil and Lucio Santana*
+*Version: 0.3*
+
 
 PARA CASA INCLUSIVO is a tool that leverages Artificial Intelligence and ChatGPT for the cause of inclusion! 
 Designed to assist educators and students in creating and adapting homework assignments according to diverse learning needs. 
