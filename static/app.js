@@ -72,19 +72,25 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Step 1: Receiving Image/PDF
-        updateStatus('Carregando Imagem/PDF...');
-        
-        const fileInput = document.getElementById('fileInput');
-        const cameraInput = document.getElementById('cameraInput');
-        const file = fileInput.files[0];
-        const cameraFile = cameraInput.files[0];
-        
+        let file = null;
+        let cameraFile = null;
+      
+        if (fileInput.files.length > 0) {
+            file = fileInput.files[0];
+        }
+        if (cameraInput.files.length > 0) {
+            cameraFile = cameraInput.files[0];
+        }
+              
         // Check if at least one file is selected
         if (!file && !cameraFile) {
             resultDiv.innerHTML = '<p>Por favor selecione um arquivo ou tire uma foto da atividade.</p>';
             return;
         }
+
+        // Step 1: Receiving Image/PDF
+        updateStatus('Carregando Imagem/PDF...');
+        resultDiv.innerHTML = '';
 
         const formData = new FormData();
         
