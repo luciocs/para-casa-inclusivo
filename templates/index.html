@@ -57,7 +57,7 @@
                 <form id="uploadForm">
                   <div class="custom-file-upload">
                       <label>
-                          <input type="file" id="fileInput" name="file" class="file-input" accept=".jpg,.jpeg,.png,.pdf">
+                          <input type="file" id="fileInput" name="file" class="file-input" accept=".jpg,.jpeg,.png,.pdf" multiple>
                           <button type="button" onclick="document.getElementById('fileInput').click();" class="file-button">Escolha um arquivo</button>
                           <span id="fileLabel">Envie uma imagem ou PDF</span>
                       </label>
@@ -65,7 +65,7 @@
 
                   <div class="custom-file-upload camera-input">
                       <label>
-                          <input type="file" id="cameraInput" name="camera" class="file-input" accept="image/*" capture="camera">
+                          <input type="file" id="cameraInput" name="camera" class="file-input" accept="image/*" capture="camera" multiple>
                           <button type="button" onclick="document.getElementById('cameraInput').click();" class="file-button">Tire uma foto</button>
                           <span id="cameraLabel">Envie uma foto da atividade</span>
                       </label>

@@ -11,43 +11,46 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        file = request.files['file']
-        if file:
-            image_data = file.read()
-                                   
-            # Call Azure OCR to extract text
-            ocr_result = azure_ocr(image_data)
+        all_files = request.files.to_dict(flat=False)
+        concatenated_text = ""
 
-            # If ocr_result is None, that means an error occurred
-            if ocr_result is None:
-                return jsonify({"error": "Failed to extract text from image"}), 400
+        # Loop through each uploaded file
+        for file_key in all_files:
+            for file in all_files[file_key]:
+                if file:
+                    image_data = file.read()
+                    # Call Azure OCR to extract text
+                    ocr_result = azure_ocr(image_data)
+                    # If ocr_result is None, that means an error occurred
+                    if ocr_result is None:
+                        return jsonify({"error": "Failed to extract text from one or more images"}), 400
+                    
+                    concatenated_text += ocr_result + "\n"  # Concatenate OCR results
 
-            #print (ocr_result)
-            # Call OpenAI GPT to process text
-            gpt_result = adapt_text_for_inclusivity(ocr_result)
+        # Call OpenAI GPT to process the concatenated text
+        gpt_result = adapt_text_for_inclusivity(concatenated_text)
+        # If gpt_result is None, that means an error occurred
+        if gpt_result is None:
+            return jsonify({"error": "Failed to generate text"}), 400
 
-            # If gpt_result is None, that means an error occurred
-            if gpt_result is None:
-                return jsonify({"error": "Failed to generate text"}), 400
+        # Splitting adapted text and image list
+        parts = gpt_result['text'].split("---------")
+        adapted_text = parts[0]
+        image_list = parts[1].strip().split('\n') if len(parts) > 1 else [] 
 
-            # Splitting adapted text and image list
-            parts = gpt_result['text'].split("---------")
-            adapted_text = parts[0]
-            image_list = parts[1].strip().split('\n') if len(parts) > 1 else [] 
+        # Remove the first element
+        gpt_image_list = image_list[1:]
+        # Remove any empty strings
+        gpt_image_list = [item for item in gpt_image_list if item]
+        # Remove the numbering
+        cleaned_image_list = [item.split('. ')[1] if '. ' in item else item for item in gpt_image_list]
+        #print(cleaned_image_list)
 
-            # Remove the first element
-            gpt_image_list = image_list[1:]
-            # Remove any empty strings
-            gpt_image_list = [item for item in gpt_image_list if item]
-            # Remove the numbering
-            cleaned_image_list = [item.split('. ')[1] if '. ' in item else item for item in gpt_image_list]
-            #print(cleaned_image_list)
+        # Include WhatsApp sharing URL
+        whatsapp_url = generate_whatsapp_url(adapted_text)
+        
+        return jsonify({'adapted_text': adapted_text, 'image_keywords': cleaned_image_list, 'whatsapp_url': whatsapp_url})
 
-            # Include WhatsApp sharing URL
-            whatsapp_url = generate_whatsapp_url(adapted_text)
-            
-            return jsonify({'adapted_text': adapted_text, 'image_keywords': cleaned_image_list, 'whatsapp_url': whatsapp_url})
-              
     return render_template('index.html')
 
 @app.route('/fetch_images', methods=['POST'])

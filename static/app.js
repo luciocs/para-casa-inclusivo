@@ -65,34 +65,32 @@ document.addEventListener('DOMContentLoaded', () => {
     copyButton.addEventListener('click', copyToClipboard);  
       
     fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) {
-            const fileName = fileInput.files[0].name;
-            fileLabel.textContent = fileName;
-        }
+      const numFiles = fileInput.files.length;
+      if (numFiles > 0) {
+          fileLabel.textContent = `${numFiles} arquivo(s) selecionado(s)`;
+      } else {
+          fileLabel.textContent = "Escolha o arquivo";
+      }
     });
-    
+
     cameraInput.addEventListener('change', () => {
-        if (cameraInput.files.length > 0) {
-            const fileName = cameraInput.files[0].name;
-            cameraLabel.textContent = fileName;
-        }
-    });    
+      const numFiles = cameraInput.files.length;
+      if (numFiles > 0) {
+          cameraLabel.textContent = `${numFiles} foto(s) tirada(s)`;
+      } else {
+          cameraLabel.textContent = "Tire uma foto";
+      }
+    });
+ 
   
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        let file = null;
-        let cameraFile = null;
-      
-        if (fileInput.files.length > 0) {
-            file = fileInput.files[0];
-        }
-        if (cameraInput.files.length > 0) {
-            cameraFile = cameraInput.files[0];
-        }
-              
+        // Collect all files from both inputs into an array
+        const allFiles = [...Array.from(fileInput.files), ...Array.from(cameraInput.files)];
+
         // Check if at least one file is selected
-        if (!file && !cameraFile) {
+        if (allFiles.length === 0) {
             resultDiv.innerHTML = '<p>Por favor selecione um arquivo ou tire uma foto da atividade.</p>';
             return;
         }
@@ -100,16 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Step 1: Receiving Image/PDF
         updateStatus('Carregando Imagem/PDF...');
         resultDiv.innerHTML = '';
-
+      
+        // Create FormData and append all files to it
         const formData = new FormData();
-        
-        // Append the selected file to the form data
-        if (file) {
-            formData.append('file', file);
-        } else if (cameraFile) {
-            formData.append('file', cameraFile);
-        }
-
+        allFiles.forEach((file, index) => {
+            formData.append('file' + index, file);
+        });      
+      
         try {
             // Step 2: Running OCR and GPT-4
             updateStatus('Adaptando a atividade escolar com IA. Isso pode levar um minutinho...');
