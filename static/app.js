@@ -1,6 +1,7 @@
 let imageKeywords = [];
 let adaptedText = "";
 let carouselIndex = 0;
+let whatsappUrl = "";
 
 // Function to update the status on the page
 function updateStatus(message) {
@@ -12,6 +13,11 @@ function updateStatus(message) {
     spinner.style.display = 'none';
   }
   statusText.innerHTML = message;
+}
+
+// Function to share on WhatsApp
+function shareOnWhatsApp() {
+    window.open(whatsappUrl, '_blank');
 }
 
 // Function to copy text and formatting to clipboard
@@ -51,7 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const generateComicButton = document.getElementById('generateComicButton');
     const comicDiv = document.getElementById('comicContainer');  
     const printComicBook = document.getElementById('printComicBook');
+    const whatsappButton = document.getElementById("whatsappShareButton");
 
+    // Add event listener to the WhatsApp button
+    whatsappButton.addEventListener('click', shareOnWhatsApp);
     // Attach the copy function to the copy button
     copyButton.addEventListener('click', copyToClipboard);  
       
@@ -115,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.error) {
                 resultDiv.innerHTML = '<p>Error: ' + data.error + '</p>';
                 copyButton.style.display = "none";
+                whatsappButton.style.display = "none";
                 searchImagesButton.style.display = "none";
                 generateImagesButton.style.display = "none";
                 generateComicButton.style.display = "none";
@@ -122,6 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 adaptedText = data.adapted_text;
                 // Store image_keywords in the variable
                 imageKeywords = data.image_keywords;
+                // Store image_keywords in the variable
+                whatsappUrl = data.whatsapp_url;
+
                 
                 // Convert Markdown to HTML using Showdown
                 let converter = new showdown.Converter();
@@ -129,6 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
               
                 resultDiv.innerHTML = '<p>Atividade Escolar Adaptada:</p>' + html;
                 copyButton.style.display = 'inline-block';
+                // Show the button only on mobile
+                if (window.innerWidth <= 600) {
+                  whatsappButton.style.display = "inline-block";
+                }                
                 searchImagesButton.style.display = 'inline-block';
                 generateImagesButton.style.display = 'inline-block';
                 generateComicButton.style.display = 'inline-block';

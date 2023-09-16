@@ -134,8 +134,6 @@ button {
 @media only screen and (max-width: 600px) {
     .camera-input {
         display: inline-block;
-        margin-right: 15px;  /* Adds right margin */
-        margin-bottom: 10px;  /* Adds bottom margin */
     }
 }
 
@@ -153,7 +151,7 @@ button {
     background-color: #0056b3;
 }
 
-.copy-button, .image-button, .comic-button, .print-button, .file-button {
+.copy-button, .image-button, .comic-button, .print-button, .file-button, .wpp-button {
     padding: 8px;
     background-color: #87D0FA;
     border: none;
@@ -281,20 +279,15 @@ button {
 }
 
 .narration-box {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: #ffffff;
   padding: 5px;
-  border-radius: 5px;
   font-size: 12px; /* Smaller font */
-  z-index: 1; /* To make sure it appears above the image */
 }
 
 .comic-image {
   max-width: 100%;
   border-radius: 5px;
+  box-shadow: 0 6px 6px -6px #000000;
 }
 
 /* Carousel Styles */
