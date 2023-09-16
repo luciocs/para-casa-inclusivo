@@ -4,6 +4,7 @@ from openai_gpt import adapt_text_for_inclusivity
 from openai_gpt import create_dalle_images
 from openai_gpt import generate_comic_book
 from azure_bing import search_images
+import urllib.parse
 
 app = Flask(__name__)
 
@@ -41,8 +42,11 @@ def index():
             # Remove the numbering
             cleaned_image_list = [item.split('. ')[1] if '. ' in item else item for item in gpt_image_list]
             #print(cleaned_image_list)
+
+            # Include WhatsApp sharing URL
+            whatsapp_url = generate_whatsapp_url(adapted_text)
             
-            return jsonify({'adapted_text': adapted_text, 'image_keywords': cleaned_image_list})
+            return jsonify({'adapted_text': adapted_text, 'image_keywords': cleaned_image_list, 'whatsapp_url': whatsapp_url})
               
     return render_template('index.html')
 
@@ -80,14 +84,14 @@ def generate_comic():
     # Create the panels
     panels = create_panels(comic_output)
     return jsonify({'comic_panels': panels})    
-  
+
 def create_panels(comic_output):
     panels_data = parse_narration_and_images(comic_output)
     for panel in panels_data:
         image_url = create_dalle_images(panel['image_description'] + " Faça isso em um estilo vector artwork.")
         panel['image_url'] = image_url
     return panels_data
-
+  
 def parse_narration_and_images(comic_output):
     panels = []
     lines = comic_output.split('\n')
@@ -103,6 +107,12 @@ def parse_narration_and_images(comic_output):
                 narration = None  # Reset narration for the next panel
                 image_description = None  # Reset image_description for the next panel
     return panels
+
+# Function to generate WhatsApp sharing URL
+def generate_whatsapp_url(adapted_text):
+    base_url = "https://api.whatsapp.com/send?text="
+    adapted_text_encoded = urllib.parse.quote(adapted_text)
+    return f"{base_url}{adapted_text_encoded}"
   
   
 if __name__ == '__main__':
