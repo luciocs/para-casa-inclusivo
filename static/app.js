@@ -2,6 +2,7 @@ let imageKeywords = [];
 let adaptedText = "";
 let carouselIndex = 0;
 let whatsappUrl = "";
+let comicRow = null;
 
 // Function to update the status on the page
 function updateStatus(message) {
@@ -257,85 +258,81 @@ document.addEventListener('DOMContentLoaded', () => {
     span.onclick = function() {
       modal.style.display = "none";
     }
-
-    function displayComicPanels(comic_panels) {
-      comicDiv.innerHTML = '<p>Gibi:</p>';  // Clear existing panels
-
-      let comicRow = null;
-
-      comic_panels.forEach((panel, index) => {
-        // Create a new row every 2 panels
-        if (index % 2 === 0) {
-          comicRow = document.createElement('div');
-          comicRow.className = 'comic-row';
-        }
-
-        // Create a comic panel
-        const comicPanel = document.createElement('div');
-        comicPanel.className = 'comic-panel';
-
-        // Create the narration box
-        const narrationBox = document.createElement('div');
-        narrationBox.className = 'narration-box';
-        // Convert Markdown to HTML using Showdown
-        let converter = new showdown.Converter();
-        let html = converter.makeHtml(panel.narration);              
-        narrationBox.innerHTML = html;
-
-        // Create the image element
-        const img = document.createElement('img');
-        img.src = panel.image_url;
-        img.alt = 'Comic panel image';
-        img.className = 'comic-image';
-
-        // Append narration and image to the panel
-        comicPanel.appendChild(narrationBox);
-        comicPanel.appendChild(img);
-
-        // Append the panel to the row
-        comicRow.appendChild(comicPanel);
-
-        // Append the row to the container every 2 panels
-        if (index % 2 === 1) {
-          comicDiv.appendChild(comicRow);
-        }
+  
+    async function displaySingleComicPanel(panel_text, index) {
+      const response = await fetch('/generate_single_comic_panel', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ panel_text }),
       });
+
+      const panelData = await response.json();
+      const panel = panelData.comic_panel;
+
+      const comicPanel = document.createElement('div');
+      comicPanel.className = 'comic-panel';
+
+      // Create a new row every 2 panels
+      if (index % 2 === 0) {
+        comicRow = document.createElement('div');
+        comicRow.className = 'comic-row';
+      }      
+      
+      const narrationBox = document.createElement('div');
+      narrationBox.className = 'narration-box';
+      let converter = new showdown.Converter();
+      let html = converter.makeHtml(panel.narration);              
+      narrationBox.innerHTML = html;
+
+      const img = document.createElement('img');
+      img.src = panel.image_url;
+      img.alt = 'Comic panel image';
+      img.className = 'comic-image';
+
+      comicPanel.appendChild(narrationBox);
+      comicPanel.appendChild(img);
+
+      // Append the panel to the row
+      comicRow.appendChild(comicPanel);
+
+      // Append the row to the container every 2 panels
+      if (index % 2 === 1) {
+        comicDiv.appendChild(comicRow);
+      }      
     }
-    
+
     generateComicButton.addEventListener('click', async () => {
       try {
-          // Step 3: Generating Comic Book
-          updateStatus('Criando Gibi usando IA. Isso pode levar um minutinho ou dois...');
+        updateStatus('Criando Gibi usando IA. Isso pode levar um minutinho ou dois...');
+        const response = await fetch('/generate_comic_output', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ adapted_text: adaptedText }),
+        });
 
-          // Make the API call to generate the comic book
-          const response = await fetch('/generate_comic', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ adapted_text: adaptedText }),
-          });
+        const comicData = await response.json();
+        const comicOutputArray = comicData.comic_output;
 
-          // Parse the response and display the comic panels
-          const comicData = await response.json();
-          if (comicData.error) {
-              comicDiv.innerHTML = '<p>Error: ' + comicData.error + '</p>';
-              printComicBook.style.display = 'none';
-          } else {
-              if (comicData.comic_panels) {
-                displayComicPanels(comicData.comic_panels);
-                printComicBook.style.display = 'inline-block';
-              }
-          }
-          // Clear the status
-          updateStatus('');        
+        comicDiv.innerHTML = '<p>Gibi:</p>';  // Clear existing panels
+
+        for (let i = 0; i < comicOutputArray.length; i++) {
+          updateStatus('Criando Gibi usando IA. Criando painel ' + (i + 1) + ' de ' + comicOutputArray.length + '...');
+          await displaySingleComicPanel(comicOutputArray[i], i);
+        }
+
+        // Handle the last row if there is an odd number of panels
+        if (comicOutputArray.length % 2 !== 0) {
+          comicDiv.appendChild(comicRow);
+        }
+
+        printComicBook.style.display = 'inline-block';
+        updateStatus('');
       } catch (error) {
-          comicDiv.innerHTML = '<p>Error: ' + error + '</p>';
-          // Clear the status
-          updateStatus('');
+        comicDiv.innerHTML = '<p>Error: ' + error + '</p>';
+        updateStatus('');
       }            
     });
-  
+    
     printComicBook.addEventListener("click", function() {
         // Clone the elements you want to print
         const headerClone = document.querySelector('.header').cloneNode(true);

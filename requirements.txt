@@ -4,4 +4,7 @@ Jinja2
 requests
 openai
 azure-ai-formrecognizer
+azure-storage-blob
 Pillow
+datetime
+uuid

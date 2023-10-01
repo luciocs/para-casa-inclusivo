@@ -39,7 +39,7 @@ def adapt_text_for_inclusivity(extracted_text):
         )
         return {"text": response["choices"][0]["message"]["content"]}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error in adapt_text_for_inclusivity": str(e)}
 
 def generate_comic_book(adapted_text):
     openai.api_key = OPENAI_API_KEY
@@ -47,7 +47,7 @@ def generate_comic_book(adapted_text):
     messages=[
       {
         "role": "system",
-        "content": "# PARA CASA INCLUSIVO - VERSÃO QUADRINHOS\nVocê receberá o texto adaptado de uma atividade escolar. Sua tarefa é transformá-lo em narração e descrições de imagens para um livro de quadrinhos com 4 painéis por página, 2 em cada linha.\n\n1. Divida o texto adaptado em segmentos menores que serão usados em cada painel do quadrinho.\n2. Escreva a narração para cada painel de forma que complemente as ilustrações que serão geradas. O texto deve seguir as diretrizes:\n2.1. Linguagem Simples\n2.2. Usar emojis para facilitar a compreensão\n2.3. TODAS AS LETRAS EM MAIÚSCULA\n2.4. Destaque as palavras mais importantes de cada parágrafo em **negrito** para facilitar a leitura\n3. Para cada painel, inclua também uma descrição de imagem para ser gerada pelo Dall-E.\n4. Certifique-se de que a narração e as descrições de imagem fluiam bem e façam sentido como uma história em quadrinhos.\n5. Indique claramente onde começa e termina a narração e a descrição de cada painel, para facilitar a montagem posterior.\n\nResponda apenas com a narração e descrições de imagem formatadas para os painéis."
+        "content": "# PARA CASA INCLUSIVO - VERSÃO QUADRINHOS\nVocê receberá o texto adaptado de uma atividade escolar. Sua tarefa é transformá-lo em narração e descrições de imagens para um livro de quadrinhos com 4 painéis por página, 2 em cada linha.\n\n1. Divida o texto adaptado em segmentos menores que serão usados em cada painel do quadrinho.\n2. Escreva a narração para cada painel de forma que complemente as ilustrações que serão geradas. O texto deve seguir as diretrizes:\n2.1. Linguagem Simples\n2.2. Usar emojis para facilitar a compreensão\n2.3. TODAS AS LETRAS EM MAIÚSCULA\n2.4. Destaque as palavras mais importantes de cada parágrafo em **negrito** para facilitar a leitura\n3. Para cada painel, inclua também uma descrição de imagem para ser gerada pelo Stable Diffusion\n3.1 A descrição deve ser criada em inglês\n4. Certifique-se de que a narração e as descrições de imagem fluiam bem e façam sentido como uma história em quadrinhos.\n5. Indique claramente onde começa e termina a narração e a descrição de cada painel, para facilitar a montagem posterior.\n\nResponda apenas com a narração e descrições de imagem formatadas para os painéis."
       },
       {
         "role": "user",
@@ -67,7 +67,7 @@ def generate_comic_book(adapted_text):
         )
         return response['choices'][0]['message']['content']
     except Exception as e:
-        return {"error": str(e)}        
+        return {"error in generate_comic_book": str(e)}        
       
 def create_dalle_images(prompt, n=1, size="512x512"):
     openai.api_key = OPENAI_API_KEY
@@ -80,6 +80,6 @@ def create_dalle_images(prompt, n=1, size="512x512"):
         if response and response.get('data'):
             return [img['url'] for img in response['data']]
         else:
-            return {"error": "No images generated"}
+            return {"error in create_dalle_images": "No images generated"}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error in create_dalle_images": str(e)}
