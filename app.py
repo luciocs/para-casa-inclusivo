@@ -6,8 +6,11 @@ from openai_gpt import generate_comic_book
 from azure_bing import search_images
 from stability_ai import create_stability_images
 import urllib.parse
+import os
 
 app = Flask(__name__)
+
+IMAGE_PROVIDER = os.environ.get('IMAGE_PROVIDER', 'OpenAI')  # Default to OpenAI
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -70,10 +73,13 @@ def fetch_images():
 @app.route('/generate_images', methods=['POST'])
 def generate_images():
     image_keywords = request.json.get('image_keywords', [])
-    #Generate images using Dall-E
+    #Generate images using Dall-E (OpenAI) or Stable Diffusion (Stability)
     image_urls = []
     for keyword in image_keywords:
-          url = create_stability_images(keyword)
+          if IMAGE_PROVIDER == 'OpenAI':
+              url = create_dalle_images(keyword)
+          else:
+              url = create_stability_images(keyword)
           if url:
               image_urls.append(url)              
         
@@ -94,7 +100,10 @@ def generate_single_comic_panel():
   
 def create_panels(panels_data):
     for panel in panels_data:
-        image_url = create_stability_images(panel['image_description'])
+        if IMAGE_PROVIDER == 'OpenAI':
+            image_url = create_dalle_images(panel['image_description'])
+        else:
+            image_url = create_stability_images(panel['image_description'])
         panel['image_url'] = image_url
     return panels_data
   
