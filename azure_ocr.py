@@ -23,7 +23,7 @@ def azure_ocr(image_data):
             "prebuilt-document", image_data)
         result = poller.result()
     except Exception as e:
-        return {"error": f"Failed to start OCR job: {str(e)}"}
+        return {"error in azure_ocr": f"Failed to start OCR job: {str(e)}"}
 
     # Extract text from the OCR result
     extracted_text = []

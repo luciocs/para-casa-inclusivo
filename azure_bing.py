@@ -20,4 +20,4 @@ def search_images(keyword):
       return content_url
     except Exception as e:
         print(e)
-        return {"error": str(e)}
+        return {"error in search_images": str(e)}
