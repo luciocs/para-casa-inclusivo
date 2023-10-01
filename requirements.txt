@@ -7,4 +7,3 @@ azure-ai-formrecognizer
 azure-storage-blob
 Pillow
 datetime
-uuid
