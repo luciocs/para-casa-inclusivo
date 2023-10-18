@@ -46,7 +46,7 @@ Caso não tenha acesso ao GPT-4, você pode utilizar a versão simplificada e ot
 
 ## Exemplos
 
-![PARA CASA INCLUSIVO - Example - Fácil](https://blobparacasa.blob.core.windows.net/stability-images/Example-7.png?sp=r&st=2023-10-15T21:20:29Z&se=2023-10-16T05:20:29Z&spr=https&sv=2022-11-02&sr=b&sig=gMAVAcBMWnDO5s9QC5YwUPbzZzoyYRAQRlNrCQoZiYM%3D)
+![PARA CASA INCLUSIVO - Example - Fácil](https://blobparacasa.blob.core.windows.net/stability-images/Example-7.png?sp=r&st=2023-10-18T21:12:26Z&se=2025-10-31T05:12:26Z&spr=https&sv=2022-11-02&sr=b&sig=wAzLXnBZaXBQUr9PZR3swqihnUh4c4az0IegW9yX2j4%3D)
 
 ![PARA CASA INCLUSIVO - Comic Book 2](https://blobparacasa.blob.core.windows.net/stability-images/Example-8.png?sp=r&st=2023-10-01T13:50:02Z&se=2025-01-10T21:50:02Z&spr=https&sv=2022-11-02&sr=b&sig=nfaVH8wv6qSg%2Fw22VKpsvjFl8dG8dOn9Ncr5UW3JAZY%3D) 
 
