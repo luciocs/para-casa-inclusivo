@@ -25,9 +25,14 @@ def index():
                     image_data = file.read()
                     # Call Azure OCR to extract text
                     ocr_result = azure_ocr(image_data)
+                    # Check if ocr_result is an error message
+                    if isinstance(ocr_result, dict) and "error in azure_ocr" in ocr_result:
+                        # Handle the error accordingly
+                        print(ocr_result["error in azure_ocr"])
+                        return jsonify({"error": "Falha ao extrair o texto da(s) imagem(s)."}), 500                    
                     # If ocr_result is None, that means an error occurred
                     if ocr_result is None:
-                        return jsonify({"error": "Failed to extract text from one or more images"}), 400
+                        return jsonify({"error": "Falha ao extrair o texto da(s) imagem(s)"}), 400
                     
                     concatenated_text += ocr_result + "\n"  # Concatenate OCR results
 
@@ -35,7 +40,7 @@ def index():
         gpt_result = adapt_text_for_inclusivity(concatenated_text)
         # If gpt_result is None, that means an error occurred
         if gpt_result is None:
-            return jsonify({"error": "Failed to generate text"}), 400
+            return jsonify({"error": "Falha ao adaptar o texto com GPT."}), 400
 
         # Splitting adapted text and image list
         parts = gpt_result['text'].split("---------")
