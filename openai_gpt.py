@@ -29,10 +29,10 @@ def adapt_text_for_inclusivity(extracted_text):
     # Call OpenAI API for Chat Completion
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4-1106-preview",
             messages=messages,
             temperature=0,
-            max_tokens=4976,
+            max_tokens=4096,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
@@ -57,10 +57,10 @@ def generate_comic_book(adapted_text):
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4-1106-preview",
             messages=messages,
             temperature=0,
-            max_tokens=4776,
+            max_tokens=4096,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
@@ -69,10 +69,11 @@ def generate_comic_book(adapted_text):
     except Exception as e:
         return {"error in generate_comic_book": str(e)}        
       
-def create_dalle_images(prompt, n=1, size="512x512"):
+def create_dalle_images(prompt, n=1, size="1024x1024"):
     openai.api_key = OPENAI_API_KEY
     try:
         response = openai.Image.create(
+            model="dall-e-3",
             prompt=prompt,
             n=n,
             size=size
