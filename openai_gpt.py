@@ -39,6 +39,7 @@ def adapt_text_for_inclusivity(extracted_text):
         )
         return {"text": response["choices"][0]["message"]["content"]}
     except Exception as e:
+        print(e)
         return {"error in adapt_text_for_inclusivity": str(e)}
 
 def generate_comic_book(adapted_text):
@@ -67,6 +68,7 @@ def generate_comic_book(adapted_text):
         )
         return response['choices'][0]['message']['content']
     except Exception as e:
+        print(e)
         return {"error in generate_comic_book": str(e)}        
       
 def create_dalle_images(prompt, n=1, size="1024x1024"):
@@ -83,4 +85,5 @@ def create_dalle_images(prompt, n=1, size="1024x1024"):
         else:
             return {"error in create_dalle_images": "No images generated"}
     except Exception as e:
+        print(e)
         return {"error in create_dalle_images": str(e)}
