@@ -106,4 +106,5 @@ def create_stability_images(prompt, n=1, size="1024x1024"):
         else:
             return {"error in create_stability_images": "No images generated"}
     except Exception as e:
+        print(e)
         return {"error in create_stability_images": str(e)}

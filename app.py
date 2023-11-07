@@ -36,8 +36,15 @@ def index():
                     
                     concatenated_text += ocr_result + "\n"  # Concatenate OCR results
 
+        # If gpt_result is None, that means an error occurred
+        if concatenated_text is None:
+            return jsonify({"error": "Falha ao extrair o texto da(s) imagem(s)."}), 400
         # Call OpenAI GPT to process the concatenated text
         gpt_result = adapt_text_for_inclusivity(concatenated_text)
+        if isinstance(gpt_result, dict) and "error in adapt_text_for_inclusivity" in gpt_result:
+            # Handle the error accordingly
+            print(gpt_result["error in adapt_text_for_inclusivity"])
+            return jsonify({"error": "Falha ao adaptar o texto com GPT."}), 500                    
         # If gpt_result is None, that means an error occurred
         if gpt_result is None:
             return jsonify({"error": "Falha ao adaptar o texto com GPT."}), 400
