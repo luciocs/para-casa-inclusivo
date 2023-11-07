@@ -77,8 +77,8 @@ def create_dalle_images(prompt, n=1, size="1024x1024"):
             n=n,
             size=size
         )
-        if response and response.get('data'):
-            return [img['url'] for img in response['data']]
+        if response and response.data:
+            return [img.url for img in response.data]
         else:
             return {"error in create_dalle_images": "No images generated"}
     except Exception as e:
