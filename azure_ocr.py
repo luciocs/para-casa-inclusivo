@@ -1,4 +1,5 @@
 import os
+import logging
 from dotenv import load_dotenv
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.formrecognizer import DocumentAnalysisClient
@@ -9,6 +10,9 @@ load_dotenv()
 # Set up Azure OCR API endpoint and API key
 AZURE_OCR_ENDPOINT = "https://para-casa-inclusivo-ocr.cognitiveservices.azure.com/"
 AZURE_OCR_API_KEY = os.getenv("AZURE_OCR_API_KEY")  # You'll insert this later
+
+# Create a logger with the __name__ of the module
+logger = logging.getLogger(__name__)
 
 def azure_ocr(image_data):
     """
@@ -23,7 +27,7 @@ def azure_ocr(image_data):
             "prebuilt-document", image_data)
         result = poller.result()
     except Exception as e:
-        print(e)
+        logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in azure_ocr": f"Failed to start OCR job: {str(e)}"}
 
     # Extract text from the OCR result

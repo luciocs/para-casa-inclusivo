@@ -1,5 +1,6 @@
 import os
 import requests
+import logging
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -8,6 +9,9 @@ load_dotenv()
 # Set up Azure Image Search API endpoint and API key
 AZURE_BING_API_ENDPOINT = "https://api.bing.microsoft.com/v7.0/images/search"
 AZURE_BING_API_KEY = os.getenv("AZURE_BING_API_KEY")
+
+# Create a logger with the __name__ of the module
+logger = logging.getLogger(__name__)
 
 def search_images(keyword):
     try:
@@ -19,5 +23,5 @@ def search_images(keyword):
       content_url = [img["contentUrl"] for img in search_results["value"][:16]]
       return content_url
     except Exception as e:
-        print(e)
+        logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in search_images": str(e)}
