@@ -43,8 +43,6 @@ def adapt_text_for_inclusivity(extracted_text):
         return {"error in adapt_text_for_inclusivity": str(e)}
 
 def generate_comic_book(adapted_text):
-    openai.api_key = OPENAI_API_KEY
-
     messages=[
       {
         "role": "system",
@@ -72,7 +70,6 @@ def generate_comic_book(adapted_text):
         return {"error in generate_comic_book": str(e)}        
       
 def create_dalle_images(prompt, n=1, size="1024x1024"):
-    openai.api_key = OPENAI_API_KEY
     try:
         response = client.images.generate(
             model="dall-e-3",
