@@ -8,3 +8,4 @@ azure-ai-formrecognizer
 azure-storage-blob
 Pillow
 datetime
+urllib3<2.0
