@@ -2,6 +2,7 @@ import os
 import requests
 import base64
 import uuid
+import logging
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, generate_blob_sas, BlobSasPermissions
@@ -11,6 +12,9 @@ load_dotenv()
 
 # Get the Stability API Key from environment variables
 STABILITY_API_KEY = os.getenv("STABILITY_API_KEY")
+
+# Create a logger with the __name__ of the module
+logger = logging.getLogger(__name__)
 
 # Initialize the BlobServiceClient
 azure_connection_string = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
@@ -106,5 +110,5 @@ def create_stability_images(prompt, n=1, size="1024x1024"):
         else:
             return {"error in create_stability_images": "No images generated"}
     except Exception as e:
-        print(e)
+        logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in create_stability_images": str(e)}

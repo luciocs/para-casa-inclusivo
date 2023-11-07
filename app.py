@@ -7,66 +7,71 @@ from azure_bing import search_images
 from stability_ai import create_stability_images
 import urllib.parse
 import os
+import logging
 
 app = Flask(__name__)
 
 IMAGE_PROVIDER = os.environ.get('IMAGE_PROVIDER', 'OpenAI')  # Default to OpenAI
 
+# Configure the logging
+logging.basicConfig(level=logging.INFO)
+
+# If you want to use a named logger instead of 'app.logger'
+logger = logging.getLogger(__name__)
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        all_files = request.files.to_dict(flat=False)
-        concatenated_text = ""
+      try:
+          all_files = request.files.to_dict(flat=False)
+          concatenated_text = ""
 
-        # Loop through each uploaded file
-        for file_key in all_files:
-            for file in all_files[file_key]:
-                if file:
-                    image_data = file.read()
-                    # Call Azure OCR to extract text
-                    ocr_result = azure_ocr(image_data)
-                    # Check if ocr_result is an error message
-                    if isinstance(ocr_result, dict) and "error in azure_ocr" in ocr_result:
-                        # Handle the error accordingly
-                        print(ocr_result["error in azure_ocr"])
-                        return jsonify({"error": "Falha ao extrair o texto da(s) imagem(s)."}), 500                    
-                    # If ocr_result is None, that means an error occurred
-                    if ocr_result is None:
-                        return jsonify({"error": "Falha ao extrair o texto da(s) imagem(s)"}), 400
-                    
-                    concatenated_text += ocr_result + "\n"  # Concatenate OCR results
+          # Loop through each uploaded file
+          for file_key in all_files:
+              for file in all_files[file_key]:
+                  if file:
+                      image_data = file.read()
+                      # Call Azure OCR to extract text
+                      ocr_result = azure_ocr(image_data)
+                      # Check if ocr_result is an error message
+                      if isinstance(ocr_result, dict) and "error in azure_ocr" in ocr_result:
+                          error_detail = ocr_result["error in azure_ocr"]
+                          logger.error(f"Azure OCR error: {error_detail}")
+                          return jsonify({"error": "Failed to extract text from images."}), 500
+                      concatenated_text += ocr_result + "\n"  # Concatenate OCR results
 
-        # If gpt_result is None, that means an error occurred
-        if concatenated_text is None:
-            return jsonify({"error": "Falha ao extrair o texto da(s) imagem(s)."}), 400
-        # Call OpenAI GPT to process the concatenated text
-        gpt_result = adapt_text_for_inclusivity(concatenated_text)
-        if isinstance(gpt_result, dict) and "error in adapt_text_for_inclusivity" in gpt_result:
-            # Handle the error accordingly
-            print(gpt_result["error in adapt_text_for_inclusivity"])
-            return jsonify({"error": "Falha ao adaptar o texto com GPT."}), 500                    
-        # If gpt_result is None, that means an error occurred
-        if gpt_result is None:
-            return jsonify({"error": "Falha ao adaptar o texto com GPT."}), 400
+          if not concatenated_text:
+              raise ValueError("No text was concatenated from the images.")
 
-        # Splitting adapted text and image list
-        parts = gpt_result['text'].split("---------")
-        adapted_text = parts[0]
-        image_list = parts[1].strip().split('\n') if len(parts) > 1 else [] 
+          # Call OpenAI GPT to process the concatenated text
+          gpt_result = adapt_text_for_inclusivity(concatenated_text)
+          if isinstance(gpt_result, dict) and "error in adapt_text_for_inclusivity" in gpt_result:
+              error_detail = gpt_result["error in adapt_text_for_inclusivity"]
+              logger.error(f"GPT adaptation error: {error_detail}")
+              return jsonify({"error": "Failed to adapt text using GPT."}), 500
 
-        # Remove the first element
-        gpt_image_list = image_list[1:]
-        # Remove any empty strings
-        gpt_image_list = [item for item in gpt_image_list if item]
-        # Remove the numbering
-        cleaned_image_list = [item.split('. ')[1] if '. ' in item else item for item in gpt_image_list]
-        #print(cleaned_image_list)
+          # Splitting adapted text and image list
+          parts = gpt_result['text'].split("---------")
+          adapted_text = parts[0]
+          image_list = parts[1].strip().split('\n') if len(parts) > 1 else [] 
 
-        # Include WhatsApp sharing URL
-        whatsapp_url = generate_whatsapp_url(adapted_text)
-        
-        return jsonify({'adapted_text': adapted_text, 'image_keywords': cleaned_image_list, 'whatsapp_url': whatsapp_url})
+          # Remove the first element
+          gpt_image_list = image_list[1:]
+          # Remove any empty strings
+          gpt_image_list = [item for item in gpt_image_list if item]
+          # Remove the numbering
+          cleaned_image_list = [item.split('. ')[1] if '. ' in item else item for item in gpt_image_list]
+          #print(cleaned_image_list)
 
+          # Include WhatsApp sharing URL
+          whatsapp_url = generate_whatsapp_url(adapted_text)
+
+          return jsonify({'adapted_text': adapted_text, 'image_keywords': cleaned_image_list, 'whatsapp_url': whatsapp_url})
+
+      except Exception as e:
+          logger.exception("An error occurred during image processing.")
+          return jsonify({"error": "An unexpected error occurred during image processing."}), 500
+                
     return render_template('index.html')
 
 @app.route('/fetch_images', methods=['POST'])

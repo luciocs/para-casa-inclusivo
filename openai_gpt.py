@@ -1,5 +1,6 @@
 import os
 import openai
+import logging
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -7,6 +8,9 @@ load_dotenv()
 
 # Set up OpenAI API key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # You'll insert this later
+
+# Create a logger with the __name__ of the module
+logger = logging.getLogger(__name__)
 
 def adapt_text_for_inclusivity(extracted_text):
     """Adapt text for inclusivity using OpenAI GPT."""
@@ -39,7 +43,7 @@ def adapt_text_for_inclusivity(extracted_text):
         )
         return {"text": response["choices"][0]["message"]["content"]}
     except Exception as e:
-        print(e)
+        logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in adapt_text_for_inclusivity": str(e)}
 
 def generate_comic_book(adapted_text):
@@ -68,7 +72,7 @@ def generate_comic_book(adapted_text):
         )
         return response['choices'][0]['message']['content']
     except Exception as e:
-        print(e)
+        logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in generate_comic_book": str(e)}        
       
 def create_dalle_images(prompt, n=1, size="1024x1024"):
@@ -85,5 +89,5 @@ def create_dalle_images(prompt, n=1, size="1024x1024"):
         else:
             return {"error in create_dalle_images": "No images generated"}
     except Exception as e:
-        print(e)
+        logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in create_dalle_images": str(e)}
