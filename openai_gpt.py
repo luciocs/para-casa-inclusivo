@@ -1,13 +1,12 @@
 import os
-import openai
 import logging
 from dotenv import load_dotenv
+from openai import OpenAI
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Set up OpenAI API key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # You'll insert this later
+client = OpenAI()
 
 # Create a logger with the __name__ of the module
 logger = logging.getLogger(__name__)
@@ -15,9 +14,6 @@ logger = logging.getLogger(__name__)
 def adapt_text_for_inclusivity(extracted_text):
     """Adapt text for inclusivity using OpenAI GPT."""
     
-    # Initialize OpenAI API
-    openai.api_key = OPENAI_API_KEY
-
     # Create a conversation with the prompt and user message
     messages = [
         {
@@ -32,16 +28,16 @@ def adapt_text_for_inclusivity(extracted_text):
 
     # Call OpenAI API for Chat Completion
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
+        response = client.chat.completions.create(
+            model="gpt-4-1106-preview",
             messages=messages,
             temperature=0,
-            max_tokens=4976,
+            max_tokens=4096,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
         )
-        return {"text": response["choices"][0]["message"]["content"]}
+        return {"text": response.choices[0].message.content}
     except Exception as e:
         logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in adapt_text_for_inclusivity": str(e)}
@@ -61,24 +57,25 @@ def generate_comic_book(adapted_text):
     ]    
 
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
+        response = client.chat.completions.create(
+            model="gpt-4-1106-preview",
             messages=messages,
             temperature=0,
-            max_tokens=4776,
+            max_tokens=4096,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
         )
-        return response['choices'][0]['message']['content']
+        return response.choices[0].message.content
     except Exception as e:
         logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in generate_comic_book": str(e)}        
       
-def create_dalle_images(prompt, n=1, size="512x512"):
+def create_dalle_images(prompt, n=1, size="1024x1024"):
     openai.api_key = OPENAI_API_KEY
     try:
-        response = openai.Image.create(
+        response = client.images.generate(
+            model="dall-e-3",
             prompt=prompt,
             n=n,
             size=size
