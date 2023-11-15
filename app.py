@@ -3,11 +3,11 @@ from azure_ocr import azure_ocr
 from openai_gpt import adapt_text_for_inclusivity
 from openai_gpt import create_dalle_images
 from openai_gpt import generate_comic_book
-from azure_bing import search_images
 from stability_ai import create_stability_images
 import urllib.parse
 import os
 import logging
+import requests
 
 app = Flask(__name__)
 
@@ -18,6 +18,30 @@ logging.basicConfig(level=logging.INFO)
 
 # If you want to use a named logger instead of 'app.logger'
 logger = logging.getLogger(__name__)
+
+ZAPIER_WEBHOOK_URL = os.environ.get('ZAPIER_WEBHOOK_URL')
+
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    feedback_data = request.get_json()
+    is_positive = feedback_data['positive']
+    text_feedback = feedback_data.get('text', '')
+
+    # Construct the feedback payload
+    payload = {
+        'is_positive': is_positive,
+        'text_feedback': text_feedback,
+    }
+
+    # Send the feedback to the Zapier Webhook
+    response = requests.post(ZAPIER_WEBHOOK_URL, json=payload)
+
+    # Check if the POST request to the webhook was successful
+    if response.status_code == 200:
+        return jsonify({'success': True}), 200
+    else:
+        # Log or handle unsuccessful webhook POST request here
+        return jsonify({'success': False, 'message': 'Failed to send feedback to webhook'}), 500
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -73,19 +97,6 @@ def index():
           return jsonify({"error": "An unexpected error occurred during image processing."}), 500
                 
     return render_template('index.html')
-
-@app.route('/fetch_images', methods=['POST'])
-def fetch_images():
-    image_keywords = request.json.get('image_keywords', [])
-    #Serachin for the images on the internet
-    image_urls = []
-    for keyword in image_keywords:
-          url = search_images(keyword)
-          if url:
-              image_urls.append(url)              
-
-    #print(image_urls)  
-    return jsonify({'image_urls': image_urls})  
 
 @app.route('/generate_images', methods=['POST'])
 def generate_images():

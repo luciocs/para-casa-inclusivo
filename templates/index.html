@@ -53,22 +53,36 @@
           </div>      
         </div>  
         <div class="chat-window">
-            <div class="output" id="result"></div>
-            <button id="copyButton" class="copy-button" style="display:none">Copiar Texto</button>
-            <button id="whatsappShareButton" class="wpp-button" style="display:none">Compartilhar no WhatsApp</button>
-            <button id="searchImagesButton" class="image-button" style="display:none">Buscar Imagens de Apoio</button>          
-            <button id="generateImagesButton" class="image-button" style="display:none">Criar Imagens de Apoio com IA</button>          
-            <button id="generateComicButton" class="comic-button" style="display:none">Criar Gibi com IA</button>
-            <div id="supportImages" class="image-container"></div>
+            <div class="output" id="result" style="display:none"></div>
+            <!-- Feedback Section -->
+            <div id="feedback-section" class="feedback" style="display:none">
+              <p>Essa adaptação foi útil?</p>
+              <button id="thumbs-up" class="feedback-button" aria-label="Thumbs Up">&#128077;</button> <!-- 👍 -->
+              <button id="thumbs-down" class="feedback-button" aria-label="Thumbs Down">&#128078;</button> <!-- 👎 -->
+              <!-- Text input for additional feedback -->
+              <div id="additional-feedback" class="additional-feedback" style="display:none;">
+                <textarea id="feedback-text" placeholder="O que funcinou? O que não ficou bom?"></textarea>
+                <button id="submit-feedback" class="submit-feedback">Enviar feedback</button>
+              </div>
+            </div>
+            <div id="actions" class="actions" style="display:none">
+              <p>Como você gostaria de utilizar essa adaptação?</p>
+              <button id="copyButton" class="copy-button">Copiar Texto</button>
+              <button id="whatsappShareButton" class="wpp-button">Compartilhar no WhatsApp</button>
+              <button id="generateImagesButton" class="image-button">Criar Imagens de Apoio com IA</button>          
+              <button id="generateComicButton" class="comic-button">Criar Gibi com IA</button> 
+              <button id="newAdaptationButton" class="new-button">Nova Adaptação</button> 
+            </div>
+            <div id="supportImages" class="image-container" style="display:none"></div>
             <div id="comicContainer" class="comic-window"></div>
             <button id="printComicBook" class="print-button" style="display:none">Imprimir Gibi</button>          
-            <div class="input">
+            <div id="adaptation-input" class="input">
                 <form id="uploadForm">
                   <div class="custom-file-upload">
                       <label>
                           <input type="file" id="fileInput" name="file" class="file-input" accept=".jpg,.jpeg,.png,.pdf" multiple>
                           <button type="button" onclick="document.getElementById('fileInput').click();" class="file-button">Escolha um arquivo</button>
-                          <span id="fileLabel">Envie uma imagem ou PDF</span>
+                          <span id="fileLabel">Imagem ou PDF da Atividade</span>
                       </label>
                   </div>
 
@@ -76,7 +90,7 @@
                       <label>
                           <input type="file" id="cameraInput" name="camera" class="file-input" accept="image/*" capture="camera" multiple>
                           <button type="button" onclick="document.getElementById('cameraInput').click();" class="file-button">Tire uma foto</button>
-                          <span id="cameraLabel">Envie uma foto da atividade</span>
+                          <span id="cameraLabel">Foto da Atividade</span>
                       </label>
                   </div>
                   <button type="submit" class="submit-button">Adaptar</button>
@@ -117,9 +131,16 @@
             <button id="nextBtn">Próximo</button>
           </div>
         </div>      
+        <!-- Manifesto Video Section -->
+        <div class="tutorial-section">
+            <h2 class="tutorial-title">Manifesto sobre Neurodiversidade e Inteligência Artificial</h2>
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/WBZAhDPsqdg" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
         <div class="about-section">
             <h2 class="about-title">Sobre o Para Casa Inclusivo</h2>
-            <p class="about-version"><strong>Versão:</strong> 0.4</p>
+            <p class="about-version"><strong>Versão:</strong> 0.5</p>
             <hr>
             <p class="about-description">
                 PARA CASA INCLUSIVO é uma ferramenta que coloca a Inteligência Artificial à serviço da inclusão!
@@ -130,16 +151,11 @@
             <p class="about-target">
                 Se você é uma professora procurando tornar as atividades mais inclusivas, um mediador ou parte de uma equipe pedagógica trabalhando com uma criança atípica, o PARA CASA INCLUSIVO está aqui para ajudar!
             </p>
-            <h3 class="about-versions-title">Versões disponíveis:</h3>
-            <ul class="about-versions-list">
-                <li>&#x1F4F1; <strong>Fácil de Incluir (Este Site):</strong> Faça upload de uma imagem ou PDF, e nossa tecnologia adaptará o material educacional em tempo real utilizando visão computacional e inteligência artificial.</li>
-                <li>&#x1F916; <strong><a href="https://chat.openai.com/share/876b4883-6242-4028-9a16-af62b5cc5701" target="_blank" rel="noopener noreferrer">Versão Completa do ChatGPT para GPT-4:</a></strong> Utiliza a mais recente tecnologia GPT-4 para oferecer adaptações mais abrangentes e personalizadas. (necessário assinar o ChatGPT Plus)</li>
-                <li>&#x1F916; <strong><a href="https://chat.openai.com/share/174c02bf-4f98-453c-a412-0c5d0492929a" target="_blank" rel="noopener noreferrer">Versão Simplificada para GPT-3.5:</a></strong> Oferece adaptações básicas usando GPT-3.5. (100% gratuito)</li>
-             </ul>
             <h3 class="about-contribution-title">Contribuição:</h3>
             <p>Mais do que um projeto open source, é um convite à colaboração! Vamos juntar nossas forças, experiências e conhecimentos para promover uma educação cada vez mais inclusiva.</p>
             <p><a href="https://github.com/luciocs/para-casa-inclusivo" target="_blank" rel="noopener noreferrer">Acesse nosso GitHub!</a></p>
             <p>Compartilhe com a escola de seu filho e com todas as famílias que poderiam se beneficiar desta iniciativa!</p>
+            <p><a href="https://www.instagram.com/paracasainclusivo/" target="_blank" rel="noopener noreferrer">Compartilhe nosso Instagram!</a></p>
             <h3 class="about-license-title">Licença:</h3>
             <p>Este projeto está licenciado sob a <a href="https://github.com/luciocs/para-casa-inclusivo/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Licença MIT.</a></p>
             <hr>
