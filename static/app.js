@@ -45,11 +45,65 @@ async function copyToClipboard() {
                 'text/html': blob
             })
         ]);
-        alert('Text and format copied successfully!');
+        alert('Texto copiado para área de transferência. Agora é só colar onde você precisar!');
     } catch (err) {
-        alert('Failed to copy text: ' + err);
+        alert('Falha ao copiar o texto: ' + err);
     }
 }
+
+function handleFeedback(isPositive) {
+  // Add 'active' class to the clicked button and remove from the other
+  document.getElementById('thumbs-up').classList.toggle('active', isPositive);
+  document.getElementById('thumbs-down').classList.toggle('active', !isPositive);
+
+  // Placeholder for the next step: Sending the feedback to the server
+  console.log('Feedback given:', isPositive ? 'Positive' : 'Negative');
+  
+  // Show the additional feedback input
+  document.getElementById('additional-feedback').style.display = 'block';
+}
+
+// Step 1: Define the sendTextFeedbackToServer function with consistent error handling
+function sendTextFeedbackToServer(isPositive, textFeedback) {
+  fetch('/feedback', { // The URL to the feedback route on your server
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      positive: isPositive, // Boolean indicating positive or negative feedback
+      text: textFeedback // The additional text feedback from the user
+    })
+  })
+  .then(response => {
+    if (!response.ok) {
+      // If the server response is not ok, throw an error
+      throw new Error('Network response was not ok: ' + response.statusText);
+    }
+  })
+  .catch(error => {
+    // Handle any errors that occurred during the fetch operation
+    console.error('Error sending feedback:', error);
+    alert('Houve um erro ao enviar o seu feedback. Por favor, tente novamente.'); // Error message in Portuguese
+  });
+}
+
+// Event Listener for the Submit Feedback Button
+document.getElementById('submit-feedback').addEventListener('click', function() {
+  const textFeedback = document.getElementById('feedback-text').value;
+  const isPositive = document.getElementById('thumbs-up').classList.contains('active');
+  if(textFeedback)
+  {
+    sendTextFeedbackToServer(isPositive, textFeedback);
+  }
+  alert('Obrigado pelo seu feedback!'); // Thank the user in Portuguese
+  // Optionally, hide the additional feedback input after submission
+  document.getElementById('additional-feedback').style.display = 'none';
+});
+
+document.getElementById('newAdaptationButton').addEventListener('click', function() {
+  window.open('https://www.paracasainclusivo.com.br', '_blank');
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const uploadForm = document.getElementById('uploadForm');
@@ -60,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileLabel = document.getElementById('fileLabel');
     const cameraInput = document.getElementById('cameraInput');
     const cameraLabel = document.getElementById('cameraLabel');
-    const searchImagesButton = document.getElementById('searchImagesButton');
     const generateImagesButton = document.getElementById('generateImagesButton');
     const modal = document.getElementById("imageModal");
     const modalImg = document.getElementById("modalImage");
@@ -69,7 +122,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const comicDiv = document.getElementById('comicContainer');  
     const printComicBook = document.getElementById('printComicBook');
     const whatsappButton = document.getElementById("whatsappShareButton");
+    const thumbsUp = document.getElementById('thumbs-up');
+    const thumbsDown = document.getElementById('thumbs-down');
+    const feedbackDiv = document.getElementById('feedback-section');
+    const actionsDiv = document.getElementById('actions');
+    const adaptationDiv = document.getElementById('adaptation-input');
 
+    thumbsUp.addEventListener('click', function() {
+      gtag('event', 'Positive feedback', {
+          'event_category': 'Button',
+          'event_label': 'Thumbs up on Adaptation'
+      });
+      handleFeedback(true);
+    });
+    thumbsDown.addEventListener('click', function() {
+      gtag('event', 'Negative feedback', {
+          'event_category': 'Button',
+          'event_label': 'Thumbs down on Adaptation'
+      });
+      handleFeedback(false);
+    });
     // Add event listener to the WhatsApp button
     whatsappButton.addEventListener('click', shareOnWhatsApp);
     // Attach the copy function to the copy button
@@ -107,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check if at least one file is selected
         if (allFiles.length === 0) {
+            resultDiv.style.display = 'block';
             resultDiv.innerHTML = '<p>Por favor selecione um arquivo ou tire uma foto da atividade.</p>';
             // Warning tracking
             gtag('event', 'No file selected', {
@@ -138,12 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
                       
             if (data.error) {
+                resultDiv.style.display = 'block';
                 resultDiv.innerHTML = '<p>Error: ' + data.error + '</p>';
-                copyButton.style.display = "none";
-                whatsappButton.style.display = "none";
-                searchImagesButton.style.display = "none";
-                generateImagesButton.style.display = "none";
-                generateComicButton.style.display = "none";
+                actionsDiv.style.display = "none";
+                feedbackDiv.style.display = "none";
                 // Error tracking
                 gtag('event', 'Adaptation Error', {
                     'event_category': 'Error',
@@ -159,17 +230,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Convert Markdown to HTML using Showdown
                 let converter = new showdown.Converter();
-                let html = converter.makeHtml(adaptedText);              
+                let html = converter.makeHtml(adaptedText);  
               
+                resultDiv.style.display = 'block';
                 resultDiv.innerHTML = '<p>Atividade Escolar Adaptada:</p>' + html;
-                copyButton.style.display = 'inline-block';
+                actionsDiv.style.display = 'block';
                 // Show the button only on mobile
-                if (window.innerWidth <= 600) {
-                  whatsappButton.style.display = "inline-block";
-                }                
-                searchImagesButton.style.display = 'inline-block';
-                generateImagesButton.style.display = 'inline-block';
-                generateComicButton.style.display = 'inline-block';
+                if (window.innerWidth > 600) {
+                  whatsappButton.style.display = "none";
+                }
+                feedbackDiv.style.display = 'block';
+                adaptationDiv.style.display = "none";
               
                 // Clear the status
                 updateStatus('');
@@ -180,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });              
             }
         } catch (error) {
+            resultDiv.style.display = 'block';
             resultDiv.innerHTML = '<p>Error: ' + error + '</p>';
             // Clear the status
             updateStatus('');
@@ -191,57 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
   
-    // Event listener for Add Support Images button
-    searchImagesButton.addEventListener('click', async () => {
-        try {
-            // Google Analytics event for button click
-            gtag('event', 'Search images', {
-                'event_category': 'Button',
-                'event_label': 'Search support images on web'
-            });
-            // Step 3: Searchin for support images
-            updateStatus('Pesquisando imagens de apoio...');
-
-            const response = await fetch('/fetch_images', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({image_keywords: imageKeywords}),
-            });
-
-            const imageData = await response.json();
-
-            if (imageData.error) {
-                imageDiv.innerHTML = '<p>Error: ' + imageData.error + '</p>';
-            } else {
-                const imageUrls = imageData.image_urls;
-
-                // Display images
-                imageDiv.innerHTML = '<p>Imagens de Apoio:</p>';
-                imageUrls.forEach(url => {
-                    const img = document.createElement('img');
-                    img.src = url;
-                    img.alt = 'Imagem de suporte';
-                    img.className = 'support-image';
-                    imageDiv.appendChild(img);
-                });
-                // Clear the status
-                updateStatus('');
-            };
-          
-        } catch (error) {
-            imageDiv.innerHTML = '<p>Error: ' + error + '</p>';
-            // Clear the status
-            updateStatus('');
-            // Error tracking
-            gtag('event', 'Searching images Error', {
-                'event_category': 'Error',
-                'event_label': 'Search support images on web | Error'
-            });                        
-        }            
-    });
-
     // Event listener for Generate New Images button
     generateImagesButton.addEventListener('click', async () => {
         try {
@@ -264,11 +285,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageData = await response.json();
 
             if (imageData.error) {
+                imageDiv.style.display = 'block';
                 imageDiv.innerHTML = '<p>Error: ' + imageData.error + '</p>';
             } else {
                 const imageUrls = imageData.image_urls;
 
                 // Display images
+                imageDiv.style.display = 'block';
                 imageDiv.innerHTML = '<p>Imagens de Apoio:</p>';
                 imageUrls.forEach(url => {
                     const img = document.createElement('img');
@@ -282,6 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
         } catch (error) {
+            imageDiv.style.display = 'block';
             imageDiv.innerHTML = '<p>Error: ' + error + '</p>';
             // Clear the status
             updateStatus('');
