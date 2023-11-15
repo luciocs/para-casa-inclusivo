@@ -18,11 +18,21 @@ function updateStatus(message) {
 
 // Function to share on WhatsApp
 function shareOnWhatsApp() {
+    // Google Analytics event for button click
+    gtag('event', 'Share on WhatsApp', {
+        'event_category': 'Button',
+        'event_label': 'Share adapted text on WhatsApp'
+    });
     window.open(whatsappUrl, '_blank');
 }
 
 // Function to copy text and formatting to clipboard
 async function copyToClipboard() {
+    // Google Analytics event for button click
+    gtag('event', 'Copy to clipboard', {
+        'event_category': 'Button',
+        'event_label': 'Copy adapted text to clipboard'
+    });  
     const resultDiv = document.getElementById('result');
 
     // Create a blob with the HTML content
@@ -87,12 +97,22 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        // Google Analytics event for button click
+        gtag('event', 'Adapt', {
+            'event_category': 'Button',
+            'event_label': 'Adapt activity'
+        });
         // Collect all files from both inputs into an array
         const allFiles = [...Array.from(fileInput.files), ...Array.from(cameraInput.files)];
 
         // Check if at least one file is selected
         if (allFiles.length === 0) {
             resultDiv.innerHTML = '<p>Por favor selecione um arquivo ou tire uma foto da atividade.</p>';
+            // Warning tracking
+            gtag('event', 'No file selected', {
+                'event_category': 'Warning',
+                'event_label': 'No file selected | Adapt | Warning'
+            });          
             return;
         }
 
@@ -124,6 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchImagesButton.style.display = "none";
                 generateImagesButton.style.display = "none";
                 generateComicButton.style.display = "none";
+                // Error tracking
+                gtag('event', 'Adaptation Error', {
+                    'event_category': 'Error',
+                    'event_label': 'Adapt | Error'
+                });              
             } else {
                 adaptedText = data.adapted_text;
                 // Store image_keywords in the variable
@@ -148,17 +173,32 @@ document.addEventListener('DOMContentLoaded', () => {
               
                 // Clear the status
                 updateStatus('');
+                // Success tracking
+                gtag('event', 'Adaptation Success', {
+                    'event_category': 'Success',
+                    'event_label': 'Adapt | Success'
+                });              
             }
         } catch (error) {
             resultDiv.innerHTML = '<p>Error: ' + error + '</p>';
             // Clear the status
             updateStatus('');
+            // Error tracking
+            gtag('event', 'Adaptation Error', {
+                'event_category': 'Error',
+                'event_label': 'Adapt | Error'
+            });                        
         }
     });
   
     // Event listener for Add Support Images button
     searchImagesButton.addEventListener('click', async () => {
         try {
+            // Google Analytics event for button click
+            gtag('event', 'Search images', {
+                'event_category': 'Button',
+                'event_label': 'Search support images on web'
+            });
             // Step 3: Searchin for support images
             updateStatus('Pesquisando imagens de apoio...');
 
@@ -194,12 +234,22 @@ document.addEventListener('DOMContentLoaded', () => {
             imageDiv.innerHTML = '<p>Error: ' + error + '</p>';
             // Clear the status
             updateStatus('');
+            // Error tracking
+            gtag('event', 'Searching images Error', {
+                'event_category': 'Error',
+                'event_label': 'Search support images on web | Error'
+            });                        
         }            
     });
 
     // Event listener for Generate New Images button
     generateImagesButton.addEventListener('click', async () => {
         try {
+            // Google Analytics event for button click
+            gtag('event', 'Generate images', {
+                'event_category': 'Button',
+                'event_label': 'Generate support images'
+            });
             // Step 3: Generating new support images using Dall-E
             updateStatus('Criando imagens de apoio usando IA. Isso pode levar um minutinho...');
 
@@ -235,12 +285,22 @@ document.addEventListener('DOMContentLoaded', () => {
             imageDiv.innerHTML = '<p>Error: ' + error + '</p>';
             // Clear the status
             updateStatus('');
+            // Error tracking
+            gtag('event', 'Generating images Error', {
+                'event_category': 'Error',
+                'event_label': 'Generate support images | Error'
+            });                                  
         }            
     });  
   
     // Add an event listener to each image in the 'imageDiv'
     imageDiv.addEventListener("click", function(event) {
       if (event.target.tagName === "IMG") {
+        // Google Analytics event for button click
+        gtag('event', 'Expand image', {
+            'event_category': 'Button',
+            'event_label': 'Expand generated image'
+        });
         modal.style.display = "flex";
         modalImg.src = event.target.src;
       }
@@ -249,6 +309,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add an event listener to each image in the 'examples'
     document.getElementById('examples').addEventListener("click", function(event) {
       if (event.target.tagName === "IMG") {
+        // Google Analytics event for button click
+        gtag('event', 'Expand image', {
+            'event_category': 'Button',
+            'event_label': 'Expand example image'
+        });
         modal.style.display = "flex";
         modalImg.src = event.target.src;
       }
@@ -303,6 +368,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     generateComicButton.addEventListener('click', async () => {
       try {
+        // Google Analytics event for button click
+        gtag('event', 'Generate comic book', {
+            'event_category': 'Button',
+            'event_label': 'Generate comic book'
+        });
         updateStatus('Criando Gibi usando IA. Isso pode levar um minutinho ou dois...');
         const response = await fetch('/generate_comic_output', {
           method: 'POST',
@@ -330,10 +400,20 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (error) {
         comicDiv.innerHTML = '<p>Error: ' + error + '</p>';
         updateStatus('');
+        // Error tracking
+        gtag('event', 'Generating comic book Error', {
+            'event_category': 'Error',
+            'event_label': 'Generate comic book | Error'
+        });                                  
       }            
     });
     
     printComicBook.addEventListener("click", function() {
+        // Google Analytics event for button click
+        gtag('event', 'Print comic book', {
+            'event_category': 'Button',
+            'event_label': 'Print comic book'
+        });
         // Clone the elements you want to print
         const headerClone = document.querySelector('.header').cloneNode(true);
         const comicBookClone = comicDiv.cloneNode(true);
@@ -360,10 +440,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   
     document.getElementById('prevBtn').addEventListener('click', () => {
+      // Google Analytics event for button click
+      gtag('event', 'Navegate examples', {
+          'event_category': 'Button',
+          'event_label': 'Navegate examples'
+      });
       move(-2);  // Move two items back
     });
 
     document.getElementById('nextBtn').addEventListener('click', () => {
+      // Google Analytics event for button click
+      gtag('event', 'Navegate examples', {
+          'event_category': 'Button',
+          'event_label': 'Navegate examples'
+      });
       move(2);  // Move two items forward
     });
 
