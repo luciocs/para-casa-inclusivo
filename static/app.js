@@ -6,14 +6,20 @@ let comicRow = null;
 
 // Function to update the status on the page
 function updateStatus(message) {
-  const statusText = document.getElementById('status-text');
-  const spinner = document.getElementById('spinner');
-  if (message) {
-    spinner.style.display = 'block';
-  } else {
-    spinner.style.display = 'none';
-  }
-  statusText.innerHTML = message;
+    const statusText = document.getElementById('status-text');
+    const spinner = document.getElementById('spinner');
+    const buttons = document.querySelectorAll('button'); // Selects all buttons on the page
+
+    if (message) {
+        spinner.style.display = 'block';
+        // Disable all buttons
+        buttons.forEach(button => button.disabled = true);
+    } else {
+        spinner.style.display = 'none';
+        // Enable all buttons
+        buttons.forEach(button => button.disabled = false);
+    }
+    statusText.innerHTML = message;
 }
 
 // Function to share on WhatsApp
@@ -105,12 +111,80 @@ document.getElementById('newAdaptationButton').addEventListener('click', functio
   window.open('https://www.paracasainclusivo.com.br', '_blank');
 });
 
+document.getElementById('changeButton').addEventListener('click', async function() {
+    const newTheme = document.getElementById('newThemeInput').value.trim();
+    const resultDiv = document.getElementById('result');
+    
+    if (newTheme && adaptedText) {
+        try {
+            updateStatus('Adaptando a atividade escolar com IA. Isso pode levar um minutinho...');
+            // Send new theme to the server
+            const response = await fetch('/change_theme', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ adapted_text: adaptedText, new_theme: newTheme })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                console.error('Error changing theme:', data.error);
+                // Check for content policy violation error
+                if (data.error === 'Your request was rejected due to a content policy violation.') {
+                    alert('Desculpe, sua solicitação foi rejeitada devido a uma violação da política de conteúdo.');
+                } else {
+                    alert('Erro ao alterar o tema.');
+                }
+                // Error tracking
+                gtag('event', 'New Theme Error', {
+                    'event_category': 'Error',
+                    'event_label': 'New Theme | Error'
+                });              
+            } else {
+                adaptedText = data.adapted_text;
+                // Store image_keywords in the variable
+                imageKeywords = data.image_keywords;
+                // Store image_keywords in the variable
+                whatsappUrl = data.whatsapp_url;
+
+                
+                // Convert Markdown to HTML using Showdown
+                let converter = new showdown.Converter();
+                let html = converter.makeHtml(adaptedText);  
+              
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<p>Atividade Escolar Adaptada com o Novo Tema:</p>' + html;
+                // Set the focus to the result div
+                resultDiv.focus();
+                // Clear the status
+                updateStatus('');
+                // Success tracking
+                gtag('event', 'New Theme Success', {
+                    'event_category': 'Success',
+                    'event_label': 'New Theme | Success'
+                });              
+            }          
+        } catch (error) {
+            console.error('Error sending request:', error);
+            alert('Erro ao alterar o tema.');
+            // Error tracking
+            gtag('event', 'New Theme Error', {
+                'event_category': 'Error',
+                'event_label': 'New Theme | Error'
+            });  
+        }
+    } else {
+        alert('Por favor, insira um novo tema.');
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const uploadForm = document.getElementById('uploadForm');
     const resultDiv = document.getElementById('result');
     const imageDiv = document.getElementById('supportImages');  
     const copyButton = document.getElementById('copyButton');
-//    const changeButton = document.getElementById('changeButton');
     const fileInput = document.getElementById('fileInput');
     const fileLabel = document.getElementById('fileLabel');
     const cameraInput = document.getElementById('cameraInput');
@@ -254,6 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
               
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = '<p>Atividade Escolar Adaptada:</p>' + html;
+                // Set the focus to the result div
+                resultDiv.focus();
                 actionsDiv.style.display = 'block';
                 // Show the button only on mobile
                 if (window.innerWidth > 600) {

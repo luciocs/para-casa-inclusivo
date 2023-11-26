@@ -151,7 +151,7 @@ button {
     background-color: #0056b3;
 }
 
-.copy-button, .image-button, .comic-button, .print-button, .file-button, .wpp-button, .submit-feedback, .new-button {
+.copy-button, .image-button, .comic-button, .print-button, .file-button, .wpp-button, .submit-feedback, .new-button, .change-theme-button {
     padding: 8px;
     background-color: #87D0FA;
     border: none;
@@ -163,7 +163,7 @@ button {
     margin-bottom: 10px;  /* Adds bottom margin */  
 }
 
-.copy-button:hover, .image-button:hover, .comic-button:hover, .print-button:hover, .submit-feedback:hover, .new-button:hover {
+.copy-button:hover, .image-button:hover, .comic-button:hover, .print-button:hover, .submit-feedback:hover, .new-button:hover, .change-theme-button:hover {
     background-color: #38B6FF;
 }
 
@@ -435,4 +435,13 @@ button {
 
 #actions {
   margin-top: 20px;
+}
+
+#theme-change-container {
+    margin-top: 20px;
+}
+
+#newThemeInput {
+    margin-right: 10px;
+    padding: 5px;
 }
