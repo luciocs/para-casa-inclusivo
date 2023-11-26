@@ -38,7 +38,16 @@ def adapt_text_for_inclusivity(extracted_text):
             presence_penalty=0
         )
         return {"text": response.choices[0].message.content}
+    except OpenAIError as e:
+        # Check for content policy violation
+        if 'content_policy_violation' in str(e):
+            logger.error("Content policy violation: %s", str(e), exc_info=True)
+            return {"error in adapt_text_for_inclusivity": "content_policy_violation"}
+        else:
+            logger.error("An error occurred: %s", str(e), exc_info=True)
+            return {"error in adapt_text_for_inclusivity": str(e)}
     except Exception as e:
+        # Handling other exceptions
         logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in adapt_text_for_inclusivity": str(e)}
 
@@ -81,6 +90,14 @@ def create_dalle_images(prompt, n=1, size="1024x1024"):
             return [img.url for img in response.data]
         else:
             return {"error in create_dalle_images": "No images generated"}
+    except OpenAIError as e:
+        # Check for content policy violation
+        if 'content_policy_violation' in str(e):
+            logger.error("Content policy violation: %s", str(e), exc_info=True)
+            return {"error in create_dalle_images": "content_policy_violation"}
+        else:
+            logger.error("An error occurred: %s", str(e), exc_info=True)
+            return {"error in create_dalle_images": str(e)}
     except Exception as e:
         logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in create_dalle_images": str(e)}

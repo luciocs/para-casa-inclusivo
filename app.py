@@ -72,8 +72,11 @@ def index():
           if isinstance(gpt_result, dict) and "error in adapt_text_for_inclusivity" in gpt_result:
               error_detail = gpt_result["error in adapt_text_for_inclusivity"]
               logger.error(f"GPT adaptation error: {error_detail}")
-              return jsonify({"error": "Failed to adapt text using GPT."}), 500
-
+              if error_detail == "content_policy_violation":
+                  return jsonify({"error": "Your request was rejected due to a content policy violation."}), 400
+              # Handle other errors
+              return jsonify({"error": "Failed to adapt text using GPT."}), 500            
+            
           # Splitting adapted text and image list
           parts = gpt_result['text'].split("---------")
           adapted_text = parts[0]
@@ -101,18 +104,30 @@ def index():
 @app.route('/generate_images', methods=['POST'])
 def generate_images():
     image_keywords = request.json.get('image_keywords', [])
-    #Generate images using Dall-E (OpenAI) or Stable Diffusion (Stability)
     image_urls = []
+    error_message = None
+    #Generate images using Dall-E (OpenAI) or Stable Diffusion (Stability)
     for keyword in image_keywords:
-          if IMAGE_PROVIDER == 'OpenAI':
-              url = create_dalle_images(keyword)
-          else:
-              url = create_stability_images(keyword)
-          if url:
-              image_urls.append(url)              
+        if IMAGE_PROVIDER == 'OpenAI':
+            result = create_dalle_images(keyword)
+            if isinstance(result, dict) and "error in create_dalle_images" in result:
+                error_message = result["error in create_dalle_images"]
+                break  # Stop processing further keywords once an error is encountered
+            image_urls.append(result)  # Assuming result is a list of URLs
+        else:
+            url = create_stability_images(keyword)
+            if url:
+                image_urls.append(url)
         
-    return jsonify({"image_urls": image_urls})  
-
+    if error_message:
+        logger.error(f"Image Generation error: {error_message}")
+        if error_message == "content_policy_violation":
+            return jsonify({"error": "Your request was rejected due to a content policy violation."}), 400
+        # Handle other errors
+        return jsonify({"error": "Failed to generate image using Dall-E."}), 500            
+    else:
+        return jsonify({"image_urls": image_urls})
+    
 @app.route('/generate_comic_output', methods=['POST'])
 def generate_comic_output():
     adapted_text = request.json.get('adapted_text')
@@ -123,17 +138,33 @@ def generate_comic_output():
 def generate_single_comic_panel():
     panel_text = request.json.get('panel_text')
     panel_data = parse_narration_and_images(panel_text)
-    panels = create_panels(panel_data)
-    return jsonify({'comic_panel': panels[0]})  # Return the first panel as we are sending one at a time  
+    panels, error_message = create_panels(panel_data)
+
+    if error_message:
+        logger.error(f"Image Generation error: {error_message}")
+        if error_message == "content_policy_violation":
+            return jsonify({"error": "Your request was rejected due to a content policy violation."}), 400
+        # Handle other errors
+        return jsonify({"error": "Failed to generate image using Dall-E."}), 500            
+    else:    
+      return jsonify({'comic_panel': panels[0]})  
   
 def create_panels(panels_data):
+    error_message = None
     for panel in panels_data:
         if IMAGE_PROVIDER == 'OpenAI':
-            image_url = create_dalle_images(panel['image_description'])
+            result = create_dalle_images(panel['image_description'])
+            if isinstance(result, dict) and "error in create_dalle_images" in result:
+                error_message = result["error in create_dalle_images"]
+                break  # Stop processing further panels once an error is encountered
         else:
             image_url = create_stability_images(panel['image_description'])
-        panel['image_url'] = image_url
-    return panels_data
+            if image_url:
+                panel['image_url'] = image_url
+        if not error_message:
+            panel['image_url'] = result
+
+    return panels_data, error_message
   
 def parse_narration_and_images(comic_output):
     panels = []
