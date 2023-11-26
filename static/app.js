@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultDiv = document.getElementById('result');
     const imageDiv = document.getElementById('supportImages');  
     const copyButton = document.getElementById('copyButton');
+//    const changeButton = document.getElementById('changeButton');
     const fileInput = document.getElementById('fileInput');
     const fileLabel = document.getElementById('fileLabel');
     const cameraInput = document.getElementById('cameraInput');
@@ -148,11 +149,25 @@ document.addEventListener('DOMContentLoaded', () => {
     copyButton.addEventListener('click', copyToClipboard);  
       
     fileInput.addEventListener('change', () => {
+      const maxFileSize = 4 * 1024 * 1024; // 4 MB in bytes
       const numFiles = fileInput.files.length;
-      if (numFiles > 0) {
-          fileLabel.textContent = `${numFiles} arquivo(s) selecionado(s)`;
+      let isTooLarge = false;
+
+      for (let i = 0; i < fileInput.files.length; i++) {
+        if (fileInput.files[i].size > maxFileSize) {
+          isTooLarge = true;
+          break;
+        }
+      }
+
+      if (isTooLarge) {
+        alert('Um ou mais arquivos excedem o limite de tamanho de 4MB. Por favor, selecione arquivos menores.');
+        fileInput.value = ''; // Reset the file input
+        fileLabel.textContent = "Imagem ou PDF da Atividade (máximo: 4MB)"; // Reset the file label
+      } else if (numFiles > 0) {
+        fileLabel.textContent = `${numFiles} arquivo(s) selecionado(s)`;
       } else {
-          fileLabel.textContent = "Escolha o arquivo";
+        fileLabel.textContent = "Imagem ou PDF da Atividade (máximo: 4MB)";
       }
     });
 
@@ -212,7 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
                       
             if (data.error) {
                 resultDiv.style.display = 'block';
-                resultDiv.innerHTML = '<p>Error: ' + data.error + '</p>';
+                // Check for content policy violation error
+                if (data.error === 'Your request was rejected due to a content policy violation.') {
+                    resultDiv.innerHTML = '<p>Desculpe, sua solicitação foi rejeitada devido a uma violação da política de conteúdo.</p>';
+                } else {
+                    resultDiv.innerHTML = '<p>Error: ' + data.error + '</p>';
+                }
                 actionsDiv.style.display = "none";
                 feedbackDiv.style.display = "none";
                 // Error tracking
@@ -286,8 +306,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (imageData.error) {
                 imageDiv.style.display = 'block';
-                imageDiv.innerHTML = '<p>Error: ' + imageData.error + '</p>';
-            } else {
+                // Check for specific content policy violation error
+                if (imageData.error === "Your request was rejected due to a content policy violation.") {
+                    imageDiv.innerHTML = '<p>Desculpe, não podemos gerar imagens com base neste conteúdo devido à política de conteúdo.</p>';
+                    // Error tracking for content policy violation
+                    gtag('event', 'Generating images Error', {
+                        'event_category': 'Error',
+                        'event_label': 'Generate support images | Content Policy Violation'
+                    }); 
+                } else {
+                    imageDiv.innerHTML = '<p>Error: ' + imageData.error + '</p>';
+                }
+            } else {              
                 const imageUrls = imageData.image_urls;
 
                 // Display images
@@ -356,6 +386,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const panelData = await response.json();
+      
+      // Check for content policy violation error
+      if (panelData.error) {
+          if (panelData.error === "Your request was rejected due to a content policy violation.") {
+              throw new Error('content_policy_violation');
+          } else {
+              throw new Error('general_error');
+          }
+      }
+      
       const panel = panelData.comic_panel;
 
       const comicPanel = document.createElement('div');
@@ -422,13 +462,16 @@ document.addEventListener('DOMContentLoaded', () => {
         printComicBook.style.display = 'inline-block';
         updateStatus('');
       } catch (error) {
-        comicDiv.innerHTML = '<p>Error: ' + error + '</p>';
+        if (error.message === 'content_policy_violation') {
+            comicDiv.innerHTML = '<p>Desculpe, não podemos gerar imagens com base neste conteúdo devido à política de conteúdo.</p>';
+        } else {
+            comicDiv.innerHTML = '<p>Erro: ' + error.message + '</p>';
+        }
         updateStatus('');
-        // Error tracking
         gtag('event', 'Generating comic book Error', {
             'event_category': 'Error',
             'event_label': 'Generate comic book | Error'
-        });                                  
+        });        
       }            
     });
     
