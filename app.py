@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from azure_ocr import azure_ocr
 from openai_gpt import adapt_text_for_inclusivity
+from openai_gpt import change_activity_theme
 from openai_gpt import create_dalle_images
 from openai_gpt import generate_comic_book
 from stability_ai import create_stability_images
@@ -96,11 +97,48 @@ def index():
           return jsonify({'adapted_text': adapted_text, 'image_keywords': cleaned_image_list, 'whatsapp_url': whatsapp_url})
 
       except Exception as e:
-          logger.exception("An error occurred during image processing.")
-          return jsonify({"error": "An unexpected error occurred during image processing."}), 500
+          logger.exception("An error occurred during image processing or adapting.")
+          return jsonify({"error": "An unexpected error occurred during image processing or adapting."}), 500
                 
     return render_template('index.html')
 
+@app.route('/change_theme', methods=['POST'])
+def change_theme():
+    data = request.json
+    adapted_text = data.get('adapted_text')
+    new_theme = data.get('new_theme')
+
+    # Ensure both adapted_text and new_theme are provided
+    if not adapted_text or not new_theme:
+        return jsonify({'error': 'Adapted text and new theme are required.'}), 400
+
+    gpt_result = change_activity_theme(adapted_text, new_theme)
+
+    if isinstance(gpt_result, dict) and "error in change_activity_theme" in gpt_result:
+        error_detail = gpt_result["error in change_activity_theme"]
+        logger.error(f"New Theme adaptation error: {error_detail}")
+        if error_detail == "content_policy_violation":
+            return jsonify({"error": "Your request was rejected due to a content policy violation."}), 400
+        # Handle other errors
+        return jsonify({"error": "Failed to adapt text to new theme using GPT."}), 500   
+
+    # Splitting adapted text and image list
+    parts = gpt_result['text'].split("---------")
+    adapted_text = parts[0]
+    image_list = parts[1].strip().split('\n') if len(parts) > 1 else [] 
+
+    # Remove the first element
+    gpt_image_list = image_list[1:]
+    # Remove any empty strings
+    gpt_image_list = [item for item in gpt_image_list if item]
+    # Remove the numbering
+    cleaned_image_list = [item.split('. ')[1] if '. ' in item else item for item in gpt_image_list]
+
+    # Include WhatsApp sharing URL
+    whatsapp_url = generate_whatsapp_url(adapted_text)
+      
+    return jsonify({'adapted_text': adapted_text, 'image_keywords': cleaned_image_list, 'whatsapp_url': whatsapp_url})
+  
 @app.route('/generate_images', methods=['POST'])
 def generate_images():
     image_keywords = request.json.get('image_keywords', [])

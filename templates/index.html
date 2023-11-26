@@ -53,7 +53,7 @@
           </div>      
         </div>  
         <div class="chat-window">
-            <div class="output" id="result" style="display:none"></div>
+            <div class="output" id="result" style="display:none" tabindex="-1"></div>
             <!-- Feedback Section -->
             <div id="feedback-section" class="feedback" style="display:none">
               <p>Essa adaptação foi útil?</p>
@@ -72,6 +72,10 @@
               <button id="generateImagesButton" class="image-button">Criar Imagens de Apoio com IA</button>          
               <button id="generateComicButton" class="comic-button">Criar Gibi com IA</button> 
               <button id="newAdaptationButton" class="new-button">Nova Adaptação</button> 
+              <div id="theme-change-container">
+                  <button id="changeButton" class="change-theme-button">Alterar Tema da Atividade</button>
+                  <input type="text" id="newThemeInput" placeholder="Digite o novo tema aqui" aria-label="Novo Tema">
+              </div>
             </div>
             <div id="supportImages" class="image-container" style="display:none"></div>
             <div id="comicContainer" class="comic-window"></div>
