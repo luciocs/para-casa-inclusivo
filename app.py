@@ -5,6 +5,7 @@ from openai_gpt import change_activity_theme
 from openai_gpt import create_dalle_images
 from openai_gpt import generate_comic_book
 from stability_ai import create_stability_images
+from datetime import datetime
 import urllib.parse
 import os
 import logging
@@ -28,10 +29,16 @@ def feedback():
     is_positive = feedback_data['positive']
     text_feedback = feedback_data.get('text', '')
 
+    # Get the current date and time
+    current_datetime = datetime.now()
+    # Format the date and time as a string, e.g., '2023-01-28 14:35:22'
+    formatted_datetime = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
+    
     # Construct the feedback payload
     payload = {
         'is_positive': is_positive,
         'text_feedback': text_feedback,
+        'date_submitted': formatted_datetime,
     }
 
     # Send the feedback to the Zapier Webhook
