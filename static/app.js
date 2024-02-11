@@ -94,6 +94,50 @@ function sendTextFeedbackToServer(isPositive, textFeedback) {
   });
 }
 
+function categorizeFilesByNames(files) {
+    // Define categories with associated keywords
+    const categories = {
+        'portugues': ['portugues', 'gramatica', 'vocabulario', 'redacao', 'ensaio', 'resumo', 'artigo', 'verbo', 'conjugacao', 'pronomes'],
+        'imagens': ['imagens', 'fotos', 'figuras', 'gráficos', 'ilustracoes', 'desenhos', 'pinturas', 'diagramas'],
+        'matematica': ['matematica', 'algebra', 'geometria', 'calculo', 'estatistica', 'probabilidade', 'logica', 'numeros', 'equacoes', 'funcoes'],
+        'ciencias': ['ciencias', 'biologia', 'quimica', 'fisica', 'ecologia', 'genetica', 'astronomia', 'experiencias', 'laboratorio', 'cientifico'],
+        'historia': ['historia', 'eventos', 'datas', 'civilizacoes', 'guerras', 'revolucoes', 'biografia', 'monarquia', 'republica', 'antiguidade'],
+        'geografia': ['geografia', 'mapas', 'paises', 'continentes', 'capitais', 'clima', 'demografia', 'urbanizacao', 'relevo', 'hidrografia'],
+        'literatura': ['livro', 'poema', 'literatura', 'conto', 'novela', 'crônica', 'fábula', 'drama', 'autobiografia', 'ensaio literario'],
+        'arte': ['arte', 'pintura', 'desenho', 'escultura', 'cinema', 'fotografia', 'musica', 'danca', 'teatro', 'arquitetura'],
+        'idiomas': ['ingles', 'espanhol', 'frances', 'linguas', 'conversacao', 'leitura', 'escrita'],
+        'tecnologia': ['tecnologia', 'informatica', 'programacao', 'computacao', 'robotica', 'internet', 'software', 'hardware', 'redes', 'seguranca digital'],
+    };
+
+    // Use a Set to store categories to ensure uniqueness
+    let usedCategoriesSet = new Set();
+
+    files.forEach(file => {
+        const fileNameNormalized = file.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let fileCategorized = false;
+        
+        Object.entries(categories).forEach(([category, keywords]) => {
+            if (keywords.some(keyword => fileNameNormalized.includes(keyword.normalize("NFD").replace(/[\u0300-\u036f]/g, "")))) {
+                usedCategoriesSet.add(category);
+                fileCategorized = true;
+            }
+        });
+
+        // If the file does not match any category, add it to the "unknown" category
+        if (!fileCategorized) {
+            usedCategoriesSet.add('desconhecido'); // 'desconhecido' translates to 'unknown' in Portuguese
+        }
+    });
+
+    // In case no files were categorized (for example, if there were no files or all were uncategorizable),
+    // ensure the 'unknown' category is still present
+    if (usedCategoriesSet.size === 0) {
+        usedCategoriesSet.add('desconhecido');
+    }
+
+    return Array.from(usedCategoriesSet);
+}
+  
 // Event Listener for the Submit Feedback Button
 document.getElementById('submit-feedback').addEventListener('click', function() {
   const textFeedback = document.getElementById('feedback-text').value;
@@ -108,6 +152,11 @@ document.getElementById('submit-feedback').addEventListener('click', function() 
 });
 
 document.getElementById('newAdaptationButton').addEventListener('click', function() {
+  // New Adaptation tranking
+  gtag('event', 'New Adaptation', {
+      'event_category': 'Button',
+      'event_label': 'New Adaptation'
+  });
   window.open('https://www.paracasainclusivo.com.br', '_blank');
 });
 
@@ -117,6 +166,12 @@ document.getElementById('changeButton').addEventListener('click', async function
     
     if (newTheme && adaptedText) {
         try {
+            // New Theme tranking
+            gtag('event', 'New Theme', {
+                'event_category': 'Button',
+                'event_label': 'Change activity theme',
+                'new_theme' : newTheme
+            });
             updateStatus('Adaptando a atividade escolar com IA. Isso pode levar um minutinho...');
             // Send new theme to the server
             const response = await fetch('/change_theme', {
@@ -140,7 +195,8 @@ document.getElementById('changeButton').addEventListener('click', async function
                 // Error tracking
                 gtag('event', 'New Theme Error', {
                     'event_category': 'Error',
-                    'event_label': 'New Theme | Error'
+                    'event_label': 'New Theme | Error',
+                    'non_interaction': true
                 });              
             } else {
                 adaptedText = data.adapted_text;
@@ -163,7 +219,8 @@ document.getElementById('changeButton').addEventListener('click', async function
                 // Success tracking
                 gtag('event', 'New Theme Success', {
                     'event_category': 'Success',
-                    'event_label': 'New Theme | Success'
+                    'event_label': 'New Theme | Success',
+                    'non_interaction': true
                 });              
             }          
         } catch (error) {
@@ -172,7 +229,8 @@ document.getElementById('changeButton').addEventListener('click', async function
             // Error tracking
             gtag('event', 'New Theme Error', {
                 'event_category': 'Error',
-                'event_label': 'New Theme | Error'
+                'event_label': 'New Theme | Error',
+                'non_interaction': true
             });  
         }
     } else {
@@ -235,6 +293,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (isTooLarge) {
+        // File too large tracking
+        gtag('event', 'File too large', {
+            'event_category': 'Warning',
+            'event_label': 'File too large | Adapt | Warning'
+        });          
         alert('Um ou mais arquivos excedem o limite de tamanho de 4MB. Por favor, selecione arquivos menores.');
         fileInput.value = ''; // Reset the file input
         fileLabel.textContent = "Imagem ou PDF da Atividade (máximo: 4MB)"; // Reset the file label
@@ -253,18 +316,21 @@ document.addEventListener('DOMContentLoaded', () => {
           cameraLabel.textContent = "Tire uma foto";
       }
     });
- 
   
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        // Collect all files from both inputs into an array
+        const allFiles = [...Array.from(fileInput.files), ...Array.from(cameraInput.files)];
+      
         // Google Analytics event for button click
         gtag('event', 'Adapt', {
             'event_category': 'Button',
-            'event_label': 'Adapt activity'
+            'event_label': 'Adapt activity',
+            'number_of_files' : allFiles.length,
+            'file_types': allFiles.map(file => file.type).join(', '),
+            'content_categories': categorizeFilesByNames(allFiles).join(', ')
         });
-        // Collect all files from both inputs into an array
-        const allFiles = [...Array.from(fileInput.files), ...Array.from(cameraInput.files)];
 
         // Check if at least one file is selected
         if (allFiles.length === 0) {
@@ -273,7 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Warning tracking
             gtag('event', 'No file selected', {
                 'event_category': 'Warning',
-                'event_label': 'No file selected | Adapt | Warning'
+                'event_label': 'No file selected | Adapt | Warning',
+                'non_interaction': true
             });          
             return;
         }
@@ -312,7 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Error tracking
                 gtag('event', 'Adaptation Error', {
                     'event_category': 'Error',
-                    'event_label': 'Adapt | Error'
+                    'event_label': 'Adapt | Error',
+                    'non_interaction': true
                 });              
             } else {
                 adaptedText = data.adapted_text;
@@ -343,7 +411,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Success tracking
                 gtag('event', 'Adaptation Success', {
                     'event_category': 'Success',
-                    'event_label': 'Adapt | Success'
+                    'event_label': 'Adapt | Success',
+                    'non_interaction': true
                 });              
             }
         } catch (error) {
@@ -354,7 +423,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Error tracking
             gtag('event', 'Adaptation Error', {
                 'event_category': 'Error',
-                'event_label': 'Adapt | Error'
+                'event_label': 'Adapt | Error',
+                'non_interaction': true
             });                        
         }
     });
@@ -388,7 +458,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Error tracking for content policy violation
                     gtag('event', 'Generating images Error', {
                         'event_category': 'Error',
-                        'event_label': 'Generate support images | Content Policy Violation'
+                        'event_label': 'Generate support images | Content Policy Violation',
+                        'non_interaction': true
                     }); 
                 } else {
                     imageDiv.innerHTML = '<p>Error: ' + imageData.error + '</p>';
@@ -418,7 +489,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Error tracking
             gtag('event', 'Generating images Error', {
                 'event_category': 'Error',
-                'event_label': 'Generate support images | Error'
+                'event_label': 'Generate support images | Error',
+                'non_interaction': true
             });                                  
         }            
     });  
@@ -546,7 +618,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStatus('');
         gtag('event', 'Generating comic book Error', {
             'event_category': 'Error',
-            'event_label': 'Generate comic book | Error'
+            'event_label': 'Generate comic book | Error',
+            'non_interaction': true
         });        
       }            
     });
