@@ -27,6 +27,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
 </head>
 <body>
+    <div id="surveyModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Nos ajude a melhorar o Para Casa Inclusivo!</h2>
+            <form id="surveyForm">
+                <div class="modal-question" id="question1">
+                    <h3>Você usa o Para Casa Inclusivo como:</h3>
+                    <select name="userRole" required>
+                        <option value="" disabled selected>Selecione seu papel</option>
+                        <option value="Professor(a)">Professor(a)</option>
+                        <option value="Familiar/Responsável">Familiar/Responsável</option>
+                        <option value="Aluno(a)">Aluno(a)</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="modal-question" id="question2">
+                    <h3>Qual a fase escolar da criança?</h3>
+                    <select name="schoolPhase" required>
+                        <option value="" disabled selected>Selecione a fase</option>
+                        <option value="Fundamental anos iniciais (1-5)">Fundamental anos iniciais (1-5)</option>
+                        <option value="Fundamental anos finais (6-9)">Fundamental anos finais (6-9)</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="modal-question" id="question3">
+                    <h3>Qual a idade da criança?</h3>
+                    <input type="number" name="childAge" min="1" max="99">
+                </div>
+                <div class="modal-question" id="question4">
+                    <h3>A criança se enquadra em algum destes diagnósticos?</h3>
+                    <select name="diagnosis" required>
+                        <option value="" disabled selected>Selecione uma opção</option>
+                        <option value="Autismo (TEA)">Autismo (TEA)</option>
+                        <option value="TDAH">TDAH</option>
+                        <option value="Dislexia">Dislexia</option>
+                        <option value="Outro">Outro</option>
+                        <option value="Nenhum">Nenhum</option>
+                    </select>
+                </div>
+                <button type="submit">Enviar Respostas</button>
+            </form>
+        </div>
+    </div>
     <div class="container">
         <div class="header">
             <img src="https://blobparacasa.blob.core.windows.net/stability-images/para-casa-inclusivo-logo.png?sp=r&st=2023-10-18T21:11:14Z&se=2025-10-31T05:11:14Z&spr=https&sv=2022-11-02&sr=b&sig=JtIYoUHCfznVXwZMD7Xcl65GBA%2B%2Bwe5J0W95tSgkJ2c%3D" alt="PARA CASA INCLUSIVO Logo" class="logo">

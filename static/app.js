@@ -137,7 +137,45 @@ function categorizeFilesByNames(files) {
 
     return Array.from(usedCategoriesSet);
 }
-  
+
+document.addEventListener('DOMContentLoaded', function() {
+    const surveyModal = document.getElementById('surveyModal');
+    const surveyForm = document.getElementById('surveyForm');
+    
+    // Check if survey was already submitted to avoid showing the modal again
+    if (!localStorage.getItem('surveySubmitted')) {
+        surveyModal.style.display = "block";
+    }
+
+    surveyForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Collect survey form data
+        const formData = new FormData(surveyForm);
+        const userRole = formData.get('userRole');
+        const schoolPhase = formData.get('schoolPhase');
+        const childAge = formData.get('childAge');
+        const diagnosis = formData.get('diagnosis');
+
+        // Send a single tracking event to Google Analytics with custom dimensions
+        gtag('event', 'survey_response', {
+            'event_category': 'Survey',
+            'event_label': 'User Survey',
+            'non_interaction': true,
+            'user_role': userRole, 
+            'school_phase': schoolPhase, 
+            'child_age': childAge, 
+            'diagnosis': diagnosis
+        });
+
+        // Hide modal and mark survey as submitted
+        localStorage.setItem('surveySubmitted', 'true');
+        surveyModal.style.display = "none";
+        alert('Obrigado pelas suas respostas!');
+    });
+});
+
+
 // Event Listener for the Submit Feedback Button
 document.getElementById('submit-feedback').addEventListener('click', function() {
   const textFeedback = document.getElementById('feedback-text').value;
