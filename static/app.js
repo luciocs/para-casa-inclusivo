@@ -142,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const surveyModal = document.getElementById('surveyModal');
     const surveyForm = document.getElementById('surveyForm');
     
-    // Check if survey was already submitted to avoid showing the modal again
-    if (!localStorage.getItem('surveySubmitted')) {
+    // Check if profile survey was already submitted to avoid showing the modal again
+    if (!localStorage.getItem('profileSurveySubmitted')) {
         surveyModal.style.display = "block";
     }
 
@@ -157,6 +157,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const childAge = formData.get('childAge');
         const diagnosis = formData.get('diagnosis');
 
+        // This sets the user properties using the 'set' command
+        gtag('set', {
+          'user_properties': {
+            'user_role': userRole,
+            'school_phase': schoolPhase,
+            'child_age': childAge,
+            'diagnosis': diagnosis
+          }
+        });
+      
         // Send a single tracking event to Google Analytics with custom dimensions
         gtag('event', 'survey_response', {
             'event_category': 'Survey',
@@ -169,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Hide modal and mark survey as submitted
-        localStorage.setItem('surveySubmitted', 'true');
+        localStorage.setItem('profileSurveySubmitted', 'true');
         surveyModal.style.display = "none";
         alert('Obrigado pelas suas respostas!');
     });
