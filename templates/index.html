@@ -27,9 +27,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
 </head>
 <body>
-    <div id="surveyModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
+    <div id="surveyModal" class="surveyModal">
+        <div class="surveyModal-content">
+            <span class="surveyModalClose">&times;</span>
             <h2>Nos ajude a melhorar o Para Casa Inclusivo!</h2>
             <form id="surveyForm">
                 <div class="modal-question" id="question1">
@@ -38,6 +38,7 @@
                         <option value="" disabled selected>Selecione seu papel</option>
                         <option value="Professor(a)">Professor(a)</option>
                         <option value="Familiar/Responsável">Familiar/Responsável</option>
+                        <option value="Terapeuta">Terapeuta</option>
                         <option value="Aluno(a)">Aluno(a)</option>
                         <option value="Outro">Outro</option>
                     </select>
@@ -48,6 +49,7 @@
                         <option value="" disabled selected>Selecione a fase</option>
                         <option value="Fundamental anos iniciais (1-5)">Fundamental anos iniciais (1-5)</option>
                         <option value="Fundamental anos finais (6-9)">Fundamental anos finais (6-9)</option>
+                        <option value="Ensino médio">Ensino médio</option>
                         <option value="Outro">Outro</option>
                     </select>
                 </div>
