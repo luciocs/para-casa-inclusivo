@@ -460,25 +460,25 @@ button {
 }
 
 /* Modal Content Box */
-#surveyModal .modal-content {
-  background-color: #fff;
+#surveyModal .surveyModal-content {
+  background-color: #ffffff;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid #888888;
   width: 80%; /* Could be more or less, depending on screen size */
   border-radius: 8px; /* Rounded corners */
 }
 
 /* Close button */
-#surveyModal .close {
-  color: #aaa;
+#surveyModal .surveyModalClose {
+  color: #aaaaaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-#surveyModal .close:hover,
-#surveyModal .close:focus {
+#surveyModal .surveyModalClose:hover,
+#surveyModal .surveyModalClose:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
@@ -503,7 +503,7 @@ button {
 #surveyModal form .question select {
   padding: 10px;
   margin-top: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border-radius: 4px;
   width: 100%;
 }
