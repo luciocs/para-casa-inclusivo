@@ -441,7 +441,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Convert Markdown to HTML using Showdown
                 let converter = new showdown.Converter();
                 let html = converter.makeHtml(adaptedText);  
-              
+                // Check if the HTML is empty
+                if (!html.trim()) {
+                    // Fallback to displaying the adaptedText inside a <p> tag if HTML is empty
+                    html = `<p>${adaptedText}</p>`;
+                }              
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = '<p>Atividade Escolar Adaptada:</p>' + html;
                 // Set the focus to the result div
