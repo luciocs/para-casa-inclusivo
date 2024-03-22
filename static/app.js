@@ -637,30 +637,33 @@ document.addEventListener('DOMContentLoaded', () => {
             'event_category': 'Button',
             'event_label': 'Generate comic book'
         });
-        updateStatus('Criando Gibi usando IA. Isso pode levar um minutinho ou dois...');
-        const response = await fetch('/generate_comic_output', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ adapted_text: adaptedText }),
-        });
+        
+        alert('Devido ao alto volume de acessos, a opção de criar gibis está temporariamente indisponível. Se essa funcionalidade é importante para você, entre em contato conosco no Instagram: https://www.instagram.com/paracasainclusivo/ Agradecemos a compreensão.');
+        
+//         updateStatus('Criando Gibi usando IA. Isso pode levar um minutinho ou dois...');
+//         const response = await fetch('/generate_comic_output', {
+//           method: 'POST',
+//           headers: {'Content-Type': 'application/json'},
+//           body: JSON.stringify({ adapted_text: adaptedText }),
+//         });
 
-        const comicData = await response.json();
-        const comicOutputArray = comicData.comic_output;
+//         const comicData = await response.json();
+//         const comicOutputArray = comicData.comic_output;
 
-        comicDiv.innerHTML = '<p>Gibi:</p>';  // Clear existing panels
+//         comicDiv.innerHTML = '<p>Gibi:</p>';  // Clear existing panels
 
-        for (let i = 0; i < comicOutputArray.length; i++) {
-          updateStatus('Criando Gibi usando IA. Criando painel ' + (i + 1) + ' de ' + comicOutputArray.length + '...');
-          await displaySingleComicPanel(comicOutputArray[i], i);
-        }
+//         for (let i = 0; i < comicOutputArray.length; i++) {
+//           updateStatus('Criando Gibi usando IA. Criando painel ' + (i + 1) + ' de ' + comicOutputArray.length + '...');
+//           await displaySingleComicPanel(comicOutputArray[i], i);
+//         }
 
-        // Handle the last row if there is an odd number of panels
-        if (comicOutputArray.length % 2 !== 0) {
-          comicDiv.appendChild(comicRow);
-        }
+//         // Handle the last row if there is an odd number of panels
+//         if (comicOutputArray.length % 2 !== 0) {
+//           comicDiv.appendChild(comicRow);
+//         }
 
-        printComicBook.style.display = 'inline-block';
-        updateStatus('');
+//         printComicBook.style.display = 'inline-block';
+//         updateStatus('');
       } catch (error) {
         if (error.message === 'content_policy_violation') {
             comicDiv.innerHTML = '<p>Desculpe, não podemos gerar imagens com base neste conteúdo devido à política de conteúdo.</p>';
