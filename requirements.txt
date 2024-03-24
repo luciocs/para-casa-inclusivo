@@ -10,3 +10,4 @@ azure-storage-blob
 Pillow
 datetime
 urllib3<2.0
+azure-core

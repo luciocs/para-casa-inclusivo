@@ -638,8 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'event_label': 'Generate comic book'
         });
         
-        alert('Devido ao alto volume de acessos, a opção de criar gibis está temporariamente indisponível. Se essa funcionalidade é importante para você, entre em contato conosco no Instagram: https://www.instagram.com/paracasainclusivo/ Agradecemos a compreensão.');
-        
+        document.getElementById('comicUnavailableModal').style.display = 'block';
 //         updateStatus('Criando Gibi usando IA. Isso pode levar um minutinho ou dois...');
 //         const response = await fetch('/generate_comic_output', {
 //           method: 'POST',
@@ -678,7 +677,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });        
       }            
     });
-    
+
+    document.querySelector('.comicUnavailableModalClose').addEventListener('click', () => {
+      document.getElementById('comicUnavailableModal').style.display = 'none';
+    });
+    document.getElementById('closeComicUnavailableModalButton').addEventListener('click', () => {
+      document.getElementById('comicUnavailableModal').style.display = 'none';
+    });
+  
     printComicBook.addEventListener("click", function() {
         // Google Analytics event for button click
         gtag('event', 'Print comic book', {

@@ -151,7 +151,7 @@ button {
     background-color: #0056b3;
 }
 
-.copy-button, .image-button, .comic-button, .print-button, .file-button, .wpp-button, .submit-feedback, .new-button, .change-theme-button {
+.copy-button, .image-button, .comic-button, .print-button, .file-button, .wpp-button, .submit-feedback, .new-button, .change-theme-button, .comic-modal-button {
     padding: 8px;
     background-color: #87D0FA;
     border: none;
@@ -163,7 +163,7 @@ button {
     margin-bottom: 10px;  /* Adds bottom margin */  
 }
 
-.copy-button:hover, .image-button:hover, .comic-button:hover, .print-button:hover, .submit-feedback:hover, .new-button:hover, .change-theme-button:hover {
+.copy-button:hover, .image-button:hover, .comic-button:hover, .print-button:hover, .submit-feedback:hover, .new-button:hover, .change-theme-button:hover, .comic-modal-button:hover {
     background-color: #38B6FF;
 }
 
@@ -520,4 +520,40 @@ button {
 
 #surveyModal form button[type="submit"]:hover {
   background-color: #0056b3;
+}
+
+/* Comic Unavailable Modal Styling */
+.comic-unavailable-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.comic-unavailable-modal .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+  border-radius: 8px;
+}
+
+.comic-unavailable-modal .comicUnavailableModalClose {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.comic-unavailable-modal .comicUnavailableModalClose:hover,
+.comic-unavailable-modal .comicUnavailableModalClose:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
