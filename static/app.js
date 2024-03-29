@@ -496,50 +496,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 'event_category': 'Button',
                 'event_label': 'Generate support images'
             });
-            // Step 3: Generating new support images using Dall-E
-            updateStatus('Criando imagens de apoio usando IA. Isso pode levar um minutinho...');
-
-            const response = await fetch('/generate_images', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({image_keywords: imageKeywords}),
-            });
-
-            const imageData = await response.json();
-
-            if (imageData.error) {
-                imageDiv.style.display = 'block';
-                // Check for specific content policy violation error
-                if (imageData.error === "Your request was rejected due to a content policy violation.") {
-                    imageDiv.innerHTML = '<p>Desculpe, não podemos gerar imagens com base neste conteúdo devido à política de conteúdo.</p>';
-                    // Error tracking for content policy violation
-                    gtag('event', 'Generating images Error', {
-                        'event_category': 'Error',
-                        'event_label': 'Generate support images | Content Policy Violation',
-                        'non_interaction': true
-                    }); 
-                } else {
-                    imageDiv.innerHTML = '<p>Error: ' + imageData.error + '</p>';
+            // Clear previous content
+            imageDiv.style.display = 'block';
+            imageDiv.innerHTML = '<p><strong>Para criar imagens de apoio, clique nos links abaixo e, na página do Microsoft Copilot Designer, clique em "gerar".</strong></p><p><i>Caso não tenha uma conta do Microsoft Copilot, é só criar <strong>gratuitamente</strong> com seu e-mail para ter acesso a esta e outras ferramentas incíveis.<i/></p>';
+  
+            // Generate links for each keyword
+            imageKeywords.forEach((keyword, index) => {
+                const encodedKeyword = encodeURIComponent(keyword);
+                const url = `https://designer.microsoft.com/image-creator?p=${encodedKeyword}`;
+                const linkElement = document.createElement('a');
+                linkElement.href = url;
+                linkElement.target = "_blank"; // Open in a new tab
+                linkElement.className = 'copilot-link';
+                // Truncate label if it's longer than 30
+                const maxLabelLength = 30;
+                let displayText = `Imagem ${index + 1}: ${keyword}`;
+                if (displayText.length > maxLabelLength) {
+                    displayText = displayText.substring(0, maxLabelLength - 3) + '...';
                 }
-            } else {              
-                const imageUrls = imageData.image_urls;
-
-                // Display images
-                imageDiv.style.display = 'block';
-                imageDiv.innerHTML = '<p>Imagens de Apoio:</p>';
-                imageUrls.forEach(url => {
-                    const img = document.createElement('img');
-                    img.src = url;
-                    img.alt = 'Imagem de suporte';
-                    img.className = 'support-image';
-                    imageDiv.appendChild(img);
-                });
-                // Clear the status
-                updateStatus('');
-            };
-
+                linkElement.textContent = displayText;
+                  
+                const container = document.createElement('div');
+                container.className = 'copilot-link-container';
+                container.appendChild(linkElement);
+  
+                imageDiv.appendChild(container);
+            });
         } catch (error) {
             imageDiv.style.display = 'block';
             imageDiv.innerHTML = '<p>Error: ' + error + '</p>';

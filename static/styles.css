@@ -589,3 +589,22 @@ button {
 .sponsorship-highlight .buttons .button:hover {
     background-color: #0056b3; /* Darker blue */
 }
+
+.copilot-link-container {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #007BFF; /* Use the site's primary color */
+    border-radius: 8px;
+    background-color: #f0f8ff;
+    text-align: center;
+}
+
+.copilot-link {
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.copilot-link:hover {
+    text-decoration: underline;
+}
