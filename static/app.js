@@ -32,6 +32,13 @@ function shareOnWhatsApp() {
     window.open(whatsappUrl, '_blank');
 }
 
+function shareSponsorshipOnWhatsApp() {
+    const message = encodeURIComponent("Convidamos sua escola a se tornar patrocinadora do Para Casa Inclusivo e ajudar a manter o projeto gratuito. Saiba mais e contribua para impactar a vida de muitas crianças em todo o Brasil. Confira o material de patrocínio aqui: https://drive.google.com/file/d/1Q96vjRHNdP705hMQyQLw9_md1uHRTF8K/view?usp=sharing");
+    const whatsappUrl = `https://wa.me/?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+
 // Function to copy text and formatting to clipboard
 async function copyToClipboard() {
     // Google Analytics event for button click

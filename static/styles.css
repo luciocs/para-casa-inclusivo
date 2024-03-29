@@ -557,3 +557,35 @@ button {
   text-decoration: none;
   cursor: pointer;
 }
+
+.sponsorship-highlight {
+    background-color: #f0f8ff; /* Light blue background */
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.sponsorship-highlight h2 {
+    color: #007bff; /* Blue */
+    margin-bottom: 15px;
+}
+
+.sponsorship-highlight p {
+    color: #333; /* Dark grey */
+    margin-bottom: 20px;
+}
+
+.sponsorship-highlight .buttons .button {
+    display: inline-block;
+    background-color: #007bff; /* Blue */
+    color: #ffffff; /* White */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.sponsorship-highlight .buttons .button:hover {
+    background-color: #0056b3; /* Darker blue */
+}
