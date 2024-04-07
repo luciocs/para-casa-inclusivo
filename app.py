@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, request, jsonify, render_template
 from azure_ocr import azure_ocr
 from openai_gpt import adapt_text_for_inclusivity
 from openai_gpt import change_activity_theme
@@ -10,8 +10,10 @@ import urllib.parse
 import os
 import logging
 import requests
+from assistant_api import assistant_api
 
 app = Flask(__name__)
+app.register_blueprint(assistant_api, url_prefix='/assistant')
 
 IMAGE_PROVIDER = os.environ.get('IMAGE_PROVIDER', 'OpenAI')  # Default to OpenAI
 

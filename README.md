@@ -2,7 +2,7 @@
 
 # PARA CASA INCLUSIVO
 
-*Versão: 0.5*
+*Versão: 0.6*
 
 
 
@@ -60,7 +60,7 @@ Empodere a educação com adaptações personalizadas usando o PARA CASA INCLUSI
 
 # PARA CASA INCLUSIVO
 
-*Version: 0.5*
+*Version: 0.6*
 
 
 PARA CASA INCLUSIVO is a tool that leverages Artificial Intelligence for the cause of inclusion! 
