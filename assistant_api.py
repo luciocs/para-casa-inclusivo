@@ -1,5 +1,6 @@
 from flask import request, abort, Response, Blueprint
 from functools import wraps
+from urllib.parse import unquote
 import requests
 import os
 import openai
@@ -35,7 +36,7 @@ def create_thread():
 @require_api_key
 def handle_message():
     thread_id = request.json.get('thread_id')
-    user_message = request.json.get('user_message')
+    user_message = unquote(request.json.get('user_message'))
     file_url = request.json.get('file_url')
     file_ids = []
   
