@@ -166,18 +166,70 @@
         <div class="instructions">
             <p>Ou Crie uma nova Atividade Adaptada pelo CHAT, clicando no balãozinho azul no canto da página!</p>
         </div>
-        <script src="https://unpkg.com/blip-chat-widget" type="text/javascript"></script>
-        <script>
-            (function () {
-                window.onload = function () {
-                    new BlipChat()
-                        .withAppKey('bWFpbmJvdHBhcmFjYXNhaW5jbHVzaXZvOmQ3ZGRiMThkLWJmZDYtNGQxNy1hMTg5LWZlN2U4Y2RkYjE0Mg==')
-                        .withButton({"color":"#0096fa","icon":""})
-                        .withCustomCommonUrl('https://lucio-santana-2sfbu.chat.blip.ai/')
-                        .build();
-                }
-            })();
-        </script>
+      
+
+        <div id="blip-chat-bubble">
+          <div class="containerBubble">
+              <div class="welcome-bubble" id="welcome-bubble">
+                  <div class="textContainer">
+                      <span onclick="sendChat('Me conte o que você pode fazer')" id="text-bubble">Agora você pode criar atividades adaptadas. <b>Converse com a nossa IA!</b></span>
+                  </div>
+                  <span class="close-button" onclick="closeBubble()"></span>
+              </div>
+              <div class="example-message">
+                  <li><a onclick="sendChat('Crie uma atividade sobre adição para criança de 9 anos')">Ex: "Crie uma atividade de adição"</a></li>
+                  <li><a onclick="sendChat('Crie uma atividade sobre Sistema Solar para criança de 9 anos')">Ex: "Sistema solar para 9 anos"</a></li>
+              </div>
+          </div>
+        </div>
+      
+      <script src="https://unpkg.com/blip-chat-widget" type="text/javascript"></script>
+      <script>
+        function ChatManager() {
+          this.blipChat = null;
+
+          this.init = function() {
+            this.blipChat = new BlipChat();
+            this.blipChat
+              .withAppKey('bWFpbmJvdHBhcmFjYXNhaW5jbHVzaXZvOmQ3ZGRiMThkLWJmZDYtNGQxNy1hMTg5LWZlN2U4Y2RkYjE0Mg==')
+              .withButton({"color":"#0096fa","icon":""})
+              .withCustomCommonUrl('https://lucio-santana-2sfbu.chat.blip.ai/')
+              .build();
+          };
+
+          this.sendChat = function(action) {
+            if (this.blipChat) {
+              this.blipChat.sendMessage({type: 'text/plain', content: action});
+              this.blipChat.toogleChat();
+              closeBubble();
+            } else {
+              console.error("BlipChat is not initialized");
+            }
+          };
+
+          this.closeBubble = function() {
+            var bubble = document.getElementById('blip-chat-bubble');
+            if (bubble) {
+              bubble.style.display = 'none';
+            }
+          };
+        }
+
+        var chatManager = new ChatManager();
+        document.addEventListener('DOMContentLoaded', function() {
+          chatManager.init();
+        });
+
+        window.sendChat = function(action) {
+          chatManager.sendChat(action);
+        };
+
+        window.closeBubble = function() {
+          chatManager.closeBubble();
+        };
+      </script>
+
+      
         <!-- Tutorial Video Section -->
         <div class="tutorial-section">
             <h2 class="tutorial-title">Como Usar o Para Casa Inclusivo</h2>

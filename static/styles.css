@@ -608,3 +608,103 @@ button {
 .copilot-link:hover {
     text-decoration: underline;
 }
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%);  /* Start from right */
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+#blip-chat-bubble .welcome-bubble {
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    max-width: 210px;
+    position: fixed;
+    bottom: 80px; /* Adjust to push up above the Blip Chat button */
+    right: 100px; /* Adjust as needed */
+    z-index: 1000; /* Ensure this is less than the options menu */
+    animation: 1s ease-out 0s 1 slideInFromRight;
+}
+
+#blip-chat-bubble .textContainer {
+    color: #333;    
+    padding: 8px;
+    font-size: 14px;
+}
+
+#blip-chat-bubble .close-button {
+    position: absolute;
+    padding: 8px;
+    cursor: pointer;
+    right: 0.625em;
+    top: 0.9375em;
+    width: 0.7em;
+    height: 0.7em;
+    opacity: 0.3;
+  }
+
+#blip-chat-bubble .close-button:before,
+#blip-chat-bubble .close-button:after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 2px;
+    background-color: #333;
+    top: 50%;
+    left: 50%;
+}
+
+#blip-chat-bubble .close-button:before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+#blip-chat-bubble .close-button:after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+#blip-chat-bubble .example-message {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    bottom: -15px; /* Position the options above the bubble */
+    right: 70px; /* Align with the right side of the bubble */
+    z-index: 1001; /* Just above the bubble's z-index */
+    width: 250px; /* Allow the width to be content-driven, but no wider than bubble */
+    padding: 25px;
+    font-size: 0.9rem; /* Smaller font size */
+}
+
+#blip-chat-bubble .example-message li {
+    list-style-type: none;
+    margin-top: 5px;
+}
+
+#blip-chat-bubble .example-message li a {
+    background: #0056b3;
+    color: white;
+    padding: 10px;
+    border-radius: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+    padding: 8px 15px; /* Reduced padding for a more delicate button */
+    font-size: 0.8rem; /* Smaller font size */
+    line-height: 1; /* Adjust line height to ensure text is centered */
+    white-space: nowrap; /* Ensure text doesn't wrap */
+    animation: 1s ease-out 0s 1 slideInFromRight;
+}
+
+#blip-chat-bubble .example-message li a:hover {
+    background-color: #0078D7;
+}
