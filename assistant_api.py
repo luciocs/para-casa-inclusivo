@@ -46,14 +46,28 @@ def handle_message():
     if user_message:
         content.append({"type": "text", "text": user_message})
 
-    # If file_url is provided, add it to the content as an image_url object
+    # If file_url is provided, download the file and upload it to OpenAI's storage
     if file_url:
+        response = requests.get(file_url)
+        response.raise_for_status()  # Ensure the download was successful
+
+        # Save the file locally with an appropriate extension
+        file_name = 'downloaded_image.png'
+        with open(file_name, 'wb') as file:
+            file.write(response.content)
+
+        # Upload the file to OpenAI's storage
+        with open(file_name, 'rb') as file:
+            uploaded_file = client.files.create(
+                file=file,
+                purpose='vision'
+            )
+        file_id = uploaded_file.id
+
+        # Add the file to the content as an attachment
         content.append({
-            "type": "image_url",
-            "image_url": {
-                "url": file_url,
-                "detail": "high"
-            }
+            "type": "image_file",
+            "image_file": {"file_id": file_id}
         })
 
     # Ensure content is not empty before sending the message
