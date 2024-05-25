@@ -13,6 +13,8 @@ Criado para ajudar educadores e equipes pedagógicas a adaptar Atividades Escola
 
 Se você é um(a) professor(a) procurando tornar as atividades mais inclusivas, um(a) mediador(a) ou parte de uma equipe pedagógica trabalhando com uma criança atípica, o PARA CASA INCLUSIVO está aqui para ajudar!
 
+O Para Casa Inclusivo é um projeto do [Instituto Inclui.ai](https://inclui.ai/), que nasceu para acelerar e viabilizar iniciativas que aplicam Inteligência Artificial para criar um mundo mais inclusivo!
+
 ## Primeiros Passos
 
 1. Acesse o site [Para Casa Inclusivo](https://www.paracasainclusivo.com.br).
@@ -66,6 +68,7 @@ Empodere a educação com adaptações personalizadas usando o PARA CASA INCLUSI
 PARA CASA INCLUSIVO is a tool that leverages Artificial Intelligence for the cause of inclusion! 
 Designed to assist educators and students in creating and adapting homework assignments according to diverse learning needs. 
 Whether you are a teacher looking to make assignments more inclusive or a student seeking personalized adaptations, PARA CASA INCLUSIVO is here to help!
+Para Casa Inclusivo is a project by [Instituto Inclui.ai](https://inclui.ai/english-version), which was created to accelerate and facilitate initiatives that apply Artificial Intelligence to create a more inclusive world!
 
 ## Contribution
 

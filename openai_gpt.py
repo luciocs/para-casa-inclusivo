@@ -30,7 +30,7 @@ def adapt_text_for_inclusivity(extracted_text):
     # Call OpenAI API for Chat Completion
     try:
         response = client.chat.completions.create(
-            model="gpt-4-1106-preview",
+            model="gpt-4o",
             messages=messages,
             temperature=0,
             max_tokens=4096,
@@ -74,7 +74,7 @@ def change_activity_theme(adapted_text, new_theme):
     # Call OpenAI API for Chat Completion
     try:
         response = client.chat.completions.create(
-            model="gpt-4-1106-preview",
+            model="gpt-4o",
             messages=messages,
             temperature=0,
             max_tokens=4096,
@@ -100,7 +100,7 @@ def generate_comic_book(adapted_text):
     messages=[
       {
         "role": "system",
-        "content": "# PARA CASA INCLUSIVO - VERSÃO QUADRINHOS\nVocê receberá o texto adaptado de uma atividade escolar. Sua tarefa é transformá-lo em narração e descrições de imagens para um livro de quadrinhos com 4 painéis por página, 2 em cada linha.\n\n1. Divida o texto adaptado em segmentos menores que serão usados em cada painel do quadrinho.\n2. Escreva a narração para cada painel de forma que complemente as ilustrações que serão geradas. O texto deve seguir as diretrizes:\n2.1. Linguagem Simples\n2.2. Usar emojis para facilitar a compreensão\n2.3. TODAS AS LETRAS EM MAIÚSCULA\n2.4. Destaque as palavras mais importantes de cada parágrafo em **negrito** para facilitar a leitura\n3. Para cada painel, inclua também uma descrição de imagem para ser gerada pelo Stable Diffusion\n3.1 A descrição deve ser criada em inglês\n4. Certifique-se de que a narração e as descrições de imagem fluiam bem e façam sentido como uma história em quadrinhos.\n5. Indique claramente onde começa e termina a narração e a descrição de cada painel, para facilitar a montagem posterior.\n\nResponda apenas com a narração e descrições de imagem formatadas para os painéis."
+        "content": "# PARA CASA INCLUSIVO - VERSÃO QUADRINHOS\nVocê receberá o texto adaptado de uma atividade escolar. Sua tarefa é transformá-lo em narração e descrições de imagens para um livro de quadrinhos com 4 painéis por página, 2 em cada linha.\n\n1. Divida o texto adaptado em segmentos menores que serão usados em cada painel do quadrinho.\n2. Escreva a narração para cada painel de forma que complemente as ilustrações que serão geradas. O texto deve seguir as diretrizes:\n2.1. Linguagem Simples\n2.2. Usar emojis para facilitar a compreensão\n2.3. TODAS AS LETRAS EM MAIÚSCULA\n2.4. Destaque as palavras mais importantes de cada parágrafo em **negrito** para facilitar a leitura\n3. Para cada painel, inclua também uma descrição de imagem para ser gerada pelo modelo dall-e-3\n3.1 A descrição deve ser criada em inglês\n4. Certifique-se de que a narração e as descrições de imagem fluiam bem e façam sentido como uma história em quadrinhos.\n5. Indique claramente onde começa e termina a narração e a descrição de cada painel, para facilitar a montagem posterior.\n\nResponda apenas com a narração e descrições de imagem para os painéis, no seguinte formato:\n**PAINEL 1:**\nNARRAÇÃO: [TEXTO DE NARRAÇÃO]\nDESCRIÇÃO DE IMAGEM:  [IMAGE DESCRIPTION]\n\n**PAINEL 2:**\nNARRAÇÃO: [TEXTO DE NARRAÇÃO]\nDESCRIÇÃO DE IMAGEM:  [IMAGE DESCRIPTION]"
       },
       {
         "role": "user",
@@ -110,7 +110,7 @@ def generate_comic_book(adapted_text):
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4-1106-preview",
+            model="gpt-4o",
             messages=messages,
             temperature=0,
             max_tokens=4096,

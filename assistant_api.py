@@ -38,48 +38,55 @@ def handle_message():
     thread_id = request.json.get('thread_id')
     user_message = unquote(request.json.get('user_message'))
     file_url = request.json.get('file_url')
-    file_ids = []
-  
-    # Check if file_url exists and is not empty
+
+    # Prepare content list
+    content = []
+
+    # Add user message to content if it's not empty
+    if user_message:
+        content.append({"type": "text", "text": user_message})
+
+    # If file_url is provided, add it to the content as an image_url object
     if file_url:
-        # Download the file content from URL
-        response = requests.get(file_url)
-        response.raise_for_status()  # Ensure the download was successful
-        # Upload the file to Assistant
-        uploaded_file = client.files.create(
-            file= (os.path.basename(file_url), response.content, 'application/octet-stream'),
-            purpose="assistants"
-        )
-        file_ids.append(uploaded_file.id)
-    
-    # Add user message to thread
-    client.beta.threads.messages.create(
-        thread_id=thread_id,
-        role="user",
-        content=user_message,
-        file_ids=file_ids
-    )
+        content.append({
+            "type": "image_url",
+            "image_url": {
+                "url": file_url,
+                "detail": "high"
+            }
+        })
 
-    # Create a run for the thread
-    run = client.beta.threads.runs.create(
-        thread_id=thread_id,
-        assistant_id=assistant_id
-    )
-
-    # Poll the run status
-    while run.status in ['queued', 'in_progress']:
-        time.sleep(1)  # Sleep to avoid overwhelming the API with requests
-        run = client.beta.threads.runs.retrieve(
+    # Ensure content is not empty before sending the message
+    if content:
+        # Add user message to thread
+        client.beta.threads.messages.create(
             thread_id=thread_id,
-            run_id=run.id
+            role="user",
+            content=content
         )
-
-    # Retrieve messages once the run completes
-    if run.status == 'completed':
-        messages = client.beta.threads.messages.list(thread_id=thread_id)
-        if messages.data:
-            return messages.data[0].content[0].text.value
+    
+        # Create a run for the thread
+        run = client.beta.threads.runs.create(
+            thread_id=thread_id,
+            assistant_id=assistant_id
+        )
+    
+        # Poll the run status
+        while run.status in ['queued', 'in_progress']:
+            time.sleep(1)  # Sleep to avoid overwhelming the API with requests
+            run = client.beta.threads.runs.retrieve(
+                thread_id=thread_id,
+                run_id=run.id
+            )
+    
+        # Retrieve messages once the run completes
+        if run.status == 'completed':
+            messages = client.beta.threads.messages.list(thread_id=thread_id)
+            if messages.data:
+                return messages.data[0].content[0].text.value
+            else:
+                return Response('No response from the assistant.', status=404, mimetype='text/plain')
         else:
-            return Response('No response from the assistant.', status=404, mimetype='text/plain')
+            return Response(f'Run did not complete successfully. Status: {run.status}', status=500, mimetype='text/plain')
     else:
-        return Response(f'Run did not complete successfully. Status: {run.status}', status=500, mimetype='text/plain')
+        return Response('No content to send in the message.', status=400, mimetype='text/plain')

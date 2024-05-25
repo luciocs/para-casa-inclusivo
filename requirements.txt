@@ -4,7 +4,7 @@ python-dotenv
 Flask-Cors
 Jinja2
 requests
-openai==1.16.2
+openai==1.30.3
 azure-ai-formrecognizer
 azure-storage-blob
 Pillow
