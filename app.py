@@ -4,7 +4,7 @@ from openai_gpt import adapt_text_for_inclusivity
 from openai_gpt import change_activity_theme
 from openai_gpt import create_dalle_images
 from openai_gpt import generate_comic_book
-from stability_ai import create_stability_images
+from stability_ai import create_stability_images, create_bedrock_images
 from datetime import datetime
 import urllib.parse
 import os
@@ -161,6 +161,10 @@ def generate_images():
                 error_message = result["error in create_dalle_images"]
                 break  # Stop processing further keywords once an error is encountered
             image_urls.append(result)  # Assuming result is a list of URLs
+        elif IMAGE_PROVIDER == 'Bedrock':
+            url = create_bedrock_images(keyword)
+            if url:
+                image_urls.append(url)    
         else:
             url = create_stability_images(keyword)
             if url:
@@ -204,12 +208,16 @@ def create_panels(panels_data):
             if isinstance(result, dict) and "error in create_dalle_images" in result:
                 error_message = result["error in create_dalle_images"]
                 break  # Stop processing further panels once an error is encountered
+            if not error_message:
+                panel['image_url'] = result
+        elif IMAGE_PROVIDER == 'Bedrock':
+            image_url = create_bedrock_images(panel['image_description'])
+            if image_url:
+                panel['image_url'] = image_url
         else:
             image_url = create_stability_images(panel['image_description'])
             if image_url:
                 panel['image_url'] = image_url
-        if not error_message:
-            panel['image_url'] = result
 
     return panels_data, error_message
   

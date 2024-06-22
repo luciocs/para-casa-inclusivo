@@ -6,8 +6,9 @@ Jinja2
 requests
 openai==1.30.3
 azure-ai-formrecognizer
-azure-storage-blob
 Pillow
 datetime
 urllib3<2.0
 azure-core
+boto3
+awscli
