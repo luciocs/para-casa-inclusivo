@@ -543,19 +543,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Display images
                 imageDiv.style.display = 'block';
                 imageDiv.innerHTML = '<p>Imagens de Apoio:</p>';
-                imageUrls.forEach(url => {
-                    const img = document.createElement('img');
-                    img.src = url;
-                    img.alt = 'Imagem de suporte';
-                    img.className = 'support-image';
-                    imageDiv.appendChild(img);
-                });
+                if (imageUrls.length === 0) {
+                    imageDiv.innerHTML += '<p>Nenhuma imagem foi gerada. Por favor, tente novamente.</p>';
+                } else {
+                        imageUrls.forEach(url => {
+                        if (url.error) {
+                            const errorText = document.createElement('p');
+                            errorText.textContent = url.error;
+                            imageDiv.appendChild(errorText);
+                        } else {
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.alt = 'Imagem de suporte';
+                            img.className = 'support-image';
+                            imageDiv.appendChild(img);
+                        }
+                    });
+                }
                 // Clear the status
                 updateStatus('');
             };
         } catch (error) {
             imageDiv.style.display = 'block';
-            imageDiv.innerHTML = '<p>Error: ' + error + '</p>';
+            imageDiv.innerHTML = `<p>Erro ao gerar imagens. Por favor, tente novamente mais tarde.</p>`;
             // Clear the status
             updateStatus('');
             // Error tracking

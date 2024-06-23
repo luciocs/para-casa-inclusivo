@@ -7,6 +7,7 @@ import boto3
 import json
 import random
 from dotenv import load_dotenv
+from botocore.exceptions import ClientError
 
 # Load environment variables
 load_dotenv()
@@ -110,9 +111,18 @@ def create_bedrock_images(prompt, n=1, size="1024x1024"):
     }
 
     request = json.dumps(native_request)
-    response = client.invoke_model(modelId=model_id, body=request)
-    model_response = json.loads(response["body"].read())
+    try:
+        response = client.invoke_model(modelId=model_id, body=request)
+        model_response = json.loads(response["body"].read())
 
-    base64_images = [artifact["base64"] for artifact in model_response["artifacts"]]
-    image_urls = [save_and_get_image_url(img) for img in base64_images]
-    return image_urls
+        base64_images = [artifact["base64"] for artifact in model_response["artifacts"]]
+        image_urls = [save_and_get_image_url(img) for img in base64_images]
+        return image_urls
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'ValidationException' and 'filtered words' in e.response['Error']['Message']:
+            return {"error": "Desculpe, não podemos gerar imagens com base neste conteúdo devido à política de conteúdo."}
+        else:
+            return {"error": "Erro ao gerar imagens. Por favor, tente novamente mais tarde."}
+    except Exception as e:
+        logger.error("An error occurred: %s", str(e), exc_info=True)
+        return {"error": "Erro ao gerar imagens. Por favor, tente novamente mais tarde."}
