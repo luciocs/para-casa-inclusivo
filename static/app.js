@@ -32,13 +32,6 @@ function shareOnWhatsApp() {
     window.open(whatsappUrl, '_blank');
 }
 
-function shareSponsorshipOnWhatsApp() {
-    const message = encodeURIComponent("Convidamos sua escola a se tornar patrocinadora do Para Casa Inclusivo e ajudar a manter o projeto gratuito. Saiba mais e contribua para impactar a vida de muitas crianças em todo o Brasil. Confira o material de patrocínio aqui: https://drive.google.com/file/d/1Q96vjRHNdP705hMQyQLw9_md1uHRTF8K/view?usp=sharing");
-    const whatsappUrl = `https://wa.me/?text=${message}`;
-    window.open(whatsappUrl, '_blank');
-}
-
-
 // Function to copy text and formatting to clipboard
 async function copyToClipboard() {
     // Google Analytics event for button click
@@ -62,6 +55,16 @@ async function copyToClipboard() {
     } catch (err) {
         alert('Falha ao copiar o texto: ' + err);
     }
+}
+
+function improveAdaptation() {
+    // Google Analytics event for button click
+    gtag('event', 'Improve Adaptation', {
+        'event_category': 'Button',
+        'event_label': 'Improve Adaptation'
+    });
+    const message = `${adaptedText}\n\n---------------------\n\nQuero melhorar essa adaptação.`;
+    sendChat(message);
 }
 
 function handleFeedback(isPositive) {
@@ -145,54 +148,6 @@ function categorizeFilesByNames(files) {
     return Array.from(usedCategoriesSet);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const surveyModal = document.getElementById('surveyModal');
-    const surveyForm = document.getElementById('surveyForm');
-    
-    // Check if profile survey was already submitted to avoid showing the modal again
-    if (!localStorage.getItem('profileSurveySubmitted')) {
-        surveyModal.style.display = "block";
-    }
-
-    surveyForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        // Collect survey form data
-        const formData = new FormData(surveyForm);
-        const userRole = formData.get('userRole');
-        const schoolPhase = formData.get('schoolPhase');
-        const childAge = formData.get('childAge');
-        const diagnosis = formData.get('diagnosis');
-
-        // This sets the user properties using the 'set' command
-        gtag('set', {
-          'user_properties': {
-            'user_role': userRole,
-            'school_phase': schoolPhase,
-            'child_age': childAge,
-            'diagnosis': diagnosis
-          }
-        });
-      
-        // Send a single tracking event to Google Analytics with custom dimensions
-        gtag('event', 'survey_response', {
-            'event_category': 'Survey',
-            'event_label': 'User Survey',
-            'non_interaction': true,
-            'user_role': userRole, 
-            'school_phase': schoolPhase, 
-            'child_age': childAge, 
-            'diagnosis': diagnosis
-        });
-
-        // Hide modal and mark survey as submitted
-        localStorage.setItem('profileSurveySubmitted', 'true');
-        surveyModal.style.display = "none";
-        alert('Obrigado pelas suas respostas!');
-    });
-});
-
-
 // Event Listener for the Submit Feedback Button
 document.getElementById('submit-feedback').addEventListener('click', function() {
   const textFeedback = document.getElementById('feedback-text').value;
@@ -204,6 +159,61 @@ document.getElementById('submit-feedback').addEventListener('click', function() 
   alert('Obrigado pelo seu feedback!'); // Thank the user in Portuguese
   // Optionally, hide the additional feedback input after submission
   document.getElementById('additional-feedback').style.display = 'none';
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const highlights = [
+        {
+            title: "Crie atividades conversando com nossa IA!",
+            text: "Crie atividades únicas e personalizadas para as necessidades de cada aluno. Converse com nossa IA e ajuste a adaptação do seu jeito!",
+            link: "#",
+            linkText: "Criar Atividade",
+            isButton: true
+        },
+        {
+            title: "Para Casa Inclusivo diretamente no ChatGPT!",
+            text: "Agora você pode utilizar, gratuitamente, o Para Casa Inclusivo direto no ChatGPT para adptar e criar atividades, imagens de apoio e muito mais!",
+            link: "https://chatgpt.com/g/g-bY1aP1fth-para-casa-inclusivo", 
+            linkText: "Experimentar",
+            isButton: false
+        },
+        {
+            title: "Compartilhe a sua história com o Para Casa Inclusivo!",
+            text: "Queremos entender o impacto que o Para Casa Inclusivo está gerando na vida das pessoas. Responda uma breve pesquisa e nos ajude a evoluir ainda mais a ferramenta.",
+            link: "https://docs.google.com/forms/d/e/1FAIpQLSe0FLA2TXoFDx5aysWi88wdqhVhp8Dyj6EE3ZKGNcXS8HRH7g/viewform?usp=sf_link",
+            linkText: "Responder",
+            isButton: false
+        }
+    ];
+
+    let currentHighlight = 0;
+
+    function updateHighlight() {
+        const highlight = highlights[currentHighlight];
+        document.getElementById('highlight-title').textContent = highlight.title;
+        document.getElementById('highlight-text').textContent = highlight.text;
+
+        const highlightLink = document.getElementById('highlight-link');
+        const highlightButton = document.getElementById('highlight-button');
+
+        if (highlight.isButton) {
+            highlightLink.style.display = 'none';
+            highlightButton.style.display = 'inline-block';
+        } else {
+            highlightLink.style.display = 'inline-block';
+            highlightButton.style.display = 'none';
+            highlightLink.href = highlight.link;
+            highlightLink.textContent = highlight.linkText;
+        }
+
+        currentHighlight = (currentHighlight + 1) % highlights.length;
+    }
+
+    // Rotate highlights every 10 seconds
+    setInterval(updateHighlight, 10000);
+
+    // Initialize the first highlight
+    updateHighlight();
 });
 
 document.getElementById('newAdaptationButton').addEventListener('click', function() {
@@ -297,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadForm = document.getElementById('uploadForm');
     const resultDiv = document.getElementById('result');
     const imageDiv = document.getElementById('supportImages');  
+    const improveButton = document.getElementById('improveAdaptationButton');
     const copyButton = document.getElementById('copyButton');
     const fileInput = document.getElementById('fileInput');
     const fileLabel = document.getElementById('fileLabel');
@@ -411,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });      
       
         try {
-            // Step 2: Running OCR and GPT-4
+            // Step 2: Running OCR and GPT-4o
             updateStatus('Adaptando a atividade escolar com IA. Isso pode levar um minutinho...');
             
             const response = await fetch('/', {
@@ -487,7 +498,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });                        
         }
     });
-  
+
+    // Event listener for the "Melhorar Adaptação" button
+    improveButton.addEventListener('click', improveAdaptation);
+    
     // Event listener for Generate New Images button
     generateImagesButton.addEventListener('click', async () => {
         try {

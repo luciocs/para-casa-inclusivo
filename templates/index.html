@@ -27,69 +27,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
 </head>
 <body>
-    <div id="comicUnavailableModal" class="comic-unavailable-modal">
-      <div class="modal-content">
-        <span class="comicUnavailableModalClose">×</span>
-        <p>Devido ao alto volume de acessos, a opção de criar gibis está temporariamente indisponível.</p>
-        <p>Se essa funcionalidade é importante para você, entre em contato conosco no <a href="https://www.instagram.com/paracasainclusivo/" target="_blank">Instagram</a>.</p>
-        <p>Agradecemos a compreensão.</p>
-        <button id="closeComicUnavailableModalButton" class="comic-modal-button">OK</button>
-      </div>
-    </div>
-    <div id="surveyModal" class="surveyModal">
-        <div class="surveyModal-content">
-            <span class="surveyModalClose">&times;</span>
-            <h2>Nos ajude a melhorar o Para Casa Inclusivo!</h2>
-            <form id="surveyForm">
-                <div class="modal-question" id="question1">
-                    <h3>Você usa o Para Casa Inclusivo como:</h3>
-                    <select name="userRole" required>
-                        <option value="" disabled selected>Selecione seu papel</option>
-                        <option value="Professor(a)">Professor(a)</option>
-                        <option value="Familiar/Responsável">Familiar/Responsável</option>
-                        <option value="Terapeuta">Terapeuta</option>
-                        <option value="Aluno(a)">Aluno(a)</option>
-                        <option value="Outro">Outro</option>
-                    </select>
-                </div>
-                <div class="modal-question" id="question2">
-                    <h3>Qual a fase escolar da criança?</h3>
-                    <select name="schoolPhase" required>
-                        <option value="" disabled selected>Selecione a fase</option>
-                        <option value="Fundamental anos iniciais (1-5)">Fundamental anos iniciais (1-5)</option>
-                        <option value="Fundamental anos finais (6-9)">Fundamental anos finais (6-9)</option>
-                        <option value="Ensino médio">Ensino médio</option>
-                        <option value="Outro">Outro</option>
-                    </select>
-                </div>
-                <div class="modal-question" id="question3">
-                    <h3>Qual a idade da criança?</h3>
-                    <input type="number" name="childAge" min="1" max="99">
-                </div>
-                <div class="modal-question" id="question4">
-                    <h3>A criança se enquadra em algum destes diagnósticos?</h3>
-                    <select name="diagnosis" required>
-                        <option value="" disabled selected>Selecione uma opção</option>
-                        <option value="Autismo (TEA)">Autismo (TEA)</option>
-                        <option value="TDAH">TDAH</option>
-                        <option value="Dislexia">Dislexia</option>
-                        <option value="Outro">Outro</option>
-                        <option value="Nenhum">Nenhum</option>
-                    </select>
-                </div>
-                <button type="submit">Enviar Respostas</button>
-            </form>
-        </div>
-    </div>
     <div class="container">
         <div class="header">
             <img src="https://blobparacasa.blob.core.windows.net/stability-images/para-casa-inclusivo-logo.png?sp=r&st=2023-10-18T21:11:14Z&se=2025-10-31T05:11:14Z&spr=https&sv=2022-11-02&sr=b&sig=JtIYoUHCfznVXwZMD7Xcl65GBA%2B%2Bwe5J0W95tSgkJ2c%3D" alt="PARA CASA INCLUSIVO Logo" class="logo">
         </div>
         <div class="sponsorship-highlight">
-            <h2>Compartilhe a sua história com o Para Casa Inclusivo!</h2>
-            <p>Queremos entender o impacto que o Para Casa Inclusivo está gerando na vida das pessoas. Responda uma breve pesquisa e nos ajude a evoluir ainda mais a ferramenta.</p>
+            <h2 id="highlight-title">Compartilhe a sua história com o Para Casa Inclusivo!</h2>
+            <p id="highlight-text">Queremos entender o impacto que o Para Casa Inclusivo está gerando na vida das pessoas. Responda uma breve pesquisa e nos ajude a evoluir ainda mais a ferramenta.</p>
             <div class="buttons">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSe0FLA2TXoFDx5aysWi88wdqhVhp8Dyj6EE3ZKGNcXS8HRH7g/viewform?usp=sf_link" target="_blank" class="button sponsor">Responder</a>
+                <a id="highlight-link" href="https://docs.google.com/forms/d/e/1FAIpQLSe0FLA2TXoFDx5aysWi88wdqhVhp8Dyj6EE3ZKGNcXS8HRH7g/viewform?usp=sf_link" target="_blank" class="button sponsor">Responder</a>
+                <button id="highlight-button" class="button sponsor" style="display:none;" onclick="sendChat('Me conte o que você pode fazer')">Criar Atividade</button>
             </div>
         </div>
         <div class="description">
@@ -128,9 +75,10 @@
             </div>
             <div id="actions" class="actions" style="display:none">
               <p>Como você gostaria de utilizar essa adaptação?</p>
+              <button id="improveAdaptationButton" class="copy-button">Melhorar Adaptação</button>
               <button id="copyButton" class="copy-button">Copiar Texto</button>
               <button id="whatsappShareButton" class="wpp-button">Compartilhar no WhatsApp</button>
-              <button id="generateImagesButton" class="image-button">Criar Imagens de Apoio com IA</button>          
+              <button id="generateImagesButton" class="image-button">Criar Imagens de Apoio com IA</button>         
               <button id="generateComicButton" class="comic-button">Criar Gibi com IA</button> 
               <button id="newAdaptationButton" class="new-button">Nova Adaptação</button> 
               <div id="theme-change-container">

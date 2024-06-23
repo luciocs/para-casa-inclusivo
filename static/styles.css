@@ -151,7 +151,7 @@ button {
     background-color: #0056b3;
 }
 
-.copy-button, .image-button, .comic-button, .print-button, .file-button, .wpp-button, .submit-feedback, .new-button, .change-theme-button, .comic-modal-button {
+.copy-button, .image-button, .comic-button, .print-button, .file-button, .wpp-button, .submit-feedback, .new-button, .change-theme-button {
     padding: 8px;
     background-color: #87D0FA;
     border: none;
@@ -163,7 +163,7 @@ button {
     margin-bottom: 10px;  /* Adds bottom margin */  
 }
 
-.copy-button:hover, .image-button:hover, .comic-button:hover, .print-button:hover, .submit-feedback:hover, .new-button:hover, .change-theme-button:hover, .comic-modal-button:hover {
+.copy-button:hover, .image-button:hover, .comic-button:hover, .print-button:hover, .submit-feedback:hover, .new-button:hover, .change-theme-button:hover {
     background-color: #38B6FF;
 }
 
@@ -446,118 +446,6 @@ button {
     padding: 5px;
 }
 
-/* Survey Modal Styling */
-#surveyModal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 10; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-}
-
-/* Modal Content Box */
-#surveyModal .surveyModal-content {
-  background-color: #ffffff;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888888;
-  width: 80%; /* Could be more or less, depending on screen size */
-  border-radius: 8px; /* Rounded corners */
-}
-
-/* Close button */
-#surveyModal .surveyModalClose {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-#surveyModal .surveyModalClose:hover,
-#surveyModal .surveyModalClose:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* Survey form styling */
-#surveyModal form {
-  display: flex;
-  flex-direction: column;
-}
-
-#surveyModal form .question {
-  margin-bottom: 15px;
-}
-
-#surveyModal form .question label {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-#surveyModal form .question input,
-#surveyModal form .question select {
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
-  width: 100%;
-}
-
-#surveyModal form button[type="submit"] {
-  background-color: #007BFF;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-#surveyModal form button[type="submit"]:hover {
-  background-color: #0056b3;
-}
-
-/* Comic Unavailable Modal Styling */
-.comic-unavailable-modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.comic-unavailable-modal .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 60%;
-  border-radius: 8px;
-}
-
-.comic-unavailable-modal .comicUnavailableModalClose {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.comic-unavailable-modal .comicUnavailableModalClose:hover,
-.comic-unavailable-modal .comicUnavailableModalClose:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
 .sponsorship-highlight {
     background-color: #f0f8ff; /* Light blue background */
     border-radius: 8px;
@@ -581,32 +469,15 @@ button {
     background-color: #007bff; /* Blue */
     color: #ffffff; /* White */
     padding: 10px 20px;
+    border: none;
     border-radius: 5px;
     text-decoration: none;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 .sponsorship-highlight .buttons .button:hover {
     background-color: #0056b3; /* Darker blue */
-}
-
-.copilot-link-container {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #007BFF; /* Use the site's primary color */
-    border-radius: 8px;
-    background-color: #f0f8ff;
-    text-align: center;
-}
-
-.copilot-link {
-    color: #007BFF;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.copilot-link:hover {
-    text-decoration: underline;
 }
 
 @keyframes slideInFromRight {
