@@ -164,18 +164,18 @@ document.getElementById('submit-feedback').addEventListener('click', function() 
 document.addEventListener('DOMContentLoaded', function() {
     const highlights = [
         {
+            title: "Ajude a manter o Para Casa Inclusivo funcionando!",
+            text: "Somos uma organização sem fins lucrativos e contamos com o apoio de empresas e pessoas para oferecer a plataforma gratuitamente para quem precisa.",
+            link: "https://inclui.ai/doa%C3%A7%C3%B5es", 
+            linkText: "Doar Agora",
+            isButton: false
+        },
+        {
             title: "Crie atividades conversando com nossa IA!",
             text: "Crie atividades únicas e personalizadas para as necessidades de cada aluno. Converse com nossa IA e ajuste a adaptação do seu jeito!",
             link: "#",
             linkText: "Criar Atividade",
             isButton: true
-        },
-        {
-            title: "Para Casa Inclusivo diretamente no ChatGPT!",
-            text: "Agora você pode utilizar, gratuitamente, o Para Casa Inclusivo direto no ChatGPT para adptar e criar atividades, imagens de apoio e muito mais!",
-            link: "https://chatgpt.com/g/g-bY1aP1fth-para-casa-inclusivo", 
-            linkText: "Experimentar",
-            isButton: false
         },
         {
             title: "Compartilhe a sua história com o Para Casa Inclusivo!",
@@ -668,7 +668,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'event_label': 'Generate comic book'
         });
         
-        //document.getElementById('comicUnavailableModal').style.display = 'block';
          updateStatus('Criando Gibi usando IA. Isso pode levar um minutinho ou dois...');
          const response = await fetch('/generate_comic_output', {
            method: 'POST',
@@ -708,42 +707,78 @@ document.addEventListener('DOMContentLoaded', () => {
       }            
     });
 
-    document.querySelector('.comicUnavailableModalClose').addEventListener('click', () => {
-      document.getElementById('comicUnavailableModal').style.display = 'none';
-    });
-    document.getElementById('closeComicUnavailableModalButton').addEventListener('click', () => {
-      document.getElementById('comicUnavailableModal').style.display = 'none';
-    });
-  
     printComicBook.addEventListener("click", function() {
         // Google Analytics event for button click
         gtag('event', 'Print comic book', {
             'event_category': 'Button',
             'event_label': 'Print comic book'
         });
-        // Clone the elements you want to print
-        const headerClone = document.querySelector('.header').cloneNode(true);
-        const comicBookClone = comicDiv.cloneNode(true);
 
-        // Create a temporary container
-        const printContainer = document.createElement('div');
+        // Select the comicContainer content to print
+        const comicContent = document.getElementById('comicContainer').cloneNode(true);
 
-        // Append cloned elements to the temporary container
-        printContainer.appendChild(headerClone);
-        printContainer.appendChild(comicBookClone);
+        // Create a new window for printing
+        const printWindow = window.open('', '', 'width=800,height=600');
 
-        // Save the current body
-        const originalBody = document.body.innerHTML;
+        // Write the cloned content into the new window's document
+        printWindow.document.write('<html><head><title>Print Comic Book</title>');
+        printWindow.document.write('<style>');
+        printWindow.document.write(`
+            body { 
+                font-family: 'Helvetica Neue', Arial, sans-serif; 
+                margin: 0; 
+                padding: 20px; 
+                background-color: #fff; 
+            }
+            .comic-row { 
+                display: flex; 
+                flex-wrap: wrap; 
+                justify-content: space-between; 
+                page-break-inside: avoid; 
+                margin-bottom: 20px; 
+            }
+            .comic-panel { 
+                display: flex; 
+                flex-direction: column; 
+                justify-content: space-between; 
+                width: calc(50% - 20px); 
+                margin: 10px; 
+                border: 2px solid #333; 
+                background-color: #f4f4f4; 
+                padding: 5px; 
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+                border-radius: 5px; 
+                page-break-inside: avoid; 
+                box-sizing: border-box; 
+            }
+            .narration-box { 
+                background-color: #ffffe0; 
+                padding: 8px; 
+                margin-bottom: 5px; 
+                font-size: 12px; 
+                font-family: 'Helvetica Neue', Arial, sans-serif; /* Accessible font */
+                border-radius: 3px; 
+            }
+            .comic-image { 
+                flex-grow: 1;
+                max-height: 100%; 
+                object-fit: contain; 
+                border-radius: 3px; 
+            }
+        `);
+        printWindow.document.write('</style></head><body>');
+        printWindow.document.write(comicContent.outerHTML);
+        printWindow.document.write('</body></html>');
 
-        // Replace the body with the temporary container
-        document.body.innerHTML = '';
-        document.body.appendChild(printContainer);
+        // Close the document to ensure content loads
+        printWindow.document.close();
+        printWindow.focus();
 
-        // Trigger print
-        window.print();
-
-        // Restore the original body
-        document.body.innerHTML = originalBody;   
+        // Wait for images to load before printing
+        printWindow.onload = function() {
+            printWindow.print();
+            printWindow.close();
+        };
     });
   
     document.getElementById('prevBtn').addEventListener('click', () => {
