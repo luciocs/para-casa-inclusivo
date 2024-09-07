@@ -5,14 +5,30 @@ import requests
 import os
 import openai
 import time
+from openai import AzureOpenAI
+from azure_ocr import azure_ocr
 
 assistant_api = Blueprint('assistant_api', __name__)
 
 # Setup OpenAI and API keys
-openai.api_key = os.environ.get('OPENAI_ASS_API_KEY')
+USE_AZURE_OPENAI = os.getenv("USE_AZURE_OPENAI", "False").lower() == "true"
+AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION", "2024-05-01-preview")
+OPENAI_API_KEY = os.getenv('OPENAI_ASS_API_KEY')
 VALID_API_KEYS = {os.environ.get('PCI_API_KEY'): True}
 assistant_id = os.environ.get('ASSISTANT_ID')
-client = openai.OpenAI()
+
+# Initialize the appropriate OpenAI client
+if USE_AZURE_OPENAI:
+    client = AzureOpenAI(
+        azure_endpoint=AZURE_OPENAI_ENDPOINT,
+        api_key=AZURE_OPENAI_API_KEY,
+        api_version=AZURE_OPENAI_API_VERSION
+    )
+else:
+    openai.api_key = OPENAI_API_KEY
+    client = openai.OpenAI()
 
 def require_api_key(f):
     @wraps(f)
@@ -46,7 +62,7 @@ def handle_message():
     if user_message:
         content.append({"type": "text", "text": user_message})
 
-    # If file_url is provided, download the file and upload it to OpenAI's storage
+    # If file_url is provided, download the file and extract text using Azure OCR
     if file_url:
         response = requests.get(file_url)
         response.raise_for_status()  # Ensure the download was successful
@@ -56,19 +72,15 @@ def handle_message():
         with open(file_name, 'wb') as file:
             file.write(response.content)
 
-        # Upload the file to OpenAI's storage
-        with open(file_name, 'rb') as file:
-            uploaded_file = client.files.create(
-                file=file,
-                purpose='vision'
-            )
-        file_id = uploaded_file.id
+        # Pass the file in binary mode to the OCR function
+        with open(file_name, 'rb') as image_data:
+            extracted_text = azure_ocr(image_data.read())
 
-        # Add the file to the content as an attachment
-        content.append({
-            "type": "image_file",
-            "image_file": {"file_id": file_id}
-        })
+        # Check if OCR was successful and append the text
+        if isinstance(extracted_text, str) and extracted_text.strip():
+            content.append({"type": "text", "text": extracted_text})
+        else:
+            return Response('Failed to extract text from the file.', status=400, mimetype='text/plain')
 
     # Ensure content is not empty before sending the message
     if content:

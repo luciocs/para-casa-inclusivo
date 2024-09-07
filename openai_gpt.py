@@ -9,7 +9,7 @@ load_dotenv()
 
 USE_AZURE_OPENAI = os.getenv("USE_AZURE_OPENAI", "False").lower() == "true"
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
-AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT") + "/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not USE_AZURE_OPENAI:
