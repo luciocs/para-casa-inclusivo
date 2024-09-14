@@ -1,12 +1,15 @@
-from flask import request, abort, Response, Blueprint
+from flask import request, abort, Response, Blueprint, jsonify
 from functools import wraps
 from urllib.parse import unquote
 import requests
 import os
 import openai
 import time
+import json 
 from openai import AzureOpenAI
 from azure_ocr import azure_ocr
+from stability_ai import create_stability_images, create_bedrock_images
+from openai_gpt import create_dalle_images
 
 assistant_api = Blueprint('assistant_api', __name__)
 
@@ -18,6 +21,7 @@ AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION", "2024-05-01-pre
 OPENAI_API_KEY = os.getenv('OPENAI_ASS_API_KEY')
 VALID_API_KEYS = {os.environ.get('PCI_API_KEY'): True}
 assistant_id = os.environ.get('ASSISTANT_ID')
+IMAGE_PROVIDER = os.getenv('IMAGE_PROVIDER', 'Stability')  # Default to Stability AI
 
 # Initialize the appropriate OpenAI client
 if USE_AZURE_OPENAI:
@@ -104,7 +108,34 @@ def handle_message():
                 thread_id=thread_id,
                 run_id=run.id
             )
-    
+
+        # Check if the run requires action
+        if run.status == 'requires_action':
+            tool_calls = run.required_action.submit_tool_outputs.tool_calls
+            tool_outputs = []
+
+            # Iterate over the required tool calls
+            for call in tool_calls:
+                if call.function.name == 'generate_image':
+                    # Extract the prompt argument from the function call
+                    prompt = json.loads(call.function.arguments).get('prompt')
+                    # Generate the image using the selected provider
+                    image_url = generate_image_based_on_provider(prompt)
+                    if not image_url:
+                        return Response('Failed to generate image.', status=500, mimetype='text/plain')
+
+                    # Add the tool output with the generated image URL
+                    tool_outputs.append({
+                        "tool_call_id": call.id,
+                        "output": json.dumps({"image_url": image_url})
+                    })
+
+            # End the run and submit tool outputs
+            submit_tool_outputs(thread_id, run.id, tool_outputs)
+
+            # Return the image URL directly to Blip
+            return jsonify({"image_url": image_url})
+        
         # Retrieve messages once the run completes
         if run.status == 'completed':
             messages = client.beta.threads.messages.list(thread_id=thread_id)
@@ -116,3 +147,27 @@ def handle_message():
             return Response(f'Run did not complete successfully. Status: {run.status}', status=500, mimetype='text/plain')
     else:
         return Response('No content to send in the message.', status=400, mimetype='text/plain')
+
+# Function to generate a single image based on the selected provider
+def generate_image_based_on_provider(keyword):
+    if IMAGE_PROVIDER == 'OpenAI':
+        result = create_dalle_images(keyword)
+        if isinstance(result, dict) and "error in create_dalle_images" in result:
+            error_message = result["error in create_dalle_images"]
+            print(f"Error in OpenAI DALL-E: {error_message}")
+            return None
+        return result[0]  # Assuming result is a list of URLs and we need just the first one
+    elif IMAGE_PROVIDER == 'Bedrock':
+        url = create_bedrock_images(keyword)
+        return url
+    else:
+        url = create_stability_images(keyword)
+        return url
+
+# Function to submit tool outputs to the assistant and end the run
+def submit_tool_outputs(thread_id, run_id, tool_outputs):
+    client.beta.threads.runs.submit_tool_outputs(
+        thread_id=thread_id,
+        run_id=run_id,
+        tool_outputs=tool_outputs
+    )
