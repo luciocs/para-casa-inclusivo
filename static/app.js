@@ -674,7 +674,15 @@ document.addEventListener('DOMContentLoaded', () => {
            headers: {'Content-Type': 'application/json'},
            body: JSON.stringify({ adapted_text: adaptedText }),
          });
-
+          
+          if (response.status === 403) {
+            // Show disabled message if the comic generation feature is off
+            const errorData = await response.json();
+            comicDiv.innerHTML = `<p>${errorData.error}</p>`;
+            updateStatus('');
+            return;
+          }
+          
          const comicData = await response.json();
          const comicOutputArray = comicData.comic_output;
 
@@ -696,7 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (error.message === 'content_policy_violation') {
             comicDiv.innerHTML = '<p>Desculpe, não podemos gerar imagens com base neste conteúdo devido à política de conteúdo.</p>';
         } else {
-            comicDiv.innerHTML = '<p>Erro: ' + error.message + '</p>';
+            comicDiv.innerHTML = '<p>Ocorreu um erro ao gerar seu gibi. Por favor, tente novamente mais tarde.</p>';
         }
         updateStatus('');
         gtag('event', 'Generating comic book Error', {

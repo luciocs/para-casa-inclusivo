@@ -94,35 +94,74 @@ def create_stability_images(prompt, n=1, size="1024x1024"):
         logger.error("An error occurred: %s", str(e), exc_info=True)
         return {"error in create_stability_images": str(e)}
 
-def create_bedrock_images(prompt, n=1, size="1024x1024"):
+def create_bedrock_images(prompt, n=1, size="512x512"):
+    # Choose the model based on the environment variable BEDROCK_IMAGE_MODEL
+    model_id = os.getenv('BEDROCK_IMAGE_MODEL', 'stability.stable-diffusion-xl-v1')
+
+    # Change the default size to 1024x1024 for stability model
+    if model_id == 'stability.stable-diffusion-xl-v1':
+        size = "1024x1024"
     # Split the size into width and height
     width, height = map(int, size.split("x"))
 
-    client = boto3.client("bedrock-runtime", region_name=os.getenv('AWS_REGION'))
-    model_id = "stability.stable-diffusion-xl-v1"
+    # Calculate the seed before choosing the model
     seed = random.randint(0, 4294967295)
-    native_request = {
-        "text_prompts": [{"text": prompt}],
-        "seed": seed,
-        "cfg_scale": 15,
-        "steps": 60,
-        "width": width,
-        "height": height
-    }
+
+    client = boto3.client('bedrock-runtime', region_name=os.getenv('AWS_REGION'))
+
+    if model_id == "amazon.titan-image-generator-v2:0":
+        # Payload for Titan model
+        native_request = {
+            "textToImageParams": {"text": prompt},
+            "taskType": "TEXT_IMAGE",
+            "imageGenerationConfig": {
+                "cfgScale": 8.0,
+                "seed": seed,
+                "quality": "standard",
+                "width": width,
+                "height": height,
+                "numberOfImages": n
+            }
+        }
+    else:
+        # Payload for Stability AI model
+        native_request = {
+            "text_prompts": [{"text": prompt}],
+            "seed": seed,
+            "cfg_scale": 15,
+            "steps": 50,
+            "width": width,
+            "height": height
+        }
 
     request = json.dumps(native_request)
+    logger.info("Image Prompt: %s", str(prompt), exc_info=True)
     try:
-        response = client.invoke_model(modelId=model_id, body=request)
+        # Call the model using Bedrock runtime
+        response = client.invoke_model(
+            modelId=model_id,
+            body=request
+        )
         model_response = json.loads(response["body"].read())
+        if model_id == "amazon.titan-image-generator-v2:0":
+            # Extract images for Titan model
+            base64_images = model_response["images"]
+        else:
+            # Extract images for Stability model
+            base64_images = [artifact['base64'] for artifact in model_response['artifacts']]
 
-        base64_images = [artifact["base64"] for artifact in model_response["artifacts"]]
+        # Save and return images
         image_urls = [save_and_get_image_url(img) for img in base64_images]
         return image_urls
+
     except ClientError as e:
-        if e.response['Error']['Code'] == 'ValidationException' and 'filtered words' in e.response['Error']['Message']:
-            return {"error": "Desculpe, não podemos gerar imagens com base neste conteúdo devido à política de conteúdo."}
+        error_message = e.response['Error']['Message']
+        if 'filtered words' in error_message or 'content filters' in error_message or 'has been filtered' in error_message:
+            logger.error("Content Policy block: %s", str(e), exc_info=True)
+            return {"error": "content_policy_violation"}
         else:
-            return {"error": "Erro ao gerar imagens. Por favor, tente novamente mais tarde."}
+            logger.error("An error occurred: %s", str(e), exc_info=True)
+            return {"error": "Ocorreu um erro ao gerar esta imagem. Por favor, tente novamente mais tarde."}
     except Exception as e:
         logger.error("An error occurred: %s", str(e), exc_info=True)
-        return {"error": "Erro ao gerar imagens. Por favor, tente novamente mais tarde."}
+        return {"error": "Ocorreu um erro ao gerar esta imagem. Por favor, tente novamente mais tarde."}

@@ -16,6 +16,7 @@ app = Flask(__name__)
 app.register_blueprint(assistant_api, url_prefix='/assistant')
 
 IMAGE_PROVIDER = os.environ.get('IMAGE_PROVIDER', 'OpenAI')  # Default to OpenAI
+COMIC_BOOK_GENERATION_ENABLED = os.getenv("COMIC_BOOK_GENERATION_ENABLED", "True").lower() == "true"
 
 # Configure the logging
 logging.basicConfig(level=logging.INFO)
@@ -175,12 +176,15 @@ def generate_images():
         if error_message == "content_policy_violation":
             return jsonify({"error": "Your request was rejected due to a content policy violation."}), 400
         # Handle other errors
-        return jsonify({"error": "Failed to generate image using Dall-E."}), 500            
+        return jsonify({"error": "Falha ao gerar imagem. Por favor, tente novamente mais tarde."}), 500            
     else:
         return jsonify({"image_urls": image_urls})
     
 @app.route('/generate_comic_output', methods=['POST'])
 def generate_comic_output():
+    if not COMIC_BOOK_GENERATION_ENABLED:
+        return jsonify({"error": "A criação de Gibi está temporariamente indisponível. Por favor, tente novamente mais tarde."}), 403
+        
     adapted_text = request.json.get('adapted_text')
     comic_output = generate_comic_book(adapted_text)
     return jsonify({'comic_output': comic_output.split('\n\n')})  # Split the output into panels
@@ -196,7 +200,7 @@ def generate_single_comic_panel():
         if error_message == "content_policy_violation":
             return jsonify({"error": "Your request was rejected due to a content policy violation."}), 400
         # Handle other errors
-        return jsonify({"error": "Failed to generate image using Dall-E."}), 500            
+        return jsonify({"error": "Falha ao gerar imagem. Por favor, tente novamente mais tarde."}), 500            
     else:    
       return jsonify({'comic_panel': panels[0]})  
   
