@@ -1,7 +1,7 @@
 import os
 import logging
 from dotenv import load_dotenv
-from openai import OpenAI, OpenAIError
+from openai import OpenAI, OpenAIError, AzureOpenAI
 import requests
 
 # Load environment variables from .env file
@@ -10,13 +10,18 @@ load_dotenv()
 USE_AZURE_OPENAI = os.getenv("USE_AZURE_OPENAI", "False").lower() == "true"
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_BASE_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
-AZURE_OPENAI_GPT_ENDPOINT = f"{AZURE_OPENAI_BASE_ENDPOINT}/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview"
-AZURE_OPENAI_DALLE_ENDPOINT = f"{AZURE_OPENAI_BASE_ENDPOINT}/openai/deployments/dall-e-3/images/generations?api-version=2024-02-01"
+AZURE_OPENAI_GPT_ENDPOINT = f"{AZURE_OPENAI_BASE_ENDPOINT}/openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-if not USE_AZURE_OPENAI:
+if USE_AZURE_OPENAI:
     client = OpenAI(api_key=OPENAI_API_KEY)
-
+else:
+    client = AzureOpenAI(
+        api_version="2024-02-01",
+        azure_endpoint=AZURE_OPENAI_BASE_ENDPOINT,
+        api_key=AZURE_OPENAI_API_KEY,
+    )
+    
 # Create a logger with the __name__ of the module
 logger = logging.getLogger(__name__)
 
@@ -189,52 +194,25 @@ def generate_comic_book(adapted_text):
             return {"error in generate_comic_book": str(e)}
       
 def create_dalle_images(prompt, n=1, size="1024x1024"):
-    if USE_AZURE_OPENAI:
-        headers = {
-            "Content-Type": "application/json",
-            "api-key": AZURE_OPENAI_API_KEY,
-        }
-        payload = {
-            "prompt": prompt,
-            "n": n,
-            "size": size
-        }
-        try:
-            response = requests.post(AZURE_OPENAI_DALLE_ENDPOINT, headers=headers, json=payload)
-            response.raise_for_status()
-            data = response.json()
-            # Check if there's an error with content filtering
-            if "error" in data and data["error"]["code"] == "contentFilter":
-                logger.error("Content policy violation: %s", data["error"]["message"], exc_info=True)
-                return {"error in create_dalle_images": "content_policy_violation"}
-            # Check if the 'data' key is in the response to extract image URLs
-            if "data" in data:
-                return [img["url"] for img in data["data"]]
-            else:
-                return {"error in create_dalle_images": "No images generated"}
-        except requests.RequestException as e:
+    try:
+        response = client.images.generate(
+            model="dall-e-3",
+            prompt=prompt,
+            n=n,
+            size=size
+        )
+        if response and response.data:
+            return [img.url for img in response.data]
+        else:
+            return {"error in create_dalle_images": "No images generated"}
+    except OpenAIError as e:
+        # Check for content policy violation
+        if 'content_policy_violation' in str(e):
+            logger.error("Content policy violation: %s", str(e), exc_info=True)
+            return {"error in create_dalle_images": "content_policy_violation"}
+        else:
             logger.error("An error occurred: %s", str(e), exc_info=True)
             return {"error in create_dalle_images": str(e)}
-    else:
-        try:
-            response = client.images.generate(
-                model="dall-e-3",
-                prompt=prompt,
-                n=n,
-                size=size
-            )
-            if response and response.data:
-                return [img.url for img in response.data]
-            else:
-                return {"error in create_dalle_images": "No images generated"}
-        except OpenAIError as e:
-            # Check for content policy violation
-            if 'content_policy_violation' in str(e):
-                logger.error("Content policy violation: %s", str(e), exc_info=True)
-                return {"error in create_dalle_images": "content_policy_violation"}
-            else:
-                logger.error("An error occurred: %s", str(e), exc_info=True)
-                return {"error in create_dalle_images": str(e)}
-        except Exception as e:
-            logger.error("An error occurred: %s", str(e), exc_info=True)
-            return {"error in create_dalle_images": str(e)}
+    except Exception as e:
+        logger.error("An error occurred: %s", str(e), exc_info=True)
+        return {"error in create_dalle_images": str(e)}
