@@ -14,13 +14,13 @@ AZURE_OPENAI_GPT_ENDPOINT = f"{AZURE_OPENAI_BASE_ENDPOINT}/openai/deployments/gp
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if USE_AZURE_OPENAI:
-    client = OpenAI(api_key=OPENAI_API_KEY)
-else:
     client = AzureOpenAI(
         api_version="2024-02-01",
         azure_endpoint=AZURE_OPENAI_BASE_ENDPOINT,
         api_key=AZURE_OPENAI_API_KEY,
     )
+else:
+    client = OpenAI(api_key=OPENAI_API_KEY)
     
 # Create a logger with the __name__ of the module
 logger = logging.getLogger(__name__)
