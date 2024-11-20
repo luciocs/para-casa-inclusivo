@@ -63,7 +63,7 @@ function improveAdaptation() {
         'event_category': 'Button',
         'event_label': 'Improve Adaptation'
     });
-    const message = `${adaptedText}\n\n---------------------\n\nQuero melhorar essa adaptação.`;
+    const message = `${adaptedText}\n\n---------------------\n\nQuero melhorar essa adaptação. Me pergunte o que pode ser melhorado.`;
     sendChat(message);
 }
 
