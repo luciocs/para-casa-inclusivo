@@ -236,7 +236,7 @@ def parse_narration_and_images(comic_output):
         elif "DESCRIÇÃO DE IMAGEM:" in line:
             image_description = line.replace("DESCRIÇÃO DE IMAGEM:", "").strip()
             if narration and image_description:
-                panels.append({'narration': narration, 'image_description': image_description + ' Children cartoon.'})
+                panels.append({'narration': narration, 'image_description': image_description + ' Comic Book.'})
                 narration = None  # Reset narration for the next panel
                 image_description = None  # Reset image_description for the next panel
     return panels
