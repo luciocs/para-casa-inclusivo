@@ -164,10 +164,10 @@ document.getElementById('submit-feedback').addEventListener('click', function() 
 document.addEventListener('DOMContentLoaded', function() {
     const highlights = [
         {
-            title: "Ajude a manter o Para Casa Inclusivo funcionando!",
-            text: "Somos uma organização sem fins lucrativos e contamos com o apoio de empresas e pessoas para oferecer a plataforma gratuitamente para quem precisa.",
-            link: "https://inclui.ai/doa%C3%A7%C3%B5es", 
-            linkText: "Doar Agora",
+            title: "Conheça a nossa história e o que nos inspira!",
+            text: "A Era do Impacto: um livro sobre tecnologia, educação e inclusão. Toda a renda é revertida para o projeto Para Casa Inclusivo!",
+            link: "https://clubedeautores.com.br/livro/a-era-do-impacto", 
+            linkText: "Comprar",
             isButton: false
         },
         {
