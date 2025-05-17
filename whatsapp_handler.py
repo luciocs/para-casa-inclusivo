@@ -2,12 +2,15 @@ from flask import Blueprint, request, Response
 import json
 import time
 import os
-import boto3
+import logging
 import requests
 from botocore.auth import SigV4Auth
 from botocore.awsrequest import AWSRequest
 from botocore.credentials import get_credentials
 from botocore.session import Session
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 try:
     from openai import AzureOpenAI, OpenAI
@@ -52,7 +55,7 @@ def sns_whatsapp_handler():
 
     if sns_type == "SubscriptionConfirmation":
         subscribe_url = data.get("SubscribeURL")
-        print(f"Confirme a inscrição acessando: {subscribe_url}")
+        logger.info(f"Confirme a inscrição acessando: {subscribe_url}")
         return Response("Subscription confirmation needed", status=200)
 
     if sns_type == "Notification":
@@ -102,7 +105,7 @@ def sns_whatsapp_handler():
             return Response("Mensagem processada com sucesso", status=200)
 
         except Exception as e:
-            print(f"Erro ao processar mensagem: {e}")
+            logger.error(f"Erro ao processar mensagem: {e}")
             return Response("Erro interno", status=500)
 
     return Response("Tipo de evento não suportado", status=400)
@@ -138,7 +141,7 @@ def send_whatsapp_response(phone_number, message_text):
     )
 
     if response.status_code >= 400:
-        print(f"Erro ao enviar mensagem: {response.status_code} - {response.text}")
+        logger.error(f"Erro ao enviar mensagem: {response.status_code} - {response.text}")
     else:
-        print(f"Mensagem enviada para {phone_number}: {response.text}")
+        logger.error(f"Mensagem enviada para {phone_number}: {response.text}")
         
