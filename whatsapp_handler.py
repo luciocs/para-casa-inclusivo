@@ -50,6 +50,7 @@ whatsapp_api = Blueprint("whatsapp_api", __name__)
 
 @whatsapp_api.route("/sns_whatsapp", methods=["POST"])
 def sns_whatsapp_handler():
+    logger.info(f"HEADERS: {dict(request.headers)}")
     sns_type = request.headers.get("x-amz-sns-message-type")
     data = request.json
     logger.info(f"Tipo SNS: {sns_type}")
