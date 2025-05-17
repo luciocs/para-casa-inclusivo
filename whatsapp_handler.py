@@ -52,7 +52,7 @@ whatsapp_api = Blueprint("whatsapp_api", __name__)
 def sns_whatsapp_handler():
     sns_type = request.headers.get("x-amz-sns-message-type")
     data = request.json
-
+    logger.info(f"Tipo SNS: {sns_type}")
     if sns_type == "SubscriptionConfirmation":
         subscribe_url = data.get("SubscribeURL")
         logger.info(f"Confirme a inscrição acessando: {subscribe_url}")
