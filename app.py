@@ -11,9 +11,11 @@ import os
 import logging
 import requests
 from assistant_api import assistant_api
+from whatsapp_handler import whatsapp_api
 
 app = Flask(__name__)
 app.register_blueprint(assistant_api, url_prefix='/assistant')
+app.register_blueprint(whatsapp_api, url_prefix='/whatsapp_api')
 
 IMAGE_PROVIDER = os.environ.get('IMAGE_PROVIDER', 'OpenAI')  # Default to OpenAI
 COMIC_BOOK_GENERATION_ENABLED = os.getenv("COMIC_BOOK_GENERATION_ENABLED", "True").lower() == "true"
