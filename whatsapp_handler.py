@@ -32,7 +32,7 @@ ASSISTANT_ID = os.getenv("ASSISTANT_ID")
 aws_region = os.getenv("AWS_REGION", "us-east-1")
 channel_type = "WHATSAPP"  # fixo para esse canal
 service = "social-messaging"
-endpoint = f"https://social-messaging.{aws_region}.amazonaws.com/v1/messages"
+endpoint = "https://social-messaging.us-east-2.amazonaws.com/v1/messages"
 from_number = "15557485682"  # seu número conectado na AWS
 
 # Inicializa cliente
@@ -64,9 +64,14 @@ def sns_whatsapp_handler():
 
     if sns_type == "Notification":
         try:
-            message = json.loads(data.get("Message", "{}"))
-            user_message = message.get("message", {}).get("text", "").strip()
-            phone_number = message.get("message", {}).get("from")
+            outer_message = json.loads(data.get("Message", "{}"))
+            webhook_entry = json.loads(outer_message.get("whatsAppWebhookEntry", "{}"))
+            message_data = webhook_entry["changes"][0]["value"]["messages"][0]
+
+            user_message = message_data.get("text", {}).get("body", "").strip()
+            phone_number = message_data.get("from")
+
+            logger.info(f"Mensagem recebida de {phone_number}: {user_message}")
 
             if not user_message or not phone_number:
                 return Response("Dados incompletos", status=400)
@@ -115,13 +120,10 @@ def sns_whatsapp_handler():
     return Response("Tipo de evento não suportado", status=400)
 
 def send_whatsapp_response(phone_number, message_text):
-    def format_phone_number(number):
-        return number.replace(" ", "").replace("-", "")
-
     payload = {
         "channel": "WHATSAPP",
         "from": from_number,
-        "to": format_phone_number(phone_number if phone_number.startswith("+") else f"+{phone_number}"),
+        "to": phone_number if phone_number.startswith("+") else f"+{phone_number}",
         "content": {
             "text": message_text
         }
@@ -136,7 +138,8 @@ def send_whatsapp_response(phone_number, message_text):
         data=json.dumps(payload),
         headers={"Content-Type": "application/json"}
     )
-    SigV4Auth(credentials, service, aws_region).add_auth(aws_request)
+
+    SigV4Auth(credentials, "social-messaging", "us-east-2").add_auth(aws_request)
 
     response = requests.post(
         endpoint,
@@ -145,7 +148,7 @@ def send_whatsapp_response(phone_number, message_text):
     )
 
     if response.status_code >= 400:
-        logger.error(f"Erro ao enviar mensagem: {response.status_code} - {response.text}")
+        logger.error(f"Erro ao enviar mensagem para {phone_number}: {response.status_code} - {response.text}")
     else:
-        logger.error(f"Mensagem enviada para {phone_number}: {response.text}")
+        logger.info(f"Mensagem enviada para {phone_number}: {response.text}")
         
