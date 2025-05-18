@@ -21,9 +21,7 @@ IMAGE_PROVIDER = os.environ.get('IMAGE_PROVIDER', 'OpenAI')  # Default to OpenAI
 COMIC_BOOK_GENERATION_ENABLED = os.getenv("COMIC_BOOK_GENERATION_ENABLED", "True").lower() == "true"
 
 # Configure the logging
-logging.basicConfig(level=logging.INFO)
-
-# If you want to use a named logger instead of 'app.logger'
+logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO").upper())
 logger = logging.getLogger(__name__)
 
 ZAPIER_WEBHOOK_URL = os.environ.get('ZAPIER_WEBHOOK_URL')
@@ -250,6 +248,6 @@ def generate_whatsapp_url(adapted_text):
     return f"{base_url}{adapted_text_encoded}"
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
     
     

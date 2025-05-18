@@ -10,7 +10,7 @@ from botocore.credentials import get_credentials
 from botocore.session import Session
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(os.getenv("LOG_LEVEL", "INFO").upper())
 
 try:
     from openai import AzureOpenAI, OpenAI
@@ -28,7 +28,7 @@ AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION", "2024-05-01-pre
 OPENAI_API_KEY = os.getenv("OPENAI_ASS_API_KEY")
 ASSISTANT_ID = os.getenv("ASSISTANT_ID")
 
-# Inicializa o cliente da AWS Messaging (ex: Amazon Connect ou Amazon SNS para WhatsApp)
+# Inicializa o cliente da AWS Messaging
 aws_region = os.getenv("AWS_REGION", "us-east-1")
 channel_type = "WHATSAPP"  # fixo para esse canal
 service = "social-messaging"
@@ -50,16 +50,15 @@ whatsapp_api = Blueprint("whatsapp_api", __name__)
 
 @whatsapp_api.route("/sns_whatsapp", methods=["POST"])
 def sns_whatsapp_handler():
-    logger.info(f"HEADERS: {dict(request.headers)}")
+    logger.debug(f"HEADERS: {dict(request.headers)}")
     sns_type = request.headers.get("x-amz-sns-message-type")
     data = request.get_json(force=True)
 
-    logger.info(f"Tipo SNS: {sns_type}")
-    logger.info(f"Payload recebido: {data}")
+    logger.debug(f"Payload recebido: {data}")
 
     if sns_type == "SubscriptionConfirmation":
         subscribe_url = data.get("SubscribeURL")
-        logger.info(f"Confirme a inscrição acessando: {subscribe_url}")
+        logger.debug(f"Confirme a inscrição acessando: {subscribe_url}")
         return Response("Subscription confirmation needed", status=200)
 
     if sns_type == "Notification":
@@ -71,7 +70,7 @@ def sns_whatsapp_handler():
             user_message = message_data.get("text", {}).get("body", "").strip()
             phone_number = message_data.get("from")
 
-            logger.info(f"Mensagem recebida de {phone_number}: {user_message}")
+            logger.debug(f"Mensagem recebida de {phone_number}: {user_message}")
 
             if not user_message or not phone_number:
                 return Response("Dados incompletos", status=400)
@@ -150,5 +149,5 @@ def send_whatsapp_response(phone_number, message_text):
     if response.status_code >= 400:
         logger.error(f"Erro ao enviar mensagem para {phone_number}: {response.status_code} - {response.text}")
     else:
-        logger.info(f"Mensagem enviada para {phone_number}: {response.text}")
+        logger.debug(f"Mensagem enviada para {phone_number}: {response.text}")
         

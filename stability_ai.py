@@ -135,7 +135,7 @@ def create_bedrock_images(prompt, n=1, size="512x512"):
         }
 
     request = json.dumps(native_request)
-    logger.info("Image Prompt: %s", str(prompt), exc_info=True)
+    logger.debug("Image Prompt: %s", str(prompt), exc_info=True)
     try:
         # Call the model using Bedrock runtime
         response = client.invoke_model(
