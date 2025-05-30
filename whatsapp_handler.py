@@ -36,7 +36,7 @@ aws_region = os.getenv("AWS_REGION", "us-east-1")
 channel_type = "WHATSAPP"
 service = "social-messaging"
 endpoint = f"https://social-messaging.{aws_region}.amazonaws.com/v1/messages"
-from_number = "+15557485174"
+from_number = "+15557820821"
 
 # Inicializa cliente OpenAI
 if USE_AZURE_OPENAI:
