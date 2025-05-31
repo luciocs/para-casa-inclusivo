@@ -44,7 +44,7 @@ social = boto3.client("socialmessaging", region_name=AWS_REGION)
 # Configurações do cliente S3 para garantir endpoint com região
 s3 = boto3.client(
     "s3",
-    region_name="us-east-1",
+    region_name=AWS_REGION,
     config=Config(
         signature_version="s3v4",
         s3={"addressing_style": "virtual"}
@@ -112,12 +112,23 @@ def sns_whatsapp_handler():
 
                 if media_id:
                     # Chama AWS para resgatar a URL do arquivo
-                    media_resp = social.get_whatsapp_media(
+                    folder_prefix = "whatsapp_received/"
+                    social.get_whatsapp_message_media(
                         originationPhoneNumberId=AWS_PHONE_ID,
-                        metaApiVersion=META_API_VERSION,
-                        mediaId=media_id
+                        mediaId=media_id,
+                        destinationS3File={
+                            "bucketName": AWS_S3_BUCKET_NAME,
+                            "key": folder_prefix
+                        }
                     )
-                    file_url = media_resp.get("url")
+                    # Após a chamada, o objeto estará em S3; geramos um presigned URL para leitura
+                    actual_key = f"{folder_prefix}{media_id}.png"
+                    file_url = s3.generate_presigned_url(
+                        "get_object",
+                        Params={"Bucket": AWS_S3_BUCKET_NAME, "Key": actual_key},
+                        ExpiresIn=3600
+                    )
+                    logger.debug(f"URL da mídia obtida do S3: {file_url}")
 
             else:
                 logger.debug(f"Tipo de mensagem não tratado: {msg_type}")
@@ -184,7 +195,7 @@ def sns_whatsapp_handler():
                 assistant_id=ASSISTANT_ID
             )
 
-            # Aguardar até o run finalizar
+            # Aguardar até sair de queued/in_progress
             while run.status in ["queued", "in_progress"]:
                 time.sleep(1)
                 run = client.beta.threads.runs.retrieve(
@@ -223,8 +234,8 @@ def sns_whatsapp_handler():
                     send_whatsapp_response(phone_number, image_url)
                     return Response("Imagem gerada e enviada.", status=200)
 
-            # 7) Se o run finalizou, envia texto de volta
-            if run.status == "completed":
+            # 7) 7) Se o run finalizou (completed OR incomplete), envia texto de volta
+            if run.status in ["completed", "incomplete"]:
                 messages = client.beta.threads.messages.list(thread_id=thread_id)
                 resposta = messages.data[0].content[0].text.value
                 send_whatsapp_response(phone_number, resposta)
