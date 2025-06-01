@@ -164,10 +164,17 @@ document.getElementById('submit-feedback').addEventListener('click', function() 
 document.addEventListener('DOMContentLoaded', function() {
     const highlights = [
         {
-            title: "Conheça a nossa história e o que nos inspira!",
-            text: "A Era do Impacto: um livro sobre tecnologia, educação e inclusão. Toda a renda é revertida para o projeto Para Casa Inclusivo!",
-            link: "https://clubedeautores.com.br/livro/a-era-do-impacto", 
-            linkText: "Comprar",
+            title: "Use o Para Casa Inclusivo agora pelo WhatsApp!",
+            text: "Agora você pode criar atividades, tirar dúvidas e interagir diretamente pelo WhatsApp. Converse com nossa IA de forma ainda mais prática!",
+            link: "https://wa.me/message/27RHZYG3XDPAO1",
+            linkText: "Abrir WhatsApp",
+            isButton: false
+        },
+        {
+            title: "Compartilhe a sua história com o Para Casa Inclusivo!",
+            text: "Queremos entender o impacto que o Para Casa Inclusivo está gerando na vida das pessoas. Responda uma breve pesquisa e nos ajude a evoluir ainda mais a ferramenta.",
+            link: "https://docs.google.com/forms/d/e/1FAIpQLSe0FLA2TXoFDx5aysWi88wdqhVhp8Dyj6EE3ZKGNcXS8HRH7g/viewform?usp=sf_link",
+            linkText: "Responder",
             isButton: false
         },
         {
@@ -176,13 +183,6 @@ document.addEventListener('DOMContentLoaded', function() {
             link: "#",
             linkText: "Criar Atividade",
             isButton: true
-        },
-        {
-            title: "Compartilhe a sua história com o Para Casa Inclusivo!",
-            text: "Queremos entender o impacto que o Para Casa Inclusivo está gerando na vida das pessoas. Responda uma breve pesquisa e nos ajude a evoluir ainda mais a ferramenta.",
-            link: "https://docs.google.com/forms/d/e/1FAIpQLSe0FLA2TXoFDx5aysWi88wdqhVhp8Dyj6EE3ZKGNcXS8HRH7g/viewform?usp=sf_link",
-            linkText: "Responder",
-            isButton: false
         }
     ];
 
