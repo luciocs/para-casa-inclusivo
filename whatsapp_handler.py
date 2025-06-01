@@ -113,7 +113,7 @@ def sns_whatsapp_handler():
                 if media_id:
                     # Chama AWS para resgatar a URL do arquivo
                     folder_prefix = "whatsapp_received/"
-                    social.get_whatsapp_message_media(
+                    media_info = social.get_whatsapp_message_media(
                         originationPhoneNumberId=AWS_PHONE_ID,
                         mediaId=media_id,
                         destinationS3File={
@@ -121,14 +121,44 @@ def sns_whatsapp_handler():
                             "key": folder_prefix
                         }
                     )
-                    # Após a chamada, o objeto estará em S3; geramos um presigned URL para leitura
-                    actual_key = f"{folder_prefix}{media_id}.png"
-                    file_url = s3.generate_presigned_url(
-                        "get_object",
-                        Params={"Bucket": AWS_S3_BUCKET_NAME, "Key": actual_key},
-                        ExpiresIn=3600
-                    )
-                    logger.debug(f"URL da mídia obtida do S3: {file_url}")
+                    # Após a chamada, o objeto estará em S3, geramos um presigned URL para leitura
+                    mime = media_info.get("mimeType", "")
+                    # Só continue para OCR se for um tipo suportado:
+                    if any(x in mime for x in ("image/jpeg", "image/png", "image/webp", "application/pdf")):
+                        # Monta a extensão correta para acessar o objeto no S3
+                        if "jpeg" in mime:
+                            ext = ".jpeg"
+                        elif "png" in mime:
+                            ext = ".png"
+                        elif "webp" in mime:
+                            ext = ".webp"
+                        else:  # application/pdf
+                            ext = ".pdf"
+
+                        # Monta a key no bucket exatamente como foi salvo:
+                        folder_prefix = "whatsapp_received/"
+                        actual_key = f"{folder_prefix}{media_id}{ext}"
+
+                        # Gera a URL pré‐assinada para download
+                        file_url = s3.generate_presigned_url(
+                            "get_object",
+                            Params={"Bucket": AWS_S3_BUCKET_NAME, "Key": actual_key},
+                            ExpiresIn=3600
+                        )
+                        logger.debug(f"URL da mídia obtida do S3: {file_url}")
+
+                    else:
+                        # arquivo não suportado pelo OCR: responda e encerre
+                        unsupported_msg = (
+                            "Desculpe, mas esse tipo de arquivo não é suportado.\n\n"
+                            "Por aqui só consigo adaptar atividades em imagens e PDF.\n\n"
+                            "Para mais fomas de adaptar, visite:\n https://www.paracasainclusivo.com.br/"
+                        )
+                        send_whatsapp_response(phone_number, unsupported_msg)
+                        return Response("Tipo de arquivo não suportado", status=200)
+
+                else:
+                    return Response("Arquivo sem ID", status=400)
 
             else:
                 logger.debug(f"Tipo de mensagem não tratado: {msg_type}")
@@ -159,9 +189,25 @@ def sns_whatsapp_handler():
                     resp.raise_for_status()
 
                     content_type = resp.headers.get("Content-Type", "application/octet-stream")
-                    extension = mimetypes.guess_extension(content_type) or ".bin"
-                    # **Nome único** com uuid
-                    temp_file_path = f"/tmp/arquivo_{uuid.uuid4()}{extension}"
+                    # Ajusta a extensão local para o OCR de acordo com o mimeType
+                    if "msword" in content_type:
+                        local_ext = ".doc"
+                    elif "openxmlformats-officedocument.wordprocessingml.document" in content_type:
+                        local_ext = ".docx"
+                    elif "pdf" in content_type:
+                        local_ext = ".pdf"
+                    elif "plain" in content_type:
+                        local_ext = ".txt"
+                    elif "jpeg" in content_type or "jpg" in content_type:
+                        local_ext = ".jpeg"
+                    elif "png" in content_type:
+                        local_ext = ".png"
+                    elif "webp" in content_type:
+                        local_ext = ".webp"
+                    else:
+                        # Caso outro tipo, cai no guess padrão
+                        local_ext = mimetypes.guess_extension(content_type) or ".bin"                    # **Nome único** com uuid
+                    temp_file_path = f"/tmp/arquivo_{uuid.uuid4()}{local_ext}"
 
                     with open(temp_file_path, "wb") as f:
                         f.write(resp.content)
