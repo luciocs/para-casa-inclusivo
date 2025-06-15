@@ -90,7 +90,13 @@ def sns_whatsapp_handler():
             if not changes:
                 return Response("Nenhum conteúdo para processar", status=200)
 
-            message_data = changes[0]["value"]["messages"][0]
+            value = changes[0].get("value", {})
+            # IGNORA status updates e qualquer outro evento que não tenha mensagens
+            if not value.get("messages"):
+                logger.debug("Ignorando evento sem mensagens (status update ou outro).")
+                return Response("Status update ignorado", 200)
+                
+            message_data = value["messages"][0]
             phone_number = message_data.get("from")
             msg_type = message_data.get("type")
 
