@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 from azure_ocr import azure_ocr
 from openai_gpt import adapt_text_for_inclusivity
 from openai_gpt import change_activity_theme
@@ -12,10 +13,13 @@ import logging
 import requests
 from assistant_api import assistant_api
 from whatsapp_handler import whatsapp_api
+from api import api
 
 app = Flask(__name__)
+CORS(app) 
 app.register_blueprint(assistant_api, url_prefix='/assistant')
 app.register_blueprint(whatsapp_api, url_prefix='/whatsapp_api')
+app.register_blueprint(api, url_prefix='/api')
 
 IMAGE_PROVIDER = os.environ.get('IMAGE_PROVIDER', 'OpenAI')  # Default to OpenAI
 COMIC_BOOK_GENERATION_ENABLED = os.getenv("COMIC_BOOK_GENERATION_ENABLED", "True").lower() == "true"
