@@ -249,23 +249,34 @@ def refine_activity():
     # chama o handler interno
     resp = handle_message.__wrapped__()
 
-    # Se retornar string, usa como texto e status 200
+    # prepara retorno
+    status = 200
+    message = None
+
+    # Caso o handler retorne string simples
     if isinstance(resp, str):
-        agent_text = resp
-        status = 200
+        message = resp
+
     else:
-        # raw é Response
-        try:
-            body = resp.get_json(silent=True) or {}
-            agent_text = body.get("ai_response") or body.get("text") or ""
-        except Exception:
-            agent_text = resp.get_data(as_text=True)
+        # resp é um Response
         status = getattr(resp, "status_code", 200)
+        # tenta parsear JSON
+        body = resp.get_json(silent=True)
+        if isinstance(body, dict):
+            # se for um JSON de imagem ou outro payload, repassa inteiro
+            if "image_url" in body:
+                message = body
+            # senão, extrai o texto da IA
+            else:
+                message = body.get("ai_response") or body.get("text") or body
+        else:
+            # fallback para texto puro
+            message = resp.get_data(as_text=True)
 
     return jsonify({
         "success": True,
         "thread_id": thread_id,
-        "message": agent_text
+        "message": message
     }), status
 
 
