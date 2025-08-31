@@ -1,4 +1,5 @@
 #!/bin/bash
+#Using venv to create a virtual environment
 set -e
 python -m venv .venv
 source .venv/bin/activate
