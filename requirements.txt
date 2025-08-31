@@ -1,16 +1,13 @@
 Flask
 gunicorn
 python-dotenv
-Flask-Cors
+flask-cors
 Jinja2
 requests
 openai==1.30.3
 azure-ai-formrecognizer
 Pillow
-datetime
-urllib3<2.0
 azure-core
 boto3
 botocore
-awscli
 httpx==0.27.0

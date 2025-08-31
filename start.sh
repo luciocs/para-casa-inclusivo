@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# Activate the virtual environment, if you're using one
-# source ./venv/bin/activate  # Uncomment this line if you're using a virtual environment
+# Ativar virtualenv se você usa (opcional)
+# source ./venv/bin/activate  
 
-# Install the Flask application and requeriments
-pip3 install -r requirements.txt
+# Instalar dependências
+pip install --upgrade pip
+pip install -r requirements.txt
 
-# Run the Flask application
-python3 -m flask run --host=0.0.0.0 --port=3000
+# Rodar a aplicação Flask em modo dev
+python -m flask run --host=0.0.0.0 --port=3000
