@@ -30,6 +30,36 @@ def healthcheck():
     return jsonify({"status": "ok", "success": True}), 200
 
 
+# 0.5. OCR Only
+@api.route('/ocr', methods=['POST'])
+def ocr_only():
+    start = time.time()
+
+    # 1. Recebe arquivo
+    file = request.files.get('file')
+    if not file:
+        return error_response("file é obrigatório", 400)
+
+    # 2. Lê 'adaptations' e 'extra' do FormData
+    try:
+        adaptations = json.loads(request.form.get('adaptations', '{}'))
+    except Exception:
+        return error_response("adaptations inválido", 400)
+    additional_adaptations = request.form.get('additional_adaptations', '')
+
+    # 3. OCR
+    ocr = azure_ocr(file.read())
+    if isinstance(ocr, dict) and "error" in ocr:
+        return error_response("Falha no OCR", 500)
+    elapsed = round(time.time() - start, 2)
+
+    return jsonify({
+        "success": True,
+        "ocr_text": ocr,
+        "processing_time": elapsed
+    }), 200
+
+
 # 1. Adaptar Atividade Existente
 @api.route('/adapt_activity', methods=['POST'])
 def adapt_activity():
