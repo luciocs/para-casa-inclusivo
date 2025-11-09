@@ -40,14 +40,7 @@ def ocr_only():
     if not file:
         return error_response("file é obrigatório", 400)
 
-    # 2. Lê 'adaptations' e 'extra' do FormData
-    try:
-        adaptations = json.loads(request.form.get('adaptations', '{}'))
-    except Exception:
-        return error_response("adaptations inválido", 400)
-    additional_adaptations = request.form.get('additional_adaptations', '')
-
-    # 3. OCR
+    # 2. OCR
     ocr = azure_ocr(file.read())
     if isinstance(ocr, dict) and "error" in ocr:
         return error_response("Falha no OCR", 500)
