@@ -58,35 +58,6 @@ def feedback():
         # Log or handle unsuccessful webhook POST request here
         return jsonify({'success': False, 'message': 'Failed to send feedback to webhook'}), 500
 
-@app.route('/ocr', methods=['POST'])
-def ocr():
-    try:
-        all_files = request.files.to_dict(flat=False)
-        concatenated_text = ""
-
-        # Loop through each uploaded file
-        for file_key in all_files:
-            for file in all_files[file_key]:
-                if file:
-                    image_data = file.read()
-                    # Call Azure OCR to extract text
-                    ocr_result = azure_ocr(image_data)
-                    # Check if ocr_result is an error message
-                    if isinstance(ocr_result, dict) and "error in azure_ocr" in ocr_result:
-                        error_detail = ocr_result["error in azure_ocr"]
-                        logger.error(f"Azure OCR error: {error_detail}")
-                        return jsonify({"error": "Failed to extract text from images."}), 500
-                    concatenated_text += ocr_result + "\n"  # Concatenate OCR results
-
-        if not concatenated_text:
-            raise ValueError("No text was concatenated from the images.")
-
-        return jsonify({'ocr_text': concatenated_text})
-
-    except Exception as e:
-        logger.exception("An error occurred during OCR processing.")
-        return jsonify({"error": "An unexpected error occurred during OCR processing."}), 500
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
